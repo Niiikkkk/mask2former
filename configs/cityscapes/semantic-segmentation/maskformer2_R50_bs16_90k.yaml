@@ -1,7 +1,7 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/output/train/vicreg/"
+OUTPUT_DIR: "/home/nberardo/mask2former/output/train/dino/"
 MODEL:
-  WEIGHTS: "/home/nberardo/mask2former/backbone_weights/vicreg_resnet50.pkl"
+  WEIGHTS: "/home/nberardo/mask2former/backbone_weights/dino_resnet50.pkl"
   META_ARCHITECTURE: "MaskFormer"
   RESNETS:
 
