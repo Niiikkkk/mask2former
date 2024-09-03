@@ -318,6 +318,11 @@ def main(args):
 if __name__ == "__main__":
     args = default_argument_parser().parse_args()
     print("Command Line Args:", args)
+
+
+    os.environ['MASTER_ADDR'] = 'tcp://127.0.0.1'
+    os.environ['MASTER_PORT'] = '51654'
+
     launch(
         main,
         args.num_gpus,
