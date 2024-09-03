@@ -3,7 +3,9 @@ OUTPUT_DIR: "/home/nberardo/mask2former/output/train/simsiam/"
 MODEL:
   WEIGHTS: "/home/nberardo/mask2former/backbone_weights/simsiam_resnet50.pkl"
   META_ARCHITECTURE: "MaskFormer"
-  RESNET:
+  RESNETS:
+
+    #ADDED BY ME: if use SyncBN, set NORM: "SyncBN", but only if I have more than 1 GPU. Otherwise SyncBN will call the distributed that isn't initialized..
     NORM: "BN"
   SEM_SEG_HEAD:
     NAME: "MaskFormerHead"
