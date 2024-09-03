@@ -1,4 +1,5 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
+OUTPUT_DIR: "/home/nberardo/mask2former/output/m2unk_coco_supervised_v1/simsiam/"
 MODEL:
   META_ARCHITECTURE: "MaskFormer"
   SEM_SEG_HEAD:
