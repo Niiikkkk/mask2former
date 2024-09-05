@@ -40,7 +40,7 @@ img = read_image("/home/nberardo/Datasets/FS_LostFound_full/images/54.png", form
 #print(model.state_dict().keys())
 img = img.reshape((img.shape[2], img.shape[0], img.shape[1]))
 print(img.shape)
-input = {"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}
+input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}]
 res = model(input)
 model.training = False
 print(res.shape)
