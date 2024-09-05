@@ -7,7 +7,7 @@ from detectron2.engine import DefaultTrainer
 from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.projects.deeplab import add_deeplab_config
 
-from mask2former import add_maskformer2_config
+from ..mask2former import add_maskformer2_config
 
 """x = cv2.imread("../../../legion/Datasets/FS_LostFound_full/labels_masks/54.png")
 # RA21 -> 0:Cityscapes 1:Anomaly 255:VOID
