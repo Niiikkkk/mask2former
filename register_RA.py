@@ -35,9 +35,10 @@ model = DefaultTrainer.build_model(cfg)
 DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(
             cfg.MODEL.WEIGHTS, resume=False)
 #model = torch.load("../../../legion/model_0079999.pth", weights_only=False, map_location='cpu')["model"]
+#read_image return HWC
 img = read_image("/home/nberardo/Datasets/FS_LostFound_full/images/54.png", format="BGR")
 #print(model.state_dict().keys())
-img = img.reshape((img.shape[2], img.shape[1], img.shape[2]))
+img = img.reshape((img.shape[2], img.shape[0], img.shape[1]))
 print(img.shape)
 input = {"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}
 res = model(input)
