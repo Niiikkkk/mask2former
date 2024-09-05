@@ -35,4 +35,6 @@ DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(
             cfg.MODEL.WEIGHTS, resume=False)
 #model = torch.load("../../../legion/model_0079999.pth", weights_only=False, map_location='cpu')["model"]
 img = Image.open("/home/nberardo/Datasets/FS_LostFound_full/images/54.png")
-print(model.state_dict().keys())
+#print(model.state_dict().keys())
+res = model(img)
+print(res.shape)
