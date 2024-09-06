@@ -216,6 +216,7 @@ class MaskFormer(nn.Module):
                     losses.pop(k)
             return losses
         else:
+            print("That's ok")
             mask_cls_results = outputs["pred_logits"]
             mask_pred_results = outputs["pred_masks"]
             # upsample masks
