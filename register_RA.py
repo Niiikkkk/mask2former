@@ -47,4 +47,4 @@ print(img.shape)
 input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}]
 model.training = False
 res = model(input)
-print(res.shape)
+print(res)
