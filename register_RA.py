@@ -4,7 +4,7 @@ import torch
 from PIL import Image
 from detectron2.config import get_cfg
 from detectron2.data.detection_utils import read_image
-from detectron2.engine import DefaultTrainer
+from detectron2.engine import DefaultTrainer, default_setup
 from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.projects.deeplab import add_deeplab_config
 
@@ -33,6 +33,7 @@ add_maskformer2_config(cfg)
 cfg.merge_from_file("configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k.yaml")
 cfg.freeze()
 print(cfg)
+default_setup(cfg, "")
 setup_logger(output=cfg.OUTPUT_DIR, distributed_rank=comm.get_rank(), name="mask2former")
 model = DefaultTrainer.build_model(cfg)
 DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(
@@ -44,5 +45,6 @@ img = read_image("/home/nberardo/Datasets/FS_LostFound_full/images/54.png", form
 img = img.reshape((img.shape[2], img.shape[0], img.shape[1]))
 print(img.shape)
 input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}]
+model.training = False
 res = model(input)
 print(res.shape)
