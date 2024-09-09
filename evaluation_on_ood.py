@@ -49,7 +49,7 @@ if __name__=="__main__":
     setup_logger(output=args.output, distributed_rank=comm.get_rank(), name="mask2former")
 
     model = DefaultTrainer.build_model(cfg)
-    DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(
+    DetectionCheckpointer(model, save_dir=args.output).resume_or_load(
         cfg.MODEL.WEIGHTS, resume=False)
 
     model.training = False
