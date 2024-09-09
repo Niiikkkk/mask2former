@@ -61,7 +61,7 @@ if __name__=="__main__":
         img = read_image(img_path, format="BGR")
         img = img.reshape((img.shape[2], img.shape[0], img.shape[1]))
         input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}]
-        prediction = model(input)[0]["sem_seg"] #Here C = 19, cityscapes classes
+        prediction = model(input)[0]["sem_seg"].unsqueeze(0) #Here C = 19, cityscapes classes
         prediction = torch.max(prediction, axis=0)[0]
         print(prediction.shape)
 
