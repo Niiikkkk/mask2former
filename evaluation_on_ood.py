@@ -62,7 +62,7 @@ if __name__=="__main__":
         img = img.reshape((img.shape[2], img.shape[0], img.shape[1]))
         input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}]
         prediction = model(input)
-        print(prediction["sem_seg"].shape)
+        print(prediction[0]["sem_seg"].shape)
 
         pathGT = img_path.replace("images", "labels_masks")
 
