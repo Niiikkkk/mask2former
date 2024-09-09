@@ -64,6 +64,8 @@ if __name__=="__main__":
         prediction = model(input)[0]["sem_seg"].unsqueeze(0) #Here C = 19, cityscapes classes
         prediction = torch.max(prediction, axis=1)[0]
 
+        Image.fromarray(prediction.numpy().astype(np.uint8)).save(os.path.join(args.output,"prediction.png"))
+
         pathGT = img_path.replace("images", "labels_masks")
 
         if "RoadObsticle21" in pathGT:
@@ -107,7 +109,7 @@ if __name__=="__main__":
     res = {}
     res["AUROC"] = roc_auc
     res["FPR@TPR95"] = fpr_best
-    res["AP"] = ap
+    res["AUPRC"] = ap
     print(res)
 
 
