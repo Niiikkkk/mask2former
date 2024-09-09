@@ -63,8 +63,6 @@ if __name__=="__main__":
         input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}]
         prediction = model(input)[0]["sem_seg"].unsqueeze(0) #Here C = 19, cityscapes classes
         prediction = torch.max(prediction, axis=1)[0]
-        print(prediction.shape)
-
 
         pathGT = img_path.replace("images", "labels_masks")
 
@@ -90,6 +88,9 @@ if __name__=="__main__":
         if 255 in ood_gts:
             predctions.append(prediction[ood_gts != 255])
             gts.append(ood_gts[ood_gts != 255])
+        else:
+            predctions.append(prediction)
+            gts.append(ood_gts)
 
     #Eval...
     predictions = torch.cat(predctions,0)
