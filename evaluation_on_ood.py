@@ -92,7 +92,10 @@ if __name__=="__main__":
             gts.append(ood_gts[ood_gts != 255])
 
     #Eval...
-
+    predictions = torch.cat(predctions,0)
+    gts = torch.cat(gts,0)
+    print(predictions.shape)
+    print(gts.shape)
 
 
 
