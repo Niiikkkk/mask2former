@@ -62,8 +62,9 @@ if __name__=="__main__":
         img = img.reshape((img.shape[2], img.shape[0], img.shape[1]))
         input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}]
         prediction = model(input)[0]["sem_seg"].unsqueeze(0) #Here C = 19, cityscapes classes
-        prediction = torch.max(prediction, axis=0)[0]
+        prediction = torch.max(prediction, axis=1)[0]
         print(prediction.shape)
+
 
         pathGT = img_path.replace("images", "labels_masks")
 
@@ -86,8 +87,9 @@ if __name__=="__main__":
         # 1 => Out of distribution
         # 255 => Void, so ignore it
 
-        predctions.append(prediction[ood_gts != 255])
-        gts.append(ood_gts[ood_gts != 255])
+        if 255 in ood_gts:
+            predctions.append(prediction[ood_gts != 255])
+            gts.append(ood_gts[ood_gts != 255])
 
     #Eval...
 
