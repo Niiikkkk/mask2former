@@ -86,6 +86,7 @@ if __name__=="__main__":
         # 255 => Void, so ignore it
 
         if 255 in ood_gts:
+            #If void pexels, remove them
             predctions.append(prediction[ood_gts != 255])
             gts.append(ood_gts[ood_gts != 255])
         else:
@@ -93,10 +94,23 @@ if __name__=="__main__":
             gts.append(ood_gts)
 
     #Eval...
-    predictions = torch.cat(predctions,0)
-    gts = torch.cat(gts,0)
+    predictions = np.concatenate(predctions,0)
+    gts = np.concatenate(gts,0)
     print(predictions.shape)
     print(gts.shape)
+
+    fpr, tpr, threshold = roc_curve(gts, predictions)
+    roc_auc = auc(fpr, tpr)
+    fpr_best = fpr[tpr >= 0.95][0]
+    ap = average_precision_score(gts,predictions)
+
+    res = {}
+    res["AUROC"] = roc_auc
+    res["FPR@TPR95"] = fpr_best
+    res["AP"] = ap
+    print(res)
+
+
 
 
 
