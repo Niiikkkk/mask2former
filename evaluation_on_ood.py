@@ -64,7 +64,7 @@ if __name__=="__main__":
         prediction = model(input)[0]["sem_seg"].unsqueeze(0) #Here C = 19, cityscapes classes
         prediction = torch.max(prediction, axis=1)[0]
 
-        Image.fromarray(prediction.numpy().astype(np.uint8)).save(os.path.join(args.output,"prediction.png"))
+        print(prediction.unique())
 
         pathGT = img_path.replace("images", "labels_masks")
 
