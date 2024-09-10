@@ -19,25 +19,24 @@ source /home/nberardo/myenv/bin/activate
 export DETECTRON2_DATASETS=/home/nberardo/Datasets
 export CUDA_HOME=/home/nberardo/cuda_11.8
 
-#convert pth weights to pkl
-#python tools/convert-torchvision-to-d2.py /home/nberardo/simsiam/resnet50.pth /home/nberardo/mask2anomaly_v2/backbone_weights/simsiam_resnet50.pkl
+
 
 python evaluation_on_ood.py --input /home/nberardo/Datasets/RoadAnomaly21/images/*.png \
- --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k.yaml \
- --output /home/nberardo/mask2former/results/simsiam/
+ --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml \
+ --output /home/nberardo/mask2former/results/dino/
 
 python evaluation_on_ood.py --input /home/nberardo/Datasets/RoadAnomaly/images/*.jpg \
- --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k.yaml \
- --output /home/nberardo/mask2former/results/simsiam/
+ --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml \
+ --output /home/nberardo/mask2former/results/dino/
 
 python evaluation_on_ood.py --input /home/nberardo/Datasets/RoadObsticle21/images/*.webp \
- --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k.yaml \
- --output /home/nberardo/mask2former/results/simsiam/
+ --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml \
+ --output /home/nberardo/mask2former/results/dino/
 
 python evaluation_on_ood.py --input /home/nberardo/Datasets/FS_LostFound_full/images/*.png \
- --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k.yaml \
- --output /home/nberardo/mask2former/results/simsiam/
+ --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml \
+ --output /home/nberardo/mask2former/results/dino/
 
 python evaluation_on_ood.py --input /home/nberardo/Datasets/fs_static/images/*.jpg \
- --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k.yaml \
- --output /home/nberardo/mask2former/results/simsiam/
+ --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml \
+ --output /home/nberardo/mask2former/results/dino/
