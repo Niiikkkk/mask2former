@@ -1,6 +1,6 @@
 MODEL:
   BACKBONE:
-    FREEZE_AT: 0
+    #FREEZE_AT: 0
     NAME: "build_resnet_backbone"
     #NEED TO CONVERT THE WEIGHTS OF pht to D2 WEIGHT. SEE tools/README.md
   WEIGHTS: ""
