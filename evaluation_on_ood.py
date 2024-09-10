@@ -54,7 +54,7 @@ if __name__=="__main__":
 
     model.training = False
 
-    predctions = []
+    predictions = []
     gts = []
 
     for img_path in glob.glob(os.path.expanduser(args.input[0])):
@@ -89,15 +89,15 @@ if __name__=="__main__":
 
         if 255 in ood_gts:
             #If void pexels, remove them
-            predctions.append(prediction[ood_gts != 255])
+            predictions.append(prediction[ood_gts != 255])
             gts.append(ood_gts[ood_gts != 255])
         else:
-            predctions.append(prediction)
+            predictions.append(prediction)
             gts.append(ood_gts)
 
     #Eval...
-    predictions = np.concatenate(predctions,0)
-    gts = np.concatenate(gts,0)
+    predictions = np.array(predictions)
+    gts = np.array(gts)
     print(predictions.shape)
     print(gts.shape)
 
