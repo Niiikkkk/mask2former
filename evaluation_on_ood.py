@@ -14,21 +14,22 @@ from mask2former import add_maskformer2_config
 import detectron2.utils.comm as comm
 import glob
 import os
+import tqdm
 from sklearn.metrics import roc_curve, auc, average_precision_score
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Evaluation on OOD')
     parser.add_argument("--config_file",
-        default="/home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k.yaml",
+        default="configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_TMP.yaml",
         metavar="FILE",
         help="path to config file",)
     parser.add_argument("--input",
-        default="/home/nberardo/Datasets/RoadObsticle21/images/*.webp",
+        default="/Users/nicholas.berardo/Desktop/RoadAnomaly/images/0.jpg /Users/nicholas.berardo/Desktop/RoadAnomaly/images/1.jpg",
         nargs="+",
         help="A list of space separated input images; "
         "or a single glob pattern such as 'directory/*.jpg'",)
     parser.add_argument("--output",
-        default="/home/nberardo/mask2former/results/",
+        default="../../results",
         help="A file or directory to save output visualizations. "
         "If not given, will show output in an OpenCV window.",)
 
@@ -46,7 +47,9 @@ def setup_cfgs(args):
 if __name__=="__main__":
     args = parse_args()
     cfg = setup_cfgs(args)
-    setup_logger(output=args.output, distributed_rank=comm.get_rank(), name="mask2former")
+    setup_logger(name="fvcore")
+    logger = setup_logger()
+    logger.info("Arguments: " + str(args))
 
     model = DefaultTrainer.build_model(cfg)
     DetectionCheckpointer(model, save_dir=args.output).resume_or_load(
@@ -57,7 +60,7 @@ if __name__=="__main__":
     predictions = []
     gts = []
 
-    for img_path in glob.glob(os.path.expanduser(args.input[0])):
+    for img_path in tqdm.tqdm(args.input):
         img = read_image(img_path, format="BGR")
         img = img.reshape((img.shape[2], img.shape[0], img.shape[1]))
         input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}]
@@ -89,7 +92,7 @@ if __name__=="__main__":
         ood_gts = np.expand_dims(ood_gts,0)
 
         if 255 in ood_gts:
-            #If void pexels, remove them
+            #If void pixels, remove them
             predictions.append(prediction[ood_gts != 255])
             gts.append(ood_gts[ood_gts != 255])
         else:
@@ -98,9 +101,10 @@ if __name__=="__main__":
 
     #Eval...
     predictions = np.array(predictions)
+    predictions = np.concatenate([p.flatten() for p in predictions] , axis=0)
+
     gts = np.array(gts)
-    print(predictions[0])
-    print(gts[0])
+    gts = np.concatenate([g.flatten() for g in gts], axis=0)
 
     fpr, tpr, threshold = roc_curve(gts, predictions)
     roc_auc = auc(fpr, tpr)
@@ -111,10 +115,5 @@ if __name__=="__main__":
     res["AUROC"] = roc_auc
     res["FPR@TPR95"] = fpr_best
     res["AUPRC"] = ap
+
     print(res)
-
-
-
-
-
-
