@@ -124,4 +124,4 @@ if __name__=="__main__":
 
     print(res)
 
-    file.write(res)
+    file.write(res["AUROC"] + " " + res["FPR@TPR95"] + " " + res["AUPRC"] + "\n")
