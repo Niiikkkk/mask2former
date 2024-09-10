@@ -91,6 +91,11 @@ if __name__=="__main__":
             #RA has label 2 for anomaly, but we want it to be 1, so change it
             ood_gts = np.where((ood_gts == 2), 1, ood_gts)
 
+        if "LostAndFound" in pathGT:
+            ood_gts = np.where((ood_gts == 0), 255, ood_gts)
+            ood_gts = np.where((ood_gts == 1), 0, ood_gts)
+            ood_gts = np.where((ood_gts > 1) & (ood_gts < 201), 1, ood_gts)
+
         # Ignore the "void" label, that is 255
         # 0 => In distrubiton
         # 1 => Out of distribution
