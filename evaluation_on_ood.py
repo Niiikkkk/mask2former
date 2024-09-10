@@ -99,8 +99,8 @@ if __name__=="__main__":
     #Eval...
     predictions = np.array(predictions)
     gts = np.array(gts)
-    print(predictions.shape)
-    print(gts.shape)
+    print(predictions[0])
+    print(gts[0])
 
     fpr, tpr, threshold = roc_curve(gts, predictions)
     roc_auc = auc(fpr, tpr)
