@@ -85,7 +85,8 @@ if __name__=="__main__":
         # 1 => Out of distribution
         # 255 => Void, so ignore it
 
-        prediction = prediction.detach().cpu().numpy()
+        prediction = prediction.detach().cpu().numpy().astype(np.float32)
+        ood_gts = ood_gts.unsqueeze(0)
 
         if 255 in ood_gts:
             #If void pexels, remove them
