@@ -64,8 +64,6 @@ if __name__=="__main__":
         prediction = model(input)[0]["sem_seg"].unsqueeze(0) #Here C = 19, cityscapes classes
         prediction = torch.max(prediction, axis=1)[0]
 
-        print(prediction.unique())
-
         pathGT = img_path.replace("images", "labels_masks")
 
         if "RoadObsticle21" in pathGT:
@@ -86,6 +84,8 @@ if __name__=="__main__":
         # 0 => In distrubiton
         # 1 => Out of distribution
         # 255 => Void, so ignore it
+
+        prediction = prediction.detach().cpu().numpy()
 
         if 255 in ood_gts:
             #If void pexels, remove them
