@@ -20,7 +20,7 @@ export DETECTRON2_DATASETS=/home/nberardo/Datasets
 export CUDA_HOME=/home/nberardo/cuda_11.8
 
 
-
+"""
 python evaluation_on_ood.py --input /home/nberardo/Datasets/RoadAnomaly21/images/*.png \
  --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml \
  --output /home/nberardo/mask2former/results/dino/
@@ -31,12 +31,12 @@ python evaluation_on_ood.py --input /home/nberardo/Datasets/RoadAnomaly/images/*
 
 python evaluation_on_ood.py --input /home/nberardo/Datasets/RoadObsticle21/images/*.webp \
  --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml \
- --output /home/nberardo/mask2former/results/dino/
+ --output /home/nberardo/mask2former/results/dino/"""
 
 python evaluation_on_ood.py --input /home/nberardo/Datasets/FS_LostFound_full/images/*.png \
  --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml \
  --output /home/nberardo/mask2former/results/dino/
-
+"""
 python evaluation_on_ood.py --input /home/nberardo/Datasets/fs_static/images/*.jpg \
  --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml \
- --output /home/nberardo/mask2former/results/dino/
+ --output /home/nberardo/mask2former/results/dino/"""

@@ -88,7 +88,7 @@ if __name__=="__main__":
         ood_gts = np.array(mask)
 
         if "RoadAnomaly" in pathGT:
-            #RA has label 2 for anomaly, but we want it to be 1, so change it
+            #RA21 has label 2 for anomaly, but we want it to be 1, so change it
             ood_gts = np.where((ood_gts == 2), 1, ood_gts)
 
         if "LostFound" in pathGT:
