@@ -63,6 +63,8 @@ if __name__=="__main__":
         open(file_path, 'w').close()
     file = open(file_path, 'a')
 
+    file.write(args.input[0].split('/')[4] + "\n")
+
     predictions = []
     gts = []
 

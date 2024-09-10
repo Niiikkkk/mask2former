@@ -22,6 +22,6 @@ export CUDA_HOME=/home/nberardo/cuda_11.8
 #convert pth weights to pkl
 #python tools/convert-torchvision-to-d2.py /home/nberardo/simsiam/resnet50.pth /home/nberardo/mask2anomaly_v2/backbone_weights/simsiam_resnet50.pkl
 
-python evaluation_on_ood.py --input /home/nberardo/Datasets/RoadAnomaly/images/*.jpg \
+python evaluation_on_ood.py --input /home/nberardo/Datasets/RoadAnomaly21/images/*.jpg \
  --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k.yaml \
  --output /home/nberardo/mask2former/results/simsiam/
