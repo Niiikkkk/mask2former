@@ -47,7 +47,7 @@ def setup_cfgs(args):
 if __name__=="__main__":
     args = parse_args()
     cfg = setup_cfgs(args)
-    setup_logger(name="fvcore")
+    setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
     logger = setup_logger()
     logger.info("Arguments: " + str(args))
 
@@ -56,6 +56,12 @@ if __name__=="__main__":
         cfg.MODEL.WEIGHTS, resume=False)
 
     model.training = False
+
+    file_path = os.path.join(args.output, 'results.txt')
+
+    if not os.path.exists(file_path):
+        open(file_path, 'w').close()
+    file = open(file_path, 'a')
 
     predictions = []
     gts = []
@@ -117,3 +123,5 @@ if __name__=="__main__":
     res["AUPRC"] = ap
 
     print(res)
+
+    file.write(res)
