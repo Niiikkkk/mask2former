@@ -91,11 +91,6 @@ if __name__=="__main__":
             #RA21 has label 2 for anomaly, but we want it to be 1, so change it
             ood_gts = np.where((ood_gts == 2), 1, ood_gts)
 
-        if "LostFound" in pathGT:
-            ood_gts = np.where((ood_gts == 0), 255, ood_gts)
-            ood_gts = np.where((ood_gts == 1), 0, ood_gts)
-            ood_gts = np.where((ood_gts > 1) & (ood_gts < 201), 1, ood_gts)
-
         # Ignore the "void" label, that is 255
         # 0 => In distrubiton
         # 1 => Out of distribution
@@ -104,20 +99,23 @@ if __name__=="__main__":
         prediction = prediction.detach().cpu().numpy().astype(np.float32)
         ood_gts = np.expand_dims(ood_gts,0)
 
-        if 255 in ood_gts:
-            #If void pixels, remove them
-            predictions.append(prediction[ood_gts != 255])
-            gts.append(ood_gts[ood_gts != 255])
-        else:
-            predictions.append(prediction)
-            gts.append(ood_gts)
+        predictions.append(prediction)
+        gts.append(ood_gts)
 
     #Eval...
     predictions = np.array(predictions)
-    predictions = np.concatenate([p.flatten() for p in predictions] , axis=0)
-
     gts = np.array(gts)
-    gts = np.concatenate([g.flatten() for g in gts], axis=0)
+
+    #1 is anomaly, so ood
+    ood_mask = (gts == 1)
+    #0 is in distribution
+    ind_mask = (gts == 0)
+
+    ood_predictions = predictions[ood_mask]
+    ind_predictions = predictions[ind_mask]
+
+    predictions = np.concatenate([ood_predictions, ind_predictions])
+    gts = np.concatenate([np.ones(len(ood_predictions)), np.zeros(len(ind_predictions))])
 
     fpr, tpr, threshold = roc_curve(gts, predictions)
     roc_auc = auc(fpr, tpr)
