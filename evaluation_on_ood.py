@@ -52,12 +52,12 @@ if __name__=="__main__":
     logger.info("Arguments: " + str(args))
 
     model = DefaultTrainer.build_model(cfg)
-    DetectionCheckpointer(model, save_dir=args.output).resume_or_load(
+    DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(
         cfg.MODEL.WEIGHTS, resume=False)
 
     model.training = False
 
-    file_path = os.path.join(args.output, 'results.txt')
+    file_path = os.path.join(cfg.OUTPUT_DIR, 'results.txt')
 
     if not os.path.exists(file_path):
         open(file_path, 'w').close()
