@@ -19,8 +19,6 @@ source /home/nberardo/myenv/bin/activate
 export DETECTRON2_DATASETS=/home/nberardo/Datasets
 export CUDA_HOME=/home/nberardo/cuda_11.8
 
-
-
 python evaluation_on_ood.py --input /home/nberardo/Datasets/RoadAnomaly21/images/*.png \
  --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml \
 
