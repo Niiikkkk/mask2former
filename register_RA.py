@@ -50,4 +50,9 @@ input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": i
 model.training = False
 res = model(input)[0]["sem_seg"]
 print(res.shape)
+res = res.max(0)
+print(res.shape)
+
+im = Image.fromarray(np.uint8(res*255))
+im.save("/home/nberardo/mask2former/image_results/img.jpg")
 
