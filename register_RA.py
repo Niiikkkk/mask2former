@@ -12,6 +12,7 @@ from detectron2.utils.logger import setup_logger
 from mask2former import add_maskformer2_config
 import detectron2.utils.comm as comm
 import argparse
+from matplotlib import pyplot as plt
 
 """x = cv2.imread("../../../legion/Datasets/FS_LostFound_full/labels_masks/54.png")
 # RA21 -> 0:Cityscapes 1:Anomaly 255:VOID
@@ -91,13 +92,14 @@ img = img.reshape((img.shape[2], img.shape[0], img.shape[1]))
 print(img.shape)
 input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}]
 model.training = False
-res = model(input)[0]["sem_seg"]
+res = model(input)[0]["sem_seg"].unsqueeze(0)
 print(res.shape)
-res = torch.max(res,axis=0)
-#print(np.unique(res[1]))
+res = torch.max(res,axis=1)
+print(np.unique(res[1]))
 res = res[1]
 print(res.shape)
 
-im = Image.fromarray(res.detach().cpu().numpy())
-im.save("/home/nberardo/mask2former/image_results/img.jpg")
+im = decode_segmap(res.detach().cpu().numpy())
+plt.imshow(img)
+plt.savefig("/home/nberardo/mask2former/image_results/img.jpg")
 
