@@ -95,9 +95,9 @@ res = model(input)[0]["sem_seg"].unsqueeze(0)
 print(res.shape)
 res = torch.max(res,axis=1)
 print(res[1])
-res = res[0]
+res = res[1]
 print(res.shape)
 
-im = Image.fromarray(decode_segmap(res.detach().cpu().numpy()))
+im = Image.fromarray(res.detach().cpu().numpy())
 im.save("/home/nberardo/mask2former/image_results/img.jpg")
 
