@@ -1,9 +1,7 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
 OUTPUT_DIR: "/home/nberardo/mask2former/results/simsiam_freezed/"
 MODEL:
-  BACKBONE:
-    FREEZE_AT: 5
-  WEIGHTS: "/home/nberardo/mask2former/output/train/simsiam_freezed/model_final.pth"
+  WEIGHTS: "/home/nberardo/mask2former/output/train/simsiam/model_final.pth"
   META_ARCHITECTURE: "MaskFormer"
   RESNETS:
 
