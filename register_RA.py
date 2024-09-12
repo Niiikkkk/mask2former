@@ -95,7 +95,6 @@ model.training = False
 res = model(input)[0]["sem_seg"].unsqueeze(0)
 print(res.shape)
 res = torch.max(res,axis=1)
-print(np.unique(res[1]))
 res = res[1]
 print(res.shape)
 
