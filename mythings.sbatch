@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --time=72:00:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=1
 #SBATCH --gres=gpu:1
 #SBATCH --job-name=m2f_tests
 #SBATCH --mail-user=s319439@studenti.polito.it
@@ -19,6 +19,9 @@ source /home/nberardo/myenv/bin/activate
 export DETECTRON2_DATASETS=/home/nberardo/Datasets
 export CUDA_HOME=/home/nberardo/cuda_11.8
 
+python register_RA.py
+
+"""
 python evaluation_on_ood.py --input /home/nberardo/Datasets/RoadAnomaly21/images/*.png \
  --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml \
 
@@ -33,3 +36,4 @@ python evaluation_on_ood.py --input /home/nberardo/Datasets/FS_LostFound_full/im
 
 python evaluation_on_ood.py --input /home/nberardo/Datasets/fs_static/images/*.jpg \
  --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml \
+ """
