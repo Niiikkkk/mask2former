@@ -45,6 +45,7 @@ def setup_cfgs(args):
     return cfg
 
 if __name__=="__main__":
+    print(torch.cuda.is_available())
     args = parse_args()
     cfg = setup_cfgs(args)
     setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
