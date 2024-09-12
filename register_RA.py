@@ -31,7 +31,7 @@ cfg = get_cfg()
 # for poly lr schedule
 add_deeplab_config(cfg)
 add_maskformer2_config(cfg)
-cfg.merge_from_file("configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k.yaml")
+cfg.merge_from_file("configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml")
 cfg.freeze()
 
 setup_logger(name="fvcore")
