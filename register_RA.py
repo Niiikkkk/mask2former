@@ -104,5 +104,5 @@ print(res.shape)
 
 im = decode_segmap(res.detach().cpu().numpy())
 plt.imshow(im)
-plt.savefig("/home/nberardo/mask2former/image_results/img.jpg")
+plt.savefig("/home/nberardo/mask2former/img.jpg")
 
