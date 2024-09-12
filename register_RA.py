@@ -106,4 +106,5 @@ def func() :
     plt.imshow(im)
     plt.savefig("/home/nberardo/mask2former/img.jpg")
 
-launch(func,2,1,0, "tcp://127.0.0.1:51654")
+if __name__ == "__main__":
+    launch(func,2,1,0, "tcp://127.0.0.1:51654")
