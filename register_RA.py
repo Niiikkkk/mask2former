@@ -4,7 +4,7 @@ import torch
 from PIL import Image
 from detectron2.config import get_cfg
 from detectron2.data.detection_utils import read_image
-from detectron2.engine import DefaultTrainer, default_setup
+from detectron2.engine import DefaultTrainer, default_setup, launch
 from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.projects.deeplab import add_deeplab_config
 
@@ -75,33 +75,35 @@ def decode_segmap(temp):
     return rgb
 
 
-cfg = get_cfg()
+def func() :
+    cfg = get_cfg()
 # for poly lr schedule
-add_deeplab_config(cfg)
-add_maskformer2_config(cfg)
-cfg.merge_from_file("configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml")
-cfg.freeze()
+    add_deeplab_config(cfg)
+    add_maskformer2_config(cfg)
+    cfg.merge_from_file("configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml")
+    cfg.freeze()
 
-setup_logger(name="fvcore")
-logger = setup_logger()
+    setup_logger(name="fvcore")
+    logger = setup_logger()
 
-model = DefaultTrainer.build_model(cfg)
-DetectionCheckpointer(model).resume_or_load(
-            cfg.MODEL.WEIGHTS, resume=False)
+    model = DefaultTrainer.build_model(cfg)
+    DetectionCheckpointer(model).resume_or_load(
+                cfg.MODEL.WEIGHTS, resume=False)
 
-#read_image return HWC
-img = read_image("/home/nberardo/Datasets/FS_LostFound_full/images/54.png", format="BGR")
+    #read_image return HWC
+    img = read_image("/home/nberardo/Datasets/FS_LostFound_full/images/54.png", format="BGR")
 
-img = img.reshape((img.shape[2], img.shape[0], img.shape[1]))
-print(img.shape)
-input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}]
-model.training = False
-res = model(input)[0]["sem_seg"].unsqueeze(0)
-res = torch.max(res,axis=1)
-print(torch.unique(res[1]))
-res = res[1]
+    img = img.reshape((img.shape[2], img.shape[0], img.shape[1]))
+    print(img.shape)
+    input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}]
+    model.training = False
+    res = model(input)[0]["sem_seg"].unsqueeze(0)
+    res = torch.max(res,axis=1)
+    print(torch.unique(res[1]))
+    res = res[1]
 
-im = decode_segmap(res.detach().cpu().numpy())
-plt.imshow(im)
-plt.savefig("/home/nberardo/mask2former/img.jpg")
+    im = decode_segmap(res.detach().cpu().numpy())
+    plt.imshow(im)
+    plt.savefig("/home/nberardo/mask2former/img.jpg")
 
+launch(func,2,1,0, "tcp://127.0.0.1:51654")
