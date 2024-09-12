@@ -52,8 +52,7 @@ if __name__=="__main__":
     logger.info("Arguments: " + str(args))
 
     model = DefaultTrainer.build_model(cfg)
-    DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(
-        cfg.MODEL.WEIGHTS, resume=False)
+    DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).load(cfg.MODEL.WEIGHTS)
 
     model.training = False
 
@@ -70,10 +69,10 @@ if __name__=="__main__":
 
     for img_path in tqdm.tqdm(args.input):
         img = read_image(img_path, format="BGR")
-        img = img.reshape((img.shape[2], img.shape[0], img.shape[1]))
-        input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}]
+        img = torch.as_tensor(img.astype("float32").transpose(2, 0, 1))
+        input = [{"image": img, "height": img.shape[1], "width": img.shape[2]}]
         prediction = model(input)[0]["sem_seg"].unsqueeze(0) #Here C = 19, cityscapes classes
-        prediction = torch.max(prediction, axis=1)[0]
+        prediction = torch.max(prediction, axis=1)[1]
 
         pathGT = img_path.replace("images", "labels_masks")
 

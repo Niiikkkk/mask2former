@@ -56,7 +56,6 @@ label_colours = dict(zip(range(19), colors))
 
 
 def decode_segmap(temp):
-    print(np.unique(temp))
     r = temp.copy()
     g = temp.copy()
     b = temp.copy()
@@ -80,31 +79,35 @@ def func() :
 # for poly lr schedule
     add_deeplab_config(cfg)
     add_maskformer2_config(cfg)
-    cfg.merge_from_file("configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml")
+    cfg.merge_from_file("../configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_TMP.yaml")
     cfg.freeze()
 
     setup_logger(name="fvcore")
     logger = setup_logger()
+    logger.info("Arguments: " + str(cfg))
 
     model = DefaultTrainer.build_model(cfg)
-    DetectionCheckpointer(model).resume_or_load(
-                cfg.MODEL.WEIGHTS, resume=False)
+    DetectionCheckpointer(model).load(cfg.MODEL.WEIGHTS)
 
     #read_image return HWC
-    img = read_image("/home/nberardo/Datasets/FS_LostFound_full/images/54.png", format="BGR")
+    img = read_image("/Users/nicholas.berardo/Desktop/RoadAnomaly/images/0.jpg", format="BGR")
 
-    img = img.reshape((img.shape[2], img.shape[0], img.shape[1]))
-    print(img.shape)
-    input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}]
+    height, width = img.shape[:2]
+
+
+    img = torch.as_tensor(img.astype("float32").transpose(2, 0, 1))
+
+
+    input = [{"image": img, "height": height, "width": width}]
     model.training = False
-    res = model(input)[0]["sem_seg"].unsqueeze(0)
-    res = torch.max(res,axis=1)
-    print(torch.unique(res[1]))
+    res = model(input)[0]["sem_seg"]
+
+    res = torch.max(res,axis=0)
     res = res[1]
 
-    im = decode_segmap(res.detach().cpu().numpy())
+    im = res.detach().cpu().numpy()
     plt.imshow(im)
-    plt.savefig("/home/nberardo/mask2former/img.jpg")
+    plt.show()
 
 if __name__ == "__main__":
-    launch(func,2,1,0, "tcp://127.0.0.1:51654")
+    func()
