@@ -56,7 +56,6 @@ label_colours = dict(zip(range(19), colors))
 
 
 def decode_segmap(temp):
-    temp = temp.reshape(temp.shape[2], temp.shape[1], temp.shape[0])
     r = temp.copy()
     g = temp.copy()
     b = temp.copy()
@@ -65,12 +64,13 @@ def decode_segmap(temp):
         g[temp == l] = label_colours[l][1]
         b[temp == l] = label_colours[l][2]
 
-    rgb = np.zeros((temp.shape[0], temp.shape[1], 3))
+    rgb = np.zeros((temp.shape[2], temp.shape[1], 3))
     print(temp.shape)
     print(rgb.shape)
     rgb[:, :, 0] = r / 255.0
     rgb[:, :, 1] = g / 255.0
     rgb[:, :, 2] = b / 255.0
+    print(rgb.shape)
     return rgb
 
 
