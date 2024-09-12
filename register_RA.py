@@ -50,6 +50,6 @@ model.training = False
 res = model(input)
 print(res[0]["sem_seg"].shape)"""
 
-model = torch.load("backbone_weights/simsiam_resnet50.pkl",map_location="cpu")
+model = torch.load("backbone_weights/simsiam_resnet50.pkl")
 for n,w in model.items():
     print(n)
