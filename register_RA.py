@@ -70,6 +70,7 @@ def decode_segmap(temp):
     rgb[:, :, 0] = r / 255.0
     rgb[:, :, 1] = g / 255.0
     rgb[:, :, 2] = b / 255.0
+    rgb = rgb.reshape(rgb.shape[1], rgb.shape[0], rgb.shape[2])
     print(rgb.shape)
     return rgb
 
@@ -102,5 +103,6 @@ res = res[1]
 print(res.shape)
 
 im = decode_segmap(res.detach().cpu().numpy())
-Image.fromarray(im).save("/home/nberardo/mask2former/image_results/img.jpg")
+plt.imshow(img)
+plt.savefig("/home/nberardo/mask2former/image_results/img.jpg")
 
