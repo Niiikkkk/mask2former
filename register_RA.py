@@ -26,6 +26,7 @@ cv2.imshow("image",x)
 cv2.waitKey(0)cd 
 cv2.destroyAllWindows()"""
 
+"""
 cfg = get_cfg()
 # for poly lr schedule
 add_deeplab_config(cfg)
@@ -47,4 +48,8 @@ print(img.shape)
 input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}]
 model.training = False
 res = model(input)
-print(res[0]["sem_seg"].shape)
+print(res[0]["sem_seg"].shape)"""
+
+model = torch.load("../../../model_final.pth",map_location="cpu")
+for n,w in model["model"].items():
+    print(n)
