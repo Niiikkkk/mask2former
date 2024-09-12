@@ -1,5 +1,5 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/results/simsiam_freezed/"
+OUTPUT_DIR: "/home/nberardo/mask2former/results/simsiam/"
 MODEL:
   WEIGHTS: "/home/nberardo/mask2former/output/train/simsiam/model_final.pth"
   META_ARCHITECTURE: "MaskFormer"
@@ -8,7 +8,7 @@ MODEL:
     #ADDED BY ME: if use SyncBN, set NORM: "SyncBN", but only if I have more than 1 GPU. Otherwise SyncBN will call the distributed that isn't initialized...
     #If gpu = 1 then use normal BN
 
-    NORM: "SyncBN"
+    NORM: "BN"
   SEM_SEG_HEAD:
     NAME: "MaskFormerHead"
     IGNORE_VALUE: 255
