@@ -20,8 +20,8 @@ export DETECTRON2_DATASETS=/home/nberardo/Datasets
 export CUDA_HOME=/home/nberardo/cuda_11.8
 
 #convert pth weights to pkl
-#python tools/convert-torchvision-to-d2.py /home/nberardo/moco/output_dir/moco_v2_r50/resnet50_extracted.pth /home/nberardo/mask2former/backbone_weights/moco_v2_resnet50.pkl
+python tools/convert-torchvision-to-d2.py /home/nberardo/moco/output_dir/moco_v2_r50/resnet50_extracted.pth /home/nberardo/mask2former/backbone_weights/moco_v2_resnet50.pkl
 
-python train_net.py \
-  --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k.yaml \
-  --num-gpus 2
+#python train_net.py \
+  #--config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k.yaml \
+  #--num-gpus 2
