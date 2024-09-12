@@ -91,10 +91,10 @@ img = img.reshape((img.shape[2], img.shape[0], img.shape[1]))
 print(img.shape)
 input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}]
 model.training = False
-res = model(input)[0]["sem_seg"].unsqueeze(0)
+res = model(input)[0]["sem_seg"]
 print(res.shape)
-res = torch.max(res,axis=1)
-print(res[1])
+res = torch.max(res,axis=0)
+print(np.unique(res[1]))
 res = res[1]
 print(res.shape)
 
