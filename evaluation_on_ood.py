@@ -11,8 +11,6 @@ from detectron2.projects.deeplab import add_deeplab_config
 
 from detectron2.utils.logger import setup_logger
 from mask2former import add_maskformer2_config
-import detectron2.utils.comm as comm
-import glob
 import os
 import tqdm
 from sklearn.metrics import roc_curve, auc, average_precision_score
@@ -45,7 +43,6 @@ def setup_cfgs(args):
     return cfg
 
 if __name__=="__main__":
-    print(torch.cuda.is_available())
     args = parse_args()
     cfg = setup_cfgs(args)
     setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
