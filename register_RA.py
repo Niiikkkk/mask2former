@@ -97,10 +97,9 @@ print(img.shape)
 input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}]
 model.training = False
 res = model(input)[0]["sem_seg"].unsqueeze(0)
-print(res.shape)
+print(torch.unique(res[1]))
 res = torch.max(res,axis=1)
 res = res[1]
-print(res.shape)
 
 im = decode_segmap(res.detach().cpu().numpy())
 plt.imshow(im)
