@@ -96,6 +96,6 @@ print(res.shape)
 res = torch.max(res,axis=1)[0]
 print(res.shape)
 
-im = Image.fromarray(decode_segmap(res))
+im = Image.fromarray(decode_segmap(res.cpu().numpy()))
 im.save("/home/nberardo/mask2former/image_results/img.jpg")
 
