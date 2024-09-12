@@ -53,6 +53,6 @@ print(res.shape)
 res = torch.max(res,axis=1)[0]
 print(res.shape)
 
-im = Image.fromarray(np.uint8(res.detach().numpy().cpu()*255))
+im = Image.fromarray(np.uint8(res.detach().cpu().numpy()*255))
 im.save("/home/nberardo/mask2former/image_results/img.jpg")
 
