@@ -48,9 +48,9 @@ img = img.reshape((img.shape[2], img.shape[0], img.shape[1]))
 print(img.shape)
 input = [{"image": torch.tensor(img).float(), "height": img.shape[1], "width": img.shape[2]}]
 model.training = False
-res = model(input)[0]["sem_seg"]
+res = model(input)[0]["sem_seg"].unsqueeze(0)
 print(res.shape)
-res = torch.max(res,axis=0)[0]
+res = torch.max(res,axis=1)[0]
 print(res.shape)
 
 im = Image.fromarray(np.uint8(res.detach().numpy().cpu()*255))
