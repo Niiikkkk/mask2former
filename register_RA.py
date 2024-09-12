@@ -65,6 +65,8 @@ def decode_segmap(temp):
         b[temp == l] = label_colours[l][2]
 
     rgb = np.zeros((temp.shape[0], temp.shape[1], 3))
+    print(temp.shape)
+    print(rgb.shape)
     rgb[:, :, 0] = r / 255.0
     rgb[:, :, 1] = g / 255.0
     rgb[:, :, 2] = b / 255.0
@@ -97,7 +99,6 @@ print(res.shape)
 res = torch.max(res,axis=1)
 res = res[1]
 print(res.shape)
-res = res.permute(2,1,0)
 
 im = decode_segmap(res.detach().cpu().numpy())
 plt.imshow(img)
