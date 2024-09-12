@@ -27,6 +27,49 @@ cv2.imshow("image",x)
 cv2.waitKey(0)cd 
 cv2.destroyAllWindows()"""
 
+
+colors = [
+        [128, 64, 128],
+        [244, 35, 232],
+        [70, 70, 70],
+        [102, 102, 156],
+        [190, 153, 153],
+        [153, 153, 153],
+        [250, 170, 30],
+        [220, 220, 0],
+        [107, 142, 35],
+        [152, 251, 152],
+        [0, 130, 180],
+        [220, 20, 60],
+        [255, 0, 0],
+        [0, 0, 142],
+        [0, 0, 70],
+        [0, 60, 100],
+        [0, 80, 100],
+        [0, 0, 230],
+        [119, 11, 32],
+    ]
+
+
+label_colours = dict(zip(range(19), colors))
+
+
+def decode_segmap(temp):
+    r = temp.copy()
+    g = temp.copy()
+    b = temp.copy()
+    for l in range(0, 19):
+        r[temp == l] = label_colours[l][0]
+        g[temp == l] = label_colours[l][1]
+        b[temp == l] = label_colours[l][2]
+
+    rgb = np.zeros((temp.shape[0], temp.shape[1], 3))
+    rgb[:, :, 0] = r / 255.0
+    rgb[:, :, 1] = g / 255.0
+    rgb[:, :, 2] = b / 255.0
+    return rgb
+
+
 cfg = get_cfg()
 # for poly lr schedule
 add_deeplab_config(cfg)
@@ -53,6 +96,6 @@ print(res.shape)
 res = torch.max(res,axis=1)[0]
 print(res.shape)
 
-im = Image.fromarray(np.uint8(res.detach().cpu().numpy()*255))
+im = Image.fromarray(decode_segmap(res))
 im.save("/home/nberardo/mask2former/image_results/img.jpg")
 
