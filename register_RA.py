@@ -70,7 +70,6 @@ def decode_segmap(temp):
     rgb[:, :, 0] = r / 255.0
     rgb[:, :, 1] = g / 255.0
     rgb[:, :, 2] = b / 255.0
-    rgb = rgb.reshape()
     print(rgb.shape)
     return rgb
 
