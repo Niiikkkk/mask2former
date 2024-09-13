@@ -71,8 +71,8 @@ def func():
         height, width = img.shape[:2]
         img = torch.as_tensor(img.astype("float32").transpose(2, 0, 1))
         input = [{"image": img, "height": height, "width": width}]
-        prediction = model(input)[0]["sem_seg"].unsqueeze(0)  # Here C = 19, cityscapes classes
-        prediction_ = torch.max(prediction[0:19,:,:], axis=1)[0]
+        prediction = model(input)[0]["sem_seg"]  # Here C = 19, cityscapes classes
+        prediction_ = torch.max(prediction, axis=0)[0].unsqueeze(0)
 
         pathGT = img_path.replace("images", "labels_masks")
 
