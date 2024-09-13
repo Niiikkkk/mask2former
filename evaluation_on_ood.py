@@ -74,7 +74,7 @@ def func():
         prediction = model(input)[0]["sem_seg"].unsqueeze(0)  # Here C = 19, cityscapes classes
 
         if num == 0:
-            out_img = torch.max(prediction.squeeze(),axis=0)[1]
+            out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
             plt.imshow(out_img)
             plt.savefig("output.png")
         prediction_ = torch.max(prediction, axis=1)[0]
