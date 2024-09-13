@@ -72,9 +72,9 @@ if __name__=="__main__":
         img = torch.as_tensor(img.astype("float32").transpose(2, 0, 1))
         input = [{"image": img, "height": height, "width": width}]
         prediction = model(input)[0]["sem_seg"].unsqueeze(0) #Here C = 19, cityscapes classes
-        prediction = torch.max(prediction, axis=1)[0]
+        prediction_ = torch.max(prediction, axis=1)[0]
 
-        output_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
+        output_img = torch.max(prediction.squeeze(), axis=0)[1].detach().cpu().numpy()
         plt.imshow(output_img)
         plt.savefig(str(num) + "output.png")
 
@@ -99,10 +99,10 @@ if __name__=="__main__":
         # 1 => Out of distribution
         # 255 => Void, so ignore it
 
-        prediction = prediction.detach().cpu().numpy().astype(np.float32)
+        prediction_ = prediction_.detach().cpu().numpy().astype(np.float32)
         ood_gts = np.expand_dims(ood_gts,0)
 
-        predictions.append(prediction)
+        predictions.append(prediction_)
         gts.append(ood_gts)
 
     #Eval...
