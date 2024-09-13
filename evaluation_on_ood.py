@@ -72,6 +72,7 @@ if __name__=="__main__":
         img = torch.as_tensor(img.astype("float32").transpose(2, 0, 1))
         input = [{"image": img, "height": height, "width": width}]
         prediction = model(input)[0]["sem_seg"].unsqueeze(0) #Here C = 19, cityscapes classes
+        print(prediction)
         prediction_ = torch.max(prediction, axis=1)[0]
 
         pathGT = img_path.replace("images", "labels_masks")
@@ -94,7 +95,7 @@ if __name__=="__main__":
         # 0 => In distrubiton
         # 1 => Out of distribution
         # 255 => Void, so ignore it
-        print(prediction_)
+
 
         prediction_ = prediction_.detach().cpu().numpy().astype(np.float32)
         ood_gts = np.expand_dims(ood_gts,0)
