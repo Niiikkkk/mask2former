@@ -68,9 +68,9 @@ if __name__=="__main__":
 
     for num, img_path in enumerate(tqdm.tqdm(args.input)):
         img = read_image(img_path, format="BGR")
-        print(img)
         height, width = img.shape[:2]
         img = torch.as_tensor(img.astype("float32").transpose(2, 0, 1))
+        print(img)
         input = [{"image": img, "height": height, "width": width}]
         prediction = model(input)[0]["sem_seg"].unsqueeze(0) #Here C = 19, cityscapes classes
         print(prediction)
