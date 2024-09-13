@@ -79,7 +79,7 @@ def func() :
 # for poly lr schedule
     add_deeplab_config(cfg)
     add_maskformer2_config(cfg)
-    cfg.merge_from_file("../configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_TMP.yaml")
+    cfg.merge_from_file("/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml")
     cfg.freeze()
 
     setup_logger(name="fvcore")
@@ -90,7 +90,7 @@ def func() :
     DetectionCheckpointer(model).load(cfg.MODEL.WEIGHTS)
 
     #read_image return HWC
-    img = read_image("/Users/nicholas.berardo/Desktop/RoadAnomaly/images/0.jpg", format="BGR")
+    img = read_image("/home/nberardo/Datasets/RoadAnomaly/images/0.jpg", format="BGR")
 
     height, width = img.shape[:2]
 
