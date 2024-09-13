@@ -6,7 +6,7 @@ import torch
 import numpy as np
 from detectron2.config import get_cfg
 from detectron2.data.detection_utils import read_image
-from detectron2.engine import DefaultTrainer, default_setup
+from detectron2.engine import DefaultTrainer, default_setup, launch
 from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.projects.deeplab import add_deeplab_config
 
@@ -43,7 +43,7 @@ def setup_cfgs(args):
     cfg.freeze()
     return cfg
 
-if __name__=="__main__":
+def func():
     args = parse_args()
     cfg = setup_cfgs(args)
     setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
@@ -71,8 +71,8 @@ if __name__=="__main__":
         height, width = img.shape[:2]
         img = torch.as_tensor(img.astype("float32").transpose(2, 0, 1))
         input = [{"image": img, "height": height, "width": width}]
-        prediction = model(input)[0]["sem_seg"].unsqueeze(0) #Here C = 19, cityscapes classes
-        print(prediction.max())
+        prediction = model(input)[0]["sem_seg"].unsqueeze(0)  # Here C = 19, cityscapes classes
+        print(prediction)
         prediction_ = torch.max(prediction, axis=1)[0]
 
         pathGT = img_path.replace("images", "labels_masks")
@@ -88,7 +88,7 @@ if __name__=="__main__":
         ood_gts = np.array(mask)
 
         if "RoadAnomaly" in pathGT:
-            #RA21 has label 2 for anomaly, but we want it to be 1, so change it
+            # RA21 has label 2 for anomaly, but we want it to be 1, so change it
             ood_gts = np.where((ood_gts == 2), 1, ood_gts)
 
         # Ignore the "void" label, that is 255
@@ -96,20 +96,19 @@ if __name__=="__main__":
         # 1 => Out of distribution
         # 255 => Void, so ignore it
 
-
         prediction_ = prediction_.detach().cpu().numpy().astype(np.float32)
-        ood_gts = np.expand_dims(ood_gts,0)
+        ood_gts = np.expand_dims(ood_gts, 0)
 
         predictions.append(prediction_)
         gts.append(ood_gts)
 
-    #Eval...
+    # Eval...
     predictions = np.array(predictions)
     gts = np.array(gts)
 
-    #1 is anomaly, so ood
+    # 1 is anomaly, so ood
     ood_mask = (gts == 1)
-    #0 is in distribution
+    # 0 is in distribution
     ind_mask = (gts == 0)
 
     ood_predictions = predictions[ood_mask]
@@ -121,7 +120,7 @@ if __name__=="__main__":
     fpr, tpr, threshold = roc_curve(gts, predictions)
     roc_auc = auc(fpr, tpr)
     fpr_best = fpr[tpr >= 0.95][0]
-    ap = average_precision_score(gts,predictions)
+    ap = average_precision_score(gts, predictions)
 
     res = {}
     res["AUROC"] = roc_auc
@@ -129,5 +128,9 @@ if __name__=="__main__":
     res["AUPRC"] = ap
 
     print(res)
+    file.write(
+        "AUROC: " + str(res["AUROC"]) + " FPR@TPR95: " + str(res["FPR@TPR95"]) + " AUPRC: " + str(res["AUPRC"]) + "\n")
 
-    file.write("AUROC: " + str(res["AUROC"]) + " FPR@TPR95: " + str(res["FPR@TPR95"]) + " AUPRC: " + str(res["AUPRC"]) + "\n")
+
+if __name__=="__main__":
+    launch(func, num_gpus=2, dist_url="auto", num_machines=1)
