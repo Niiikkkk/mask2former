@@ -133,4 +133,4 @@ def func():
 
 
 if __name__=="__main__":
-    launch(func, num_gpus_per_machine=2, dist_url="auto", num_machines=1)
+    launch(func, num_gpus_per_machine=1, dist_url="auto", num_machines=1)
