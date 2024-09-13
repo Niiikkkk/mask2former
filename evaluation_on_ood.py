@@ -1,5 +1,6 @@
 import argparse
 
+import matplotlib.pyplot as plt
 from PIL import Image
 import torch
 import numpy as np
@@ -65,12 +66,17 @@ if __name__=="__main__":
     predictions = []
     gts = []
 
-    for img_path in tqdm.tqdm(args.input):
+    for num, img_path in enumerate(tqdm.tqdm(args.input)):
         img = read_image(img_path, format="BGR")
+        height, width = img.shape[:2]
         img = torch.as_tensor(img.astype("float32").transpose(2, 0, 1))
-        input = [{"image": img, "height": img.shape[1], "width": img.shape[2]}]
+        input = [{"image": img, "height": height, "width": width}]
         prediction = model(input)[0]["sem_seg"].unsqueeze(0) #Here C = 19, cityscapes classes
         prediction = torch.max(prediction, axis=1)[0]
+
+        output_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
+        plt.imshow(output_img)
+        plt.savefig(str(num) + "output.png")
 
         pathGT = img_path.replace("images", "labels_masks")
 
