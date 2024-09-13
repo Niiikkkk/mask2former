@@ -94,6 +94,7 @@ if __name__=="__main__":
         # 0 => In distrubiton
         # 1 => Out of distribution
         # 255 => Void, so ignore it
+        print(prediction_)
 
         prediction_ = prediction_.detach().cpu().numpy().astype(np.float32)
         ood_gts = np.expand_dims(ood_gts,0)
@@ -104,8 +105,6 @@ if __name__=="__main__":
     #Eval...
     predictions = np.array(predictions)
     gts = np.array(gts)
-
-    print(predictions)
 
     #1 is anomaly, so ood
     ood_mask = (gts == 1)
