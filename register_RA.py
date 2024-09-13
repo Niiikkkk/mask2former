@@ -107,7 +107,7 @@ def func() :
 
     im = res.detach().cpu().numpy()
     plt.imshow(im)
-    plt.show()
+    plt.savefig("output.png")
 
 if __name__ == "__main__":
     func()
