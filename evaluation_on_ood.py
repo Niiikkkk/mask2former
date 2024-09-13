@@ -74,10 +74,6 @@ if __name__=="__main__":
         prediction = model(input)[0]["sem_seg"].unsqueeze(0) #Here C = 19, cityscapes classes
         prediction_ = torch.max(prediction, axis=1)[0]
 
-        output_img = torch.max(prediction.squeeze(), axis=0)[1].detach().cpu().numpy()
-        plt.imshow(output_img)
-        plt.savefig(str(num) + "output.png")
-
         pathGT = img_path.replace("images", "labels_masks")
 
         if "RoadObsticle21" in pathGT:
@@ -108,6 +104,8 @@ if __name__=="__main__":
     #Eval...
     predictions = np.array(predictions)
     gts = np.array(gts)
+
+    print(predictions)
 
     #1 is anomaly, so ood
     ood_mask = (gts == 1)
