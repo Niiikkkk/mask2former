@@ -11,6 +11,8 @@ from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.projects.deeplab import add_deeplab_config
 
 from detectron2.utils.logger import setup_logger
+
+from demo.predictor import VisualizationDemo
 from mask2former import add_maskformer2_config
 import os
 import tqdm
@@ -51,7 +53,10 @@ def func():
     logger.info("Arguments: " + str(args))
 
     model = DefaultTrainer.build_model(cfg)
-    DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(cfg.MODEL.WEIGHTS, resume=False)
+    DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).load(cfg.MODEL.WEIGHTS)
+
+    demo = VisualizationDemo(cfg)
+
 
     model.training = False
 
@@ -69,10 +74,11 @@ def func():
     for num, img_path in enumerate(tqdm.tqdm(args.input)):
         with torch.no_grad():
             img = read_image(img_path, format="BGR")
-            height, width = img.shape[:2]
-            img = torch.as_tensor(img.astype(np.float32).transpose(2, 0, 1))
-            input = [{"image": img, "height": height, "width": width}]
-            prediction = model(input)[0]["sem_seg"].unsqueeze(0)  # Here C = 19, cityscapes classes
+            prediction = demo.run_on_image(img)
+            # height, width = img.shape[:2]
+            # img = torch.as_tensor(img.astype(np.float32).transpose(2, 0, 1))
+            # input = [{"image": img, "height": height, "width": width}]
+            # prediction = model(input)[0]["sem_seg"].unsqueeze(0)  # Here C = 19, cityscapes classes
 
             # if num == 0:
             #     out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
