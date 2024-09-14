@@ -67,44 +67,45 @@ def func():
     gts = []
 
     for num, img_path in enumerate(tqdm.tqdm(args.input)):
-        img = read_image(img_path, format="BGR")
-        height, width = img.shape[:2]
-        img = torch.as_tensor(img.astype("float32").transpose(2, 0, 1))
-        input = [{"image": img, "height": height, "width": width}]
-        prediction = model(input)[0]["sem_seg"].unsqueeze(0)  # Here C = 19, cityscapes classes
+        with torch.no_grad():
+            img = read_image(img_path, format="BGR")
+            height, width = img.shape[:2]
+            img = torch.as_tensor(img.astype(np.float32).transpose(2, 0, 1))
+            input = [{"image": img, "height": height, "width": width}]
+            prediction = model(input)[0]["sem_seg"].unsqueeze(0)  # Here C = 19, cityscapes classes
 
-        # if num == 0:
-        #     out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
-        #     plt.imshow(out_img)
-        #     plt.savefig("output.png")
-        prediction_ = torch.max(prediction, axis=1)[0]
+            # if num == 0:
+            #     out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
+            #     plt.imshow(out_img)
+            #     plt.savefig("output.png")
+            prediction_ = torch.max(prediction, axis=1)[0]
 
-        pathGT = img_path.replace("images", "labels_masks")
+            pathGT = img_path.replace("images", "labels_masks")
 
-        if "RoadObsticle21" in pathGT:
-            pathGT = pathGT.replace("webp", "png")
-        if "fs_static" in pathGT:
-            pathGT = pathGT.replace("jpg", "png")
-        if "RoadAnomaly" in pathGT:
-            pathGT = pathGT.replace("jpg", "png")
+            if "RoadObsticle21" in pathGT:
+                pathGT = pathGT.replace("webp", "png")
+            if "fs_static" in pathGT:
+                pathGT = pathGT.replace("jpg", "png")
+            if "RoadAnomaly" in pathGT:
+                pathGT = pathGT.replace("jpg", "png")
 
-        mask = Image.open(pathGT)
-        ood_gts = np.array(mask)
+            mask = Image.open(pathGT)
+            ood_gts = np.array(mask)
 
-        if "RoadAnomaly" in pathGT:
-            # RA21 has label 2 for anomaly, but we want it to be 1, so change it
-            ood_gts = np.where((ood_gts == 2), 1, ood_gts)
+            if "RoadAnomaly" in pathGT:
+                # RA21 has label 2 for anomaly, but we want it to be 1, so change it
+                ood_gts = np.where((ood_gts == 2), 1, ood_gts)
 
-        # Ignore the "void" label, that is 255
-        # 0 => In distrubiton
-        # 1 => Out of distribution
-        # 255 => Void, so ignore it
+            # Ignore the "void" label, that is 255
+            # 0 => In distrubiton
+            # 1 => Out of distribution
+            # 255 => Void, so ignore it
 
-        prediction_ = prediction_.detach().cpu().numpy().astype(np.float32)
-        ood_gts = np.expand_dims(ood_gts, 0)
+            prediction_ = prediction_.detach().cpu().numpy().astype(np.float32)
+            ood_gts = np.expand_dims(ood_gts, 0)
 
-        predictions.append(prediction_)
-        gts.append(ood_gts)
+            predictions.append(prediction_)
+            gts.append(ood_gts)
 
     # Eval...
     predictions = np.array(predictions)
