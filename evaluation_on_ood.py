@@ -115,9 +115,11 @@ def func():
 
     # Eval...
     predictions = np.array(predictions)
+    print(predictions)
     gts = np.array(gts)
+    exit()
 
-    predictions = np.concatenate(predictions, axis=0)
+    predictions = np.concatenate([p.flatten() for p in predictions], axis=0)
     gts = np.concatenate(gts, axis=0)
 
     fpr, tpr, threshold = roc_curve(gts, predictions)
