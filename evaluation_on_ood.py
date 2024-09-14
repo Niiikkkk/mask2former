@@ -104,11 +104,11 @@ def func():
             # 255 => Void, so ignore it
 
             if 255 in ood_gts:
-                prediction_ = prediction_[(ood_gts!=255)]
-                ood_gts = ood_gts[(ood_gts!=255)]
-
-            predictions.append(prediction_)
-            gts.append(ood_gts)
+                predictions.append(prediction_[(ood_gts!=255)])
+                predictions.append(ood_gts[(ood_gts!=255)])
+            else:
+                predictions.append(prediction_)
+                gts.append(ood_gts)
 
     # Eval...
     predictions = np.array(predictions)
