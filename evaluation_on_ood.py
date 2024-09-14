@@ -115,6 +115,7 @@ def func():
 
     # Eval...
     predictions = np.array(predictions)
+    print(predictions)
     gts = np.array(gts)
 
     predictions = np.concatenate(predictions, axis=0)
