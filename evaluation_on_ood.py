@@ -74,9 +74,8 @@ def func():
     for num, img_path in enumerate(tqdm.tqdm(args.input)):
         with torch.no_grad():
             img = read_image(img_path, format="BGR")
-            prediction = demo.run_on_image(img)
-            print(prediction)
-            exit()
+            prediction, _ = demo.run_on_image(img)
+            prediction = prediction["sem_seg"].unsqueeze(0)
             # height, width = img.shape[:2]
             # img = torch.as_tensor(img.astype(np.float32).transpose(2, 0, 1))
             # input = [{"image": img, "height": height, "width": width}]
