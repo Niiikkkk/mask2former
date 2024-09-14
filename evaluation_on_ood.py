@@ -55,9 +55,6 @@ def func():
     model = DefaultTrainer.build_model(cfg)
     DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).load(cfg.MODEL.WEIGHTS)
 
-    demo = VisualizationDemo(cfg)
-
-
     model.training = False
 
     file_path = os.path.join(cfg.OUTPUT_DIR, 'results.txt')
@@ -74,12 +71,10 @@ def func():
     for num, img_path in enumerate(tqdm.tqdm(args.input)):
         with torch.no_grad():
             img = read_image(img_path, format="BGR")
-            prediction, _ = demo.run_on_image(img)
-            prediction = prediction["sem_seg"].unsqueeze(0)
-            # height, width = img.shape[:2]
-            # img = torch.as_tensor(img.astype(np.float32).transpose(2, 0, 1))
-            # input = [{"image": img, "height": height, "width": width}]
-            # prediction = model(input)[0]["sem_seg"].unsqueeze(0)  # Here C = 19, cityscapes classes
+            height, width = img.shape[:2]
+            img = torch.as_tensor(img.astype(np.float32).transpose(2, 0, 1))
+            input = [{"image": img, "height": height, "width": width}]
+            prediction = model(input)[0]["sem_seg"].unsqueeze(0)  # Here C = 19, cityscapes classes
 
             # if num == 0:
             #     out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
@@ -108,8 +103,9 @@ def func():
             # 1 => Out of distribution
             # 255 => Void, so ignore it
 
-            prediction_ = prediction_.detach().cpu().numpy().astype(np.float32)
-            ood_gts = np.expand_dims(ood_gts, 0)
+            if 255 in ood_gts:
+                prediction_ = prediction_[ood_gts!=255]
+                ood_gts = ood_gts[ood_gts!=255]
 
             predictions.append(prediction_)
             gts.append(ood_gts)
@@ -118,16 +114,8 @@ def func():
     predictions = np.array(predictions)
     gts = np.array(gts)
 
-    # 1 is anomaly, so ood
-    ood_mask = (gts == 1)
-    # 0 is in distribution
-    ind_mask = (gts == 0)
-
-    ood_predictions = predictions[ood_mask]
-    ind_predictions = predictions[ind_mask]
-
-    predictions = np.concatenate([ood_predictions, ind_predictions])
-    gts = np.concatenate([np.ones(len(ood_predictions)), np.zeros(len(ind_predictions))])
+    predictions = np.concatenate(predictions, axis=0)
+    gts = np.concatenate(gts, axis=0)
 
     fpr, tpr, threshold = roc_curve(gts, predictions)
     roc_auc = auc(fpr, tpr)
