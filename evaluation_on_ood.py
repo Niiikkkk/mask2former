@@ -103,12 +103,15 @@ def func():
             # 1 => Out of distribution
             # 255 => Void, so ignore it
 
+            prediction_ = prediction_.detach().cpu().numpy()
+            ood_gts = np.expand_dims(ood_gts, 0)
+
             if 255 in ood_gts:
-                predictions.append(prediction_[(ood_gts!=255)])
-                predictions.append(ood_gts[(ood_gts!=255)])
-            else:
-                predictions.append(prediction_)
-                gts.append(ood_gts)
+                prediction_ = prediction_[(ood_gts!=255)]
+                ood_gts = ood_gts[(ood_gts!=255)]
+
+            predictions.append(prediction_)
+            gts.append(ood_gts)
 
     # Eval...
     predictions = np.array(predictions)
