@@ -119,8 +119,10 @@ def func():
     predictions = np.concatenate(predictions, axis=0)
 
     gts = np.concatenate(gts, axis=0)
+    print(gts.shape)
+    print(np.unique(gts))
 
-    fpr, tpr, threshold = roc_curve(gts, predictions, pos_label=0)
+    fpr, tpr, threshold = roc_curve(gts, predictions)
     roc_auc = auc(fpr, tpr)
     fpr_best = fpr[tpr >= 0.95][0]
     ap = average_precision_score(gts, predictions)
