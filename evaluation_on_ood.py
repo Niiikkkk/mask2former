@@ -74,6 +74,9 @@ def func():
             height, width = img.shape[:2]
             img = torch.as_tensor(img.astype(np.float32).transpose(2, 0, 1))
             input = [{"image": img, "height": height, "width": width}]
+            prediction = model(input)
+            print(prediction)
+            exit()
             prediction = model(input)[0]["sem_seg"].unsqueeze(0)  # Here C = 19, cityscapes classes
 
             # if num == 0:
