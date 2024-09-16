@@ -76,10 +76,10 @@ def func():
             input = [{"image": img, "height": height, "width": width}]
             prediction = model(input)[0]["sem_seg"].unsqueeze(0)  # Here C = 19, cityscapes classes
 
-            # if num == 0:
-            #     out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
-            #     plt.imshow(out_img)
-            #     plt.savefig("output.png")
+            if num == 0:
+                out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
+                plt.imshow(out_img)
+                plt.savefig("output.png")
             prediction_ = torch.max(prediction, axis=1)[0]
 
             pathGT = img_path.replace("images", "labels_masks")
@@ -106,7 +106,6 @@ def func():
             prediction_ = prediction_.detach().cpu().numpy()
             ood_gts = np.expand_dims(ood_gts, 0)
 
-
             prediction_ = prediction_[(ood_gts!=255)]
             ood_gts = ood_gts[(ood_gts!=255)]
 
@@ -119,7 +118,6 @@ def func():
     gts = np.array(gts)
 
     predictions = np.concatenate(predictions, axis=0)
-    #KEEP DOING THIS, I got an error
 
     gts = np.concatenate(gts, axis=0)
 
