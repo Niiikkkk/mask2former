@@ -76,10 +76,10 @@ def func():
             input = [{"image": img, "height": height, "width": width}]
             prediction = model(input)[0]["sem_seg"].unsqueeze(0)  # Here C = 19, cityscapes classes
 
-            if num == 0:
-                out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
-                plt.imshow(out_img)
-                plt.savefig("output.png")
+            # if num == 0:
+            #     out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
+            #     plt.imshow(out_img)
+            #     plt.savefig("output.png")
             prediction_ = torch.max(prediction, axis=1)[0]
 
             pathGT = img_path.replace("images", "labels_masks")
@@ -93,6 +93,7 @@ def func():
 
             mask = Image.open(pathGT)
             ood_gts = np.array(mask)
+            print(ood_gts)
 
             if "RoadAnomaly" in pathGT:
                 # RA21 has label 2 for anomaly, but we want it to be 1, so change it
@@ -114,7 +115,6 @@ def func():
 
     # Eval...
     predictions = np.array(predictions)
-    print(predictions)
     gts = np.array(gts)
 
     predictions = np.concatenate(predictions, axis=0)
@@ -137,4 +137,4 @@ def func():
 
 
 if __name__=="__main__":
-    launch(func, num_gpus_per_machine=1, dist_url="auto", num_machines=1)
+    func()
