@@ -93,7 +93,6 @@ def func():
 
             mask = Image.open(pathGT)
             ood_gts = np.array(mask)
-            print(ood_gts)
 
             if "RoadAnomaly" in pathGT:
                 # RA21 has label 2 for anomaly, but we want it to be 1, so change it
@@ -121,7 +120,7 @@ def func():
 
     gts = np.concatenate(gts, axis=0)
 
-    fpr, tpr, threshold = roc_curve(gts, predictions)
+    fpr, tpr, threshold = roc_curve(gts, predictions, pos_label=0)
     roc_auc = auc(fpr, tpr)
     fpr_best = fpr[tpr >= 0.95][0]
     ap = average_precision_score(gts, predictions)
