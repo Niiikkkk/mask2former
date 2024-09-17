@@ -80,7 +80,7 @@ def func():
             #     out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
             #     plt.imshow(out_img)
             #     plt.savefig("output.png")
-            prediction_ = torch.max(prediction, axis=1)[0]
+            prediction_ = torch.max(prediction[0:19,:,:], axis=1)[0]
             prediction_ = prediction_.detach().cpu().numpy().squeeze().squeeze()
             prediction_ = np.expand_dims(prediction_,axis=0).astype(np.float32)
 
