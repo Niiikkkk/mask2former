@@ -76,14 +76,14 @@ def func():
             input = [{"image": img, "height": height, "width": width}]
             prediction = model(input)[0]["sem_seg"].unsqueeze(0)  # Here C = 19, cityscapes classes
 
+            if num == 0:
+                print(prediction.squeeze())
+
             # if num == 0:
             #     out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
             #     plt.imshow(out_img)
             #     plt.savefig("output.png")
-            prediction_ = torch.max(prediction[0:19,:,:], axis=1)[0]
-            prediction_ = prediction_.detach().cpu().numpy().squeeze().squeeze()
-            prediction_ = np.expand_dims(prediction_,axis=0).astype(np.float32)
-
+            prediction_ = torch.max(prediction, axis=1)[0]
 
             pathGT = img_path.replace("images", "labels_masks")
 
@@ -106,6 +106,7 @@ def func():
             # 1 => Out of distribution
             # 255 => Void, so ignore it
 
+            prediction_ = prediction_.detach().cpu().numpy()
             ood_gts = np.expand_dims(ood_gts, 0)
 
             prediction_ = prediction_[(ood_gts!=255)]
