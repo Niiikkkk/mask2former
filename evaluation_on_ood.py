@@ -74,9 +74,6 @@ def func():
             height, width = img.shape[:2]
             img = torch.as_tensor(img.astype(np.float32).transpose(2, 0, 1))
             input = [{"image": img, "height": height, "width": width}]
-            prediction = model(input)
-            print(prediction)
-            exit()
             prediction = model(input)[0]["sem_seg"].unsqueeze(0)  # Here C = 19, cityscapes classes
 
             # if num == 0:
@@ -84,6 +81,9 @@ def func():
             #     plt.imshow(out_img)
             #     plt.savefig("output.png")
             prediction_ = torch.max(prediction, axis=1)[0]
+            prediction_ = prediction_.detach().cpu().numpy().squeeze().squeeze()
+            prediction_ = np.expand_dims(prediction_,axis=0).astype(np.float32)
+
 
             pathGT = img_path.replace("images", "labels_masks")
 
@@ -106,7 +106,6 @@ def func():
             # 1 => Out of distribution
             # 255 => Void, so ignore it
 
-            prediction_ = prediction_.detach().cpu().numpy()
             ood_gts = np.expand_dims(ood_gts, 0)
 
             prediction_ = prediction_[(ood_gts!=255)]
@@ -122,8 +121,6 @@ def func():
     predictions = np.concatenate(predictions, axis=0)
 
     gts = np.concatenate(gts, axis=0)
-    print(gts.shape)
-    print(np.unique(gts))
 
     fpr, tpr, threshold = roc_curve(gts, predictions)
     roc_auc = auc(fpr, tpr)
