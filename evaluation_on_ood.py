@@ -78,6 +78,7 @@ def func():
 
             if num == 0:
                 print(prediction.squeeze())
+                print(img_path)
 
             # if num == 0:
             #     out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
