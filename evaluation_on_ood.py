@@ -6,7 +6,7 @@ import torch
 import numpy as np
 from detectron2.config import get_cfg
 from detectron2.data.detection_utils import read_image
-from detectron2.engine import DefaultTrainer, default_setup, launch
+from detectron2.engine import DefaultTrainer, default_setup, launch, DefaultPredictor
 from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.projects.deeplab import add_deeplab_config
 
@@ -45,6 +45,14 @@ def setup_cfgs(args):
     cfg.freeze()
     return cfg
 
+def plot_roc_curve(fpr, tpr):
+    plt.figure()
+    lw = 2
+    plt.plot(fpr,tpr,color='darkorange',lw=lw)
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.show()
+
 def func():
     args = parse_args()
     cfg = setup_cfgs(args)
@@ -52,10 +60,13 @@ def func():
     logger = setup_logger()
     logger.info("Arguments: " + str(args))
 
-    model = DefaultTrainer.build_model(cfg)
-    DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).load(cfg.MODEL.WEIGHTS)
+    # model = DefaultTrainer.build_model(cfg)
+    # DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).load(cfg.MODEL.WEIGHTS)
+    # model.eval()
 
-    model.training = False
+
+    model = DefaultPredictor(cfg)
+
 
     file_path = os.path.join(cfg.OUTPUT_DIR, 'results.txt')
 
@@ -65,25 +76,28 @@ def func():
 
     file.write(args.input[0].split('/')[4] + "\n")
 
-    predictions = []
-    gts = []
+    predictions = np.array([])
+    gts = np.array([])
 
     for num, img_path in enumerate(tqdm.tqdm(args.input)):
         with torch.no_grad():
             img = read_image(img_path, format="BGR")
-            height, width = img.shape[:2]
-            img = torch.as_tensor(img.astype(np.float32).transpose(2, 0, 1))
-            input = [{"image": img, "height": height, "width": width}]
-            prediction = model(input)[0]["sem_seg"].unsqueeze(0)  # Here C = 19, cityscapes classes
+            # height, width = img.shape[:2]
+            # img = torch.as_tensor(img.astype(np.float32).transpose(2, 0, 1))
+            # input = [{"image": img, "height": height, "width": width}]
+            # prediction = model(input)[0]["sem_seg"].unsqueeze(0)  # Here C = 19, cityscapes classes
 
-            if num == 0:
-                print(prediction.squeeze())
-                print(img_path)
+
+            prediction = model(img)["sem_seg"].unsqueeze(0)
+
+            # if num == 0:
+            #     print(prediction.squeeze())
+            #     print(img_path)
 
             # if num == 0:
             #     out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
             #     plt.imshow(out_img)
-            #     plt.savefig("output.png")
+            #     plt.show()
             prediction_ = torch.max(prediction, axis=1)[0]
 
             pathGT = img_path.replace("images", "labels_masks")
@@ -107,27 +121,25 @@ def func():
             # 1 => Out of distribution
             # 255 => Void, so ignore it
 
-            prediction_ = prediction_.detach().cpu().numpy()
+            prediction_ = prediction_.detach().cpu().numpy().squeeze().squeeze()
+            prediction_ = np.expand_dims(prediction_, 0).astype(np.float32)
             ood_gts = np.expand_dims(ood_gts, 0)
 
             prediction_ = prediction_[(ood_gts!=255)]
             ood_gts = ood_gts[(ood_gts!=255)]
 
-            predictions.append(prediction_)
-            gts.append(ood_gts)
+
+            predictions = np.append(predictions, prediction_)
+            print(predictions.shape)
+            gts = np.append(gts, ood_gts)
 
     # Eval...
-    predictions = np.array(predictions)
-    gts = np.array(gts)
 
-    predictions = np.concatenate(predictions, axis=0)
-
-    gts = np.concatenate(gts, axis=0)
-
-    fpr, tpr, threshold = roc_curve(gts, predictions)
+    fpr, tpr, threshold = roc_curve(gts, predictions, pos_label=0)
+    # plot_roc_curve(fpr, tpr)
     roc_auc = auc(fpr, tpr)
     fpr_best = fpr[tpr >= 0.95][0]
-    ap = average_precision_score(gts, predictions)
+    ap = average_precision_score(gts, predictions, pos_label=0)
 
     res = {}
     res["AUROC"] = roc_auc
