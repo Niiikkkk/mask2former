@@ -92,13 +92,12 @@ def func():
 
             # if num == 0:
             #     print(prediction.squeeze())
-            #     print(img_path)
 
             # if num == 0:
             #     out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
             #     plt.imshow(out_img)
             #     plt.show()
-            prediction_ = torch.max(prediction, axis=1)[0]
+            prediction_ = 1 - torch.max(prediction, axis=1)[0]
 
             pathGT = img_path.replace("images", "labels_masks")
 
@@ -135,11 +134,11 @@ def func():
 
     # Eval...
 
-    fpr, tpr, threshold = roc_curve(gts, predictions, pos_label=0)
+    fpr, tpr, threshold = roc_curve(gts, predictions)
     # plot_roc_curve(fpr, tpr)
     roc_auc = auc(fpr, tpr)
     fpr_best = fpr[tpr >= 0.95][0]
-    ap = average_precision_score(gts, predictions, pos_label=0)
+    ap = average_precision_score(gts, predictions)
 
     res = {}
     res["AUROC"] = roc_auc

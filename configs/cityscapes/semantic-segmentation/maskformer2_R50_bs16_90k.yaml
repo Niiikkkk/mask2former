@@ -1,9 +1,9 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/output/train/moco-v2_DOWNLOADED-freezed/"
+OUTPUT_DIR: "/home/nberardo/mask2former/output/train/bt-freezed/"
 MODEL:
   BACKBONE:
     FREEZE_AT: 5
-  WEIGHTS: "/home/nberardo/mask2former/backbone_weights/moco_v2_r50_e200_ckpt.pkl"
+  WEIGHTS: "/home/nberardo/mask2former/backbone_weights/bt_resnet50.pkl"
   META_ARCHITECTURE: "MaskFormer"
   RESNETS:
 
