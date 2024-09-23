@@ -17,6 +17,8 @@ from mask2former import add_maskformer2_config
 import os
 import tqdm
 from sklearn.metrics import roc_curve, auc, average_precision_score
+from ood_metrics import fpr_at_95_tpr, plot_pr
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Evaluation on OOD')
@@ -137,12 +139,13 @@ def func():
     fpr, tpr, threshold = roc_curve(gts, predictions)
     # plot_roc_curve(fpr, tpr)
     roc_auc = auc(fpr, tpr)
-    fpr_best = fpr[tpr >= 0.95][0]
+    plot_pr(predictions,gts)
+    fpr = fpr_at_95_tpr(predictions, gts)
     ap = average_precision_score(gts, predictions)
 
     res = {}
     res["AUROC"] = roc_auc
-    res["FPR@TPR95"] = fpr_best
+    res["FPR@TPR95"] = fpr
     res["AUPRC"] = ap
 
     print(res)
