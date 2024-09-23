@@ -58,8 +58,7 @@ def plot_roc_curve(fpr, tpr):
 def func():
     args = parse_args()
     cfg = setup_cfgs(args)
-    setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
-    logger = setup_logger()
+    logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
     logger.info("Arguments: " + str(args))
 
     # model = DefaultTrainer.build_model(cfg)
@@ -88,7 +87,6 @@ def func():
             # img = torch.as_tensor(img.astype(np.float32).transpose(2, 0, 1))
             # input = [{"image": img, "height": height, "width": width}]
             # prediction = model(input)[0]["sem_seg"].unsqueeze(0)  # Here C = 19, cityscapes classes
-
 
             prediction = model(img)["sem_seg"].unsqueeze(0)
 
@@ -129,17 +127,13 @@ def func():
             prediction_ = prediction_[(ood_gts!=255)]
             ood_gts = ood_gts[(ood_gts!=255)]
 
-
             predictions = np.append(predictions, prediction_)
-            print(predictions.shape)
             gts = np.append(gts, ood_gts)
 
     # Eval...
 
     fpr, tpr, threshold = roc_curve(gts, predictions)
-    # plot_roc_curve(fpr, tpr)
     roc_auc = auc(fpr, tpr)
-    plot_pr(predictions,gts)
     fpr = fpr_at_95_tpr(predictions, gts)
     ap = average_precision_score(gts, predictions)
 
@@ -151,7 +145,6 @@ def func():
     print(res)
     file.write(
         "AUROC: " + str(res["AUROC"]) + " FPR@TPR95: " + str(res["FPR@TPR95"]) + " AUPRC: " + str(res["AUPRC"]) + "\n")
-
 
 if __name__=="__main__":
     func()
