@@ -23,5 +23,5 @@ export CUDA_HOME=/home/nberardo/cuda_11.8
 #python tools/convert-torchvision-to-d2.py /home/nberardo/moco/output_dir/moco_v2_r50/moco_v2_r50_e200_ckpt.pth /home/nberardo/mask2former/backbone_weights/moco_v2_r50_e200_ckpt.pkl
 
 python train_net.py \
-  --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k.yaml \
+  --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_2.yaml \
   --num-gpus 2
