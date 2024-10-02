@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --time=72:00:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8
-#SBATCH --gres=gpu:2
+#SBATCH --cpus-per-task=1
+#SBATCH --gres=gpu:1
 #SBATCH --job-name=m2f_moco2
 #SBATCH --mail-user=s319439@studenti.polito.it
 #SBATCH --mail-type=END
@@ -20,8 +20,8 @@ export DETECTRON2_DATASETS=/home/nberardo/Datasets
 export CUDA_HOME=/home/nberardo/cuda_11.8
 
 #convert pth weights to pkl
-#python tools/convert-torchvision-to-d2.py /home/nberardo/moco/output_dir/moco_v2_r50/moco_v2_r50_e200_ckpt.pth /home/nberardo/mask2former/backbone_weights/moco_v2_r50_e200_ckpt.pkl
+python tools/convert-torchvision-to-d2.py /home/nberardo/moco/output_dir/moco_v2_r50/moco_v2_r50_clas.pth /home/nberardo/mask2former/backbone_weights/moco_v1_resnet50_downloaded.pkl
 
-python train_net.py \
-  --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_2.yaml \
-  --num-gpus 2
+#python train_net.py \
+#  --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_2.yaml \
+#  --num-gpus 2
