@@ -3,7 +3,7 @@ OUTPUT_DIR: "/home/nberardo/mask2former/results/moco-v1-freezed_NEW/"
 MODEL:
   WEIGHTS: "/home/nberardo/mask2former/output/train/moco-v1-freezed_NEW/model_final.pth"
   BACKBONE:
-    FREEZE_AT: 0
+    FREEZE_AT: 5
   META_ARCHITECTURE: "MaskFormer"
   RESNETS:
 
