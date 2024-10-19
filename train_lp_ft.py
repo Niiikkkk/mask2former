@@ -41,12 +41,15 @@ if __name__ == "__main__":
     args = default_argument_parser().parse_args()
     # print("Command Line Args:", args)
 
+    layers_to_freeze = [1,2,3,4]
+    layer_names = ["res2", "res3", "res4", "res5"]
     cfg = setup(args)
 
     #Create a model and do print it in order to get where the freeze is happening
     model = Trainer.build_model(cfg)
-    for param in model.backbone.res5.parameters():
-        param.requires_grad = True
+    for layer in layers_to_freeze:
+        for param in getattr(model.backbone, layer_names[layer]).parameters():
+            param.requires_grad = False
     for name, param in model.named_parameters():
         print(name + " -> " + str(param.requires_grad))
 
