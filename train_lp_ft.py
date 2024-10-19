@@ -39,12 +39,12 @@ from mask2former import (
 
 if __name__ == "__main__":
     args = default_argument_parser().parse_args()
-    print("Command Line Args:", args)
+    # print("Command Line Args:", args)
 
     cfg = setup(args)
 
     #Create a model and do print it in order to get where the freeze is happening
     model = Trainer.build_model(cfg)
-    for name, param in model.state_dict().items():
+    for name in model.parameters():
         print(name)
 
