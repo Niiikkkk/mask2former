@@ -45,7 +45,8 @@ if __name__ == "__main__":
 
     #Create a model and do print it in order to get where the freeze is happening
     model = Trainer.build_model(cfg)
-    model.backbone.res5.requires_grad = True
+    for param in model.backbone.res5:
+        param.requires_grad = True
     for name, param in model.named_parameters():
         print(name + " -> " + str(param.requires_grad))
 
