@@ -45,5 +45,6 @@ if __name__ == "__main__":
 
     #Create a model and do print it in order to get where the freeze is happening
     model = Trainer.build_model(cfg)
-    print(model.state_dict())
+    for name, param in model.state_dict().items():
+        print(name)
 
