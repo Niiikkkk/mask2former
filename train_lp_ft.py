@@ -41,7 +41,7 @@ if __name__ == "__main__":
     args = default_argument_parser().parse_args()
     # print("Command Line Args:", args)
 
-    layers_to_freeze = [1,2,3,4]
+    layers_to_freeze = [0,1,2,3]
     layer_names = ["res2", "res3", "res4", "res5"]
     cfg = setup(args)
 
