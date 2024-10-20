@@ -45,6 +45,8 @@ def main(args):
     # Create a model and do print it in order to get where the freeze is happening
     my_trainer = Trainer(cfg)
     for layer in layers_to_freeze:
+        if layer == 0:
+            getattr(my_trainer._trainer.model.backbone, layer_names[layer]).freeze()
         for child in getattr(my_trainer._trainer.model.backbone, layer_names[layer]).childern():
             child.freeze()
 
