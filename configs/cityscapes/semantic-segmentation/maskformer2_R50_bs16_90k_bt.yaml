@@ -1,9 +1,11 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/output/train/bt-down-freezed/"
+OUTPUT_DIR: "/home/nberardo/mask2former/output/train/bt-FT_10%/"
+SOLVER:
+  MAX_ITER: 9000
 MODEL:
   BACKBONE:
     FREEZE_AT: 5
-  WEIGHTS: "/home/nberardo/mask2former/backbone_weights/bt_resnet50_1000_epochs.pkl"
+  WEIGHTS: "/home/nberardo/mask2former/output/train/bt-down-freezed/model_final.pth"
   META_ARCHITECTURE: "MaskFormer"
   RESNETS:
 
