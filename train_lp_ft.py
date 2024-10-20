@@ -49,10 +49,8 @@ def main(args):
         for param in getattr(model.backbone, layer_names[layer]).parameters():
             param.requires_grad = False
 
-    print(format(model))
-
     my_trainer.resume_or_load(resume=args.resume)
-    # return my_trainer.train()
+    return my_trainer.train()
 
 
 if __name__ == "__main__":
