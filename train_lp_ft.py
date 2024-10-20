@@ -44,13 +44,14 @@ def main(args):
 
     # Create a model and do print it in order to get where the freeze is happening
     my_trainer = Trainer(cfg)
-    model = my_trainer._trainer.model
     for layer in layers_to_freeze:
-        for param in getattr(model.backbone, layer_names[layer]).parameters():
-            param.requires_grad = False
+        getattr(my_trainer._trainer.model.backbone, layer_names[layer]).freeze()
+
+
+    print(format(my_trainer._trainer.model))
 
     my_trainer.resume_or_load(resume=args.resume)
-    return my_trainer.train()
+    # return my_trainer.train()
 
 
 if __name__ == "__main__":
