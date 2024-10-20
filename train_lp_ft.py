@@ -37,7 +37,7 @@ from mask2former import (
     add_maskformer2_config,
 )
 
-class My_Trainer(DefaultTrainer):
+class My_Trainer(Trainer):
     def build_model(cls, cfg):
         model = super().build_model(cfg)
 
