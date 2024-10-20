@@ -55,7 +55,7 @@ def main(args):
     print(format(my_trainer._trainer.model))
 
     my_trainer.resume_or_load(resume=args.resume)
-    # return my_trainer.train()
+    return my_trainer.train()
 
 
 if __name__ == "__main__":

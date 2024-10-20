@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --time=72:00:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=8
 #SBATCH --gres=gpu:2
 #SBATCH --job-name=m2f_tests
 #SBATCH --mail-user=s319439@studenti.polito.it
