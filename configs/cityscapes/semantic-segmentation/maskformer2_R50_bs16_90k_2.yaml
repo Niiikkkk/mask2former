@@ -1,9 +1,12 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/output/train/moco-v2/"
+OUTPUT_DIR: "/home/nberardo/mask2former/output/train/simsiam_FT_10%/"
+SOLVER:
+  #DO 10% of the training as FT
+  MAX_ITER: 9000
 MODEL:
   BACKBONE:
     FREEZE_AT: 0
-  WEIGHTS: "/home/nberardo/mask2former/backbone_weights/moco_v2_resnet50.pkl"
+  WEIGHTS: "/home/nberardo/mask2former/output/train/simsiam_freezed/model_final.pth"
   META_ARCHITECTURE: "MaskFormer"
   RESNETS:
 

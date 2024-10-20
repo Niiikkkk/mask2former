@@ -59,8 +59,6 @@ def main(args):
     # Create a model and do print it in order to get where the freeze is happening
     my_trainer = My_Trainer(cfg)
 
-    print(format(my_trainer._trainer.model))
-
     my_trainer.resume_or_load(resume=args.resume)
     return my_trainer.train()
 
