@@ -37,28 +37,35 @@ from mask2former import (
     add_maskformer2_config,
 )
 
-class My_Trainer(Trainer):
-    @classmethod
-    def build_model(cls, cfg):
-        model = super().build_model(cfg)
-        print("HELLO")
-        return model
+def main(args):
+    layers_to_freeze = [0, 1, 2, 3, 4]
+    layer_names = ["stem", "res2", "res3", "res4", "res5"]
+    cfg = setup(args)
+
+    # Create a model and do print it in order to get where the freeze is happening
+    my_trainer = Trainer(cfg)
+    model = my_trainer._trainer.model
+    for layer in layers_to_freeze:
+        for param in getattr(model.backbone, layer_names[layer]).parameters():
+            param.requires_grad = False
+
+    print(format(model))
+
+    my_trainer.resume_or_load(resume=args.resume)
+    # return my_trainer.train()
 
 
 if __name__ == "__main__":
     args = default_argument_parser().parse_args()
     # print("Command Line Args:", args)
+    launch(
+        main,
+        args.num_gpus,
+        num_machines=args.num_machines,
+        machine_rank=args.machine_rank,
+        dist_url=args.dist_url,
+        args=(args,),
+    )
 
-    layers_to_freeze = [0,1,2,3,4]
-    layer_names = ["stem","res2", "res3", "res4", "res5"]
-    cfg = setup(args)
 
-    #Create a model and do print it in order to get where the freeze is happening
-    my_trainer = My_Trainer(cfg)
-    model = my_trainer._trainer.model
-    for layer in layers_to_freeze:
-        for param in getattr(model.backbone, layer_names[layer]).parameters():
-            param.requires_grad = False
-    for name, param in model.named_parameters():
-        print(name + " -> " + str(param.requires_grad))
 
