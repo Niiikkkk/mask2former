@@ -21,7 +21,7 @@ export CUDA_HOME=/home/nberardo/cuda_11.8
 
 python train_lp_ft.py \
   --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k.yaml \
-  --num-gpus 2
+  --num-gpus 1
 
 #python register_RA.py
 
