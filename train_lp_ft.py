@@ -37,25 +37,32 @@ from mask2former import (
     add_maskformer2_config,
 )
 
+class My_Trainer(DefaultTrainer):
+    def build_model(cls, cfg):
+        model = super().build_model(cfg)
+
+        layers_to_freeze = [0, 1, 2, 3, 4]
+        layer_names = ["stem", "res2", "res3", "res4", "res5"]
+
+        for layer in layers_to_freeze:
+            if layer == 0:
+                getattr(model.backbone, layer_names[layer]).freeze()
+            else:
+                for child in getattr(model.backbone, layer_names[layer]).children():
+                    child.freeze()
+
+        return model
+
 def main(args):
-    layers_to_freeze = [0, 1, 2, 3, 4]
-    layer_names = ["stem", "res2", "res3", "res4", "res5"]
     cfg = setup(args)
 
     # Create a model and do print it in order to get where the freeze is happening
-    my_trainer = Trainer(cfg)
-    for layer in layers_to_freeze:
-        if layer == 0:
-            getattr(my_trainer._trainer.model.module.backbone, layer_names[layer]).freeze()
-        else:
-            for child in getattr(my_trainer._trainer.model.module.backbone, layer_names[layer]).children():
-                child.freeze()
-
+    my_trainer = My_Trainer(cfg)
 
     print(format(my_trainer._trainer.model))
 
     my_trainer.resume_or_load(resume=args.resume)
-    return my_trainer.train()
+    # return my_trainer.train()
 
 
 if __name__ == "__main__":
