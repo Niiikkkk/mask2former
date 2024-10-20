@@ -47,8 +47,9 @@ def main(args):
     for layer in layers_to_freeze:
         if layer == 0:
             getattr(my_trainer._trainer.model.backbone, layer_names[layer]).freeze()
-        for child in getattr(my_trainer._trainer.model.backbone, layer_names[layer]).childern():
-            child.freeze()
+        else:
+            for child in getattr(my_trainer._trainer.model.backbone, layer_names[layer]).childern():
+                child.freeze()
 
 
     print(format(my_trainer._trainer.model))
