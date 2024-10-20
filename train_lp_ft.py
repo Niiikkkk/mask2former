@@ -37,6 +37,14 @@ from mask2former import (
     add_maskformer2_config,
 )
 
+class My_Trainer(Trainer):
+    @classmethod
+    def build_model(cls, cfg):
+        model = super().build_model(cfg)
+        print("HELLO")
+        return model
+
+
 if __name__ == "__main__":
     args = default_argument_parser().parse_args()
     # print("Command Line Args:", args)
@@ -46,7 +54,8 @@ if __name__ == "__main__":
     cfg = setup(args)
 
     #Create a model and do print it in order to get where the freeze is happening
-    model = Trainer.build_model(cfg)
+    my_trainer = My_Trainer(cfg)
+    model = my_trainer._trainer.model
     for layer in layers_to_freeze:
         for param in getattr(model.backbone, layer_names[layer]).parameters():
             param.requires_grad = False
