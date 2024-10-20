@@ -2,7 +2,7 @@
 #SBATCH --time=72:00:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:2
 #SBATCH --job-name=m2f_tests
 #SBATCH --mail-user=s319439@studenti.polito.it
 #SBATCH --mail-type=END
@@ -21,7 +21,7 @@ export CUDA_HOME=/home/nberardo/cuda_11.8
 
 python train_lp_ft.py \
   --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k.yaml \
-  --num-gpus 1
+  --num-gpus 2
 
 #python register_RA.py
 
