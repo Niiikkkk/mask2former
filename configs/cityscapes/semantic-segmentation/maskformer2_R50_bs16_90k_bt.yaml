@@ -4,7 +4,7 @@ SOLVER:
   MAX_ITER: 9000
 MODEL:
   BACKBONE:
-    FREEZE_AT: 5
+    FREEZE_AT: 0
   WEIGHTS: "/home/nberardo/mask2former/output/train/bt-down-freezed/model_final.pth"
   META_ARCHITECTURE: "MaskFormer"
   RESNETS:
