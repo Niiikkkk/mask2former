@@ -68,7 +68,6 @@ def func():
 
     model = DefaultPredictor(cfg)
 
-
     file_path = os.path.join(cfg.OUTPUT_DIR, 'results.txt')
 
     if not os.path.exists(file_path):
