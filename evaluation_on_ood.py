@@ -35,6 +35,8 @@ def parse_args():
         default="../../results",
         help="A file or directory to save output visualizations. "
         "If not given, will show output in an OpenCV window.",)
+    parser.add_argument("--weights",
+                        help="Path to a file with model weights")
 
     args = parser.parse_args()
     return args
@@ -44,6 +46,10 @@ def setup_cfgs(args):
     add_deeplab_config(cfg)
     add_maskformer2_config(cfg)
     cfg.merge_from_file(args.config_file)
+    # if args.output:
+    #     cfg.OUTPUT_DIR = args.output
+    # if args.weights:
+    #     cfg.MODEL.WEIGHTS = args.weights
     cfg.freeze()
     return cfg
 
