@@ -1,8 +1,9 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/output/train/simsiam_FT_5%/"
+OUTPUT_DIR: "/home/nberardo/mask2former/output/train/simsiam_FT_1k_5x10-5%/"
 SOLVER:
   #DO 10% of the training as FT
-  MAX_ITER: 4500
+  BASE_LR: 0.00005
+  MAX_ITER: 1000
 MODEL:
   BACKBONE:
     FREEZE_AT: 0
