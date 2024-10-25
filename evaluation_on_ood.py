@@ -16,8 +16,10 @@ from demo.predictor import VisualizationDemo
 from mask2former import add_maskformer2_config
 import os
 import tqdm
-from sklearn.metrics import roc_curve, auc, average_precision_score
+from sklearn.metrics import roc_curve, auc, average_precision_score, precision_recall_curve
 from ood_metrics import fpr_at_95_tpr, plot_pr
+from component_metric import segment_metrics, anomaly_instances_from_mask, aggregate, get_threshold_from_PRC, \
+    default_instancer
 
 
 def parse_args():
@@ -27,7 +29,7 @@ def parse_args():
         metavar="FILE",
         help="path to config file",)
     parser.add_argument("--input",
-        default="/Users/nicholas.berardo/Desktop/RoadAnomaly/images/0.jpg /Users/nicholas.berardo/Desktop/RoadAnomaly/images/1.jpg",
+        default="/Users/nicholas.berardo/Desktop/RoadAnomaly/images/*.jpg",
         nargs="+",
         help="A list of space separated input images; "
         "or a single glob pattern such as 'directory/*.jpg'",)
@@ -84,6 +86,7 @@ def func():
 
     predictions = np.array([])
     gts = np.array([])
+    results = np.array([])
 
     for num, img_path in enumerate(tqdm.tqdm(args.input)):
         with torch.no_grad():
@@ -129,14 +132,28 @@ def func():
             prediction_ = np.expand_dims(prediction_, 0).astype(np.float32)
             ood_gts = np.expand_dims(ood_gts, 0)
 
-            prediction_ = prediction_[(ood_gts!=255)]
-            ood_gts = ood_gts[(ood_gts!=255)]
+            # compute component level metric
+            # get the threshold in order to say "it's anomaly"
+            threshold_to_anomaly = get_threshold_from_PRC(prediction_[ood_gts != 255].squeeze(),
+                                                          ood_gts[ood_gts != 255].squeeze())
+            # get the instances of the anomaly and gt
+            anomaly_instances, anomaly_seg_pred, _, anomaly_instances_for_vis, anomaly_seg_pred_for_vis = default_instancer(
+                prediction_.squeeze(), ood_gts.squeeze(), threshold_to_anomaly, 1000, 100)
+            # get the metrics
+            result = segment_metrics(anomaly_instances, anomaly_seg_pred)
+            results = np.append(results, result)
 
+            # Visualize anomaly over the img
+            # visualize_anomlay_over_img(img, prediction_.squeeze(), threshold_to_anomaly)
+            # visualize_instances_over_img(img,anomaly_seg_pred_for_vis)
             predictions = np.append(predictions, prediction_)
             gts = np.append(gts, ood_gts)
 
     # Eval...
 
+    final_res = aggregate(results)
+    predictions = predictions[(gts != 255)]
+    gts = gts[(gts != 255)]
     fpr, tpr, threshold = roc_curve(gts, predictions)
     roc_auc = auc(fpr, tpr)
     fpr = fpr_at_95_tpr(predictions, gts)
@@ -147,9 +164,11 @@ def func():
     res["FPR@TPR95"] = fpr
     res["AUPRC"] = ap
 
-    print(res)
     file.write(
-        "AUROC: " + str(res["AUROC"]) + " FPR@TPR95: " + str(res["FPR@TPR95"]) + " AUPRC: " + str(res["AUPRC"]) + "\n")
+        "AUROC: " + str(res["AUROC"]) +
+        " FPR@TPR95: " + str(res["FPR@TPR95"]) +
+        " AUPRC: " + str(res["AUPRC"]) +
+        " sIoU_pred: " + str(final_res["sIoU_pred"]) + "\n")
 
 if __name__=="__main__":
     func()
