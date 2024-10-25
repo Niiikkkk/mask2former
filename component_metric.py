@@ -110,6 +110,10 @@ def segment_metrics(anomaly_instances, anomaly_seg_pred, iou_thresholds=np.linsp
     anomaly_instances: (numpy array) anomaly instance annoation
     anomaly_seg_pred: (numpy array) anomaly instance prediction
     iou_threshold: (float) threshold for true positive
+    return: (dictionary) results containing those main things:
+        - the number of true positive, false negative and false positive for each IoU threshold
+        - sIoU_gt: the adjusted IoU for the ground truth instances
+        - sIoU_pred: the adjusted IoU for the prediction instances
     """
 
     """Loop over ground truth instances"""
@@ -117,7 +121,9 @@ def segment_metrics(anomaly_instances, anomaly_seg_pred, iou_thresholds=np.linsp
     size_gt = []
 
     for i in np.unique(anomaly_instances[anomaly_instances>0]):
+        """i is a compoment or instance of the ground truth"""
         tp_loc = anomaly_seg_pred[anomaly_instances == i]
+        """tp_loc are the pixels related to the component i"""
         seg_ind = np.unique(tp_loc[tp_loc != 0])
 
         """calc area of intersection"""
