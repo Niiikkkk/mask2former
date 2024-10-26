@@ -7,8 +7,8 @@
 #SBATCH --mail-user=s319439@studenti.polito.it
 #SBATCH --mail-type=END
 #SBATCH --partition=cuda
-#SBATCH --output=/home/nberardo/mask2former/mythings.log
-#SBATCH --error=/home/nberardo/mask2former/mythings.err
+#SBATCH --output=/home/nberardo/mask2former/eval_on_id.log
+#SBATCH --error=/home/nberardo/mask2former/eval_on_id.err
 ###### 1 Load the module
 module load nvidia/cudasdk
 module load intel/python/3
@@ -25,4 +25,4 @@ export CUDA_HOME=/home/nberardo/cuda_11.8
 
 #python register_RA.py
 
-python evaluation_on_id.py --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference_id.yaml
+python evaluation_on_id.py --config-file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference_id.yaml
