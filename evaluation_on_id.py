@@ -15,6 +15,7 @@ if __name__ == '__main__':
     for d in cfg.DATASETS.TEST:
         data_loader = Trainer.build_test_loader(cfg,d)
         for input in data_loader:
+            print(input)
             gt = input["sem_seg"]
             output = model(input)[0]["sem_seg"].unsqueeze(0)
             pred = torch.argmax(output,axis=1)[1]
