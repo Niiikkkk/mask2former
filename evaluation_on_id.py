@@ -10,7 +10,7 @@ if __name__ == '__main__':
     model = Trainer.build_model(cfg)
     DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(cfg.MODEL.WEIGHTS,resume=args.resume)
     model.eval()
-    res = Trainer.test(cfg,model)
+    # res = Trainer.test(cfg,model)
     for d in cfg.DATASETS.TEST:
         data_loader = Trainer.build_test_loader(cfg,d)
         for input in data_loader:
