@@ -7,7 +7,8 @@ from matplotlib import color_sequences
 import matplotlib
 
 
-def visualize_anomlay_over_img(img:np.ndarray, anomaly_pred: np.ndarray, threshold:float, label:np.ndarray = None):
+def visualize_anomlay_over_img(img:np.ndarray, anomaly_pred: np.ndarray, threshold:float, label:np.ndarray = None,
+                               path_to_save:str = None):
     """
     Visualize the anomaly mask over the image
     Args:
@@ -15,6 +16,7 @@ def visualize_anomlay_over_img(img:np.ndarray, anomaly_pred: np.ndarray, thresho
         anomaly_pred (np.ndarray): The anomaly mask
         threshold (float): The threshold to say "it's anomaly"
         label (np.ndarray, optional): The label of the anomaly. Defaults to None.
+        path_to_save (str, optional): The path to save the image. Defaults to None.
     Returns:
         np.ndarray: The image with the anomaly
     """
@@ -37,6 +39,8 @@ def visualize_anomlay_over_img(img:np.ndarray, anomaly_pred: np.ndarray, thresho
         plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
         plt.imshow(label_mask ,alpha=0.7, cmap=binary_cmap, vmin=0, vmax=1)
     plt.show()
+    if path_to_save:
+        plt.imsave(path_to_save)
 
 def visualize_instances_over_img(img:np.ndarray, instances:np.ndarray):
     """
@@ -52,3 +56,4 @@ def visualize_instances_over_img(img:np.ndarray, instances:np.ndarray):
     plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
     plt.imshow(instances, cmap="magma", alpha=0.7, vmin=0, vmax=len(num_colors)-1)
     plt.show()
+
