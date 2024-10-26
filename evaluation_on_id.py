@@ -1,3 +1,4 @@
+import numpy
 import torch
 from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.engine import default_argument_parser
@@ -17,9 +18,9 @@ if __name__ == '__main__':
         for input in data_loader:
             gt = input[0]["sem_seg"].detach().cpu().numpy()
             output = model(input)[0]["sem_seg"].unsqueeze(0)
-            print(output)
             pred = torch.max(output,axis=1)[1]
             pred = pred.detach().cpu().numpy().squeeze()
+            print(numpy.unique(pred,return_counts=True))
             gt_instances , pred_instances =  anomaly_instances_from_mask(pred,gt)
             metric = segment_metrics(gt_instances,pred_instances)
             print(metric)
