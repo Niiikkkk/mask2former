@@ -1,6 +1,7 @@
+import torch
 from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.engine import default_argument_parser
-from component_metric import get_threshold_from_PRC,segment_metrics,default_instancer
+from component_metric import get_threshold_from_PRC, segment_metrics, default_instancer, anomaly_instances_from_mask
 
 from train_net import Trainer, setup
 
@@ -14,7 +15,12 @@ if __name__ == '__main__':
     for d in cfg.DATASETS.TEST:
         data_loader = Trainer.build_test_loader(cfg,d)
         for input in data_loader:
-            output = model(input)
-            print(output)
+            gt = input["sem_seg"]
+            output = model(input)[0]["sem_seg"].unsqueeze(0)
+            pred = torch.argmax(output,axis=1)[1]
+            pred = pred.detach().cpu().numpy()
+            gt_instances , pred_instances =  anomaly_instances_from_mask(pred,gt)
+            metric = segment_metrics(gt_instances,pred_instances)
+            print(metric)
             break
 
