@@ -15,7 +15,7 @@ if __name__ == '__main__':
     for d in cfg.DATASETS.TEST:
         data_loader = Trainer.build_test_loader(cfg,d)
         for input in data_loader:
-            gt = input[0]["sem_seg"]
+            gt = input[0]["sem_seg"].detach().cpu().numpy()
             output = model(input)[0]["sem_seg"].unsqueeze(0)
             print(output)
             pred = torch.max(output,axis=1)[1]
