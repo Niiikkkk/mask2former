@@ -18,7 +18,7 @@ if __name__ == '__main__':
             gt = input[0]["sem_seg"]
             output = model(input)[0]["sem_seg"].unsqueeze(0)
             print(output)
-            pred = torch.argmax(output,axis=1)[1]
+            pred = torch.max(output,axis=1)[1]
             pred = pred.detach().cpu().numpy().squeeze()
             gt_instances , pred_instances =  anomaly_instances_from_mask(pred,gt)
             metric = segment_metrics(gt_instances,pred_instances)
