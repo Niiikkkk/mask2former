@@ -15,11 +15,10 @@ if __name__ == '__main__':
     for d in cfg.DATASETS.TEST:
         data_loader = Trainer.build_test_loader(cfg,d)
         for input in data_loader:
-            print(input)
-            gt = input["sem_seg"]
+            gt = input[0]["sem_seg"]
             output = model(input)[0]["sem_seg"].unsqueeze(0)
             pred = torch.argmax(output,axis=1)[1]
-            pred = pred.detach().cpu().numpy()
+            pred = pred.detach().cpu().numpy().squeeze()
             gt_instances , pred_instances =  anomaly_instances_from_mask(pred,gt)
             metric = segment_metrics(gt_instances,pred_instances)
             print(metric)
