@@ -17,6 +17,7 @@ if __name__ == '__main__':
         for input in data_loader:
             gt = input[0]["sem_seg"]
             output = model(input)[0]["sem_seg"].unsqueeze(0)
+            print(output)
             pred = torch.argmax(output,axis=1)[1]
             pred = pred.detach().cpu().numpy().squeeze()
             gt_instances , pred_instances =  anomaly_instances_from_mask(pred,gt)
