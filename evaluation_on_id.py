@@ -13,5 +13,7 @@ if __name__ == '__main__':
     for d in cfg.DATASETS.TEST:
         data_loader = Trainer.build_test_loader(cfg,d)
         for input in data_loader:
-            print(input)
+            output = model(input)
+            print(output)
+            break
 
