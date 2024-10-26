@@ -40,7 +40,7 @@ def visualize_anomlay_over_img(img:np.ndarray, anomaly_pred: np.ndarray, thresho
         plt.imshow(label_mask ,alpha=0.7, cmap=binary_cmap, vmin=0, vmax=1)
     plt.show()
     if path_to_save:
-        plt.imsave(path_to_save)
+        plt.savefig(path_to_save)
 
 def visualize_instances_over_img(img:np.ndarray, instances:np.ndarray):
     """
