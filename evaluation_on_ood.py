@@ -20,6 +20,7 @@ from sklearn.metrics import roc_curve, auc, average_precision_score, precision_r
 from ood_metrics import fpr_at_95_tpr, plot_pr
 from component_metric import segment_metrics, anomaly_instances_from_mask, aggregate, get_threshold_from_PRC, \
     default_instancer
+from visualization import visualize_anomlay_over_img
 
 
 def parse_args():
@@ -82,7 +83,9 @@ def func():
         open(file_path, 'w').close()
     file = open(file_path, 'a')
 
-    file.write(args.input[0].split('/')[4] + "\n")
+
+    db_name = str(args.input[0].split('/')[4])
+    file.write(db_name + "\n")
 
     predictions = np.array([])
     gts = np.array([])
@@ -150,6 +153,10 @@ def func():
             result = segment_metrics(anomaly_instances, anomaly_seg_pred)
             results = np.append(results, result)
 
+            if "FS_LostFound_full" in img_path:
+                #Plot the prediction
+                visualize_anomlay_over_img(img, prediction_.squeeze(), threshold_to_anomaly, ood_gts.squeeze(),
+                                           path_to_save=os.path.join(cfg.OUTPUT_DIR, db_name + str(num) + ".png"))
             # Visualize anomaly over the img
             # visualize_anomlay_over_img(img, prediction_.squeeze(), threshold_to_anomaly)
             # visualize_instances_over_img(img,anomaly_seg_pred_for_vis)
@@ -175,7 +182,8 @@ def func():
         "AUROC: " + str(res["AUROC"]) +
         " FPR@TPR95: " + str(res["FPR@TPR95"]) +
         " AUPRC: " + str(res["AUPRC"]) +
-        " PPV: " + str(final_res["prec_pred"]) + "\n")
+        " PPV: " + str(final_res["prec_pred"]) +
+        " sIoU" + str(final_res["sIoU_gt"]) + "\n")
 
 if __name__=="__main__":
     func()
