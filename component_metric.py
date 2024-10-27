@@ -22,7 +22,10 @@ def get_threshold_from_PRC(anomaly_p: np.ndarray, label_pixel_gt: np.ndarray):
     print(thresholds.shape)
     print(f1_scores.shape)
     idx = np.nanargmax(f1_scores)
-    threshold_to_anomaly = thresholds[idx]
+    if len(thresholds) == 1:
+        threshold_to_anomaly = thresholds[0]
+    else:
+        threshold_to_anomaly = thresholds[idx]
 
     return threshold_to_anomaly
 
