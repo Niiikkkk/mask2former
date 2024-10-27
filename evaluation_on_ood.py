@@ -104,8 +104,9 @@ def func():
             # if num == 0:
             #     print(prediction.squeeze())
 
-            if num == 25:
+            if num == 0:
                 out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
+                plt.close()
                 plt.imshow(out_img)
                 plt.savefig(os.path.join(cfg.OUTPUT_DIR, "test_out.png"))
                 break
