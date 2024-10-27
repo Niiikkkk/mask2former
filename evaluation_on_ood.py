@@ -104,10 +104,11 @@ def func():
             # if num == 0:
             #     print(prediction.squeeze())
 
-            # if num == 0:
-            #     out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
-            #     plt.imshow(out_img)
-            #     plt.show()
+            if num == 25:
+                out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
+                plt.imshow(out_img)
+                plt.savefig(os.path.join(cfg.OUTPUT_DIR, "test_out.png"))
+                break
             prediction_ = 1 - torch.max(prediction, axis=1)[0]
 
             pathGT = img_path.replace("images", "labels_masks")
@@ -156,7 +157,7 @@ def func():
             if "FS_LostFound_full" in img_path:
                 #Plot the prediction
                 visualize_anomlay_over_img(img, prediction_.squeeze(), threshold_to_anomaly, ood_gts.squeeze(),
-                                           path_to_save=os.path.join(cfg.OUTPUT_DIR, db_name + str(num) + ".png"))
+                                           path_to_save=os.path.join(cfg.OUTPUT_DIR, db_name + "_" + str(num) + ".png"))
             # Visualize anomaly over the img
             # visualize_anomlay_over_img(img, prediction_.squeeze(), threshold_to_anomaly)
             # visualize_instances_over_img(img,anomaly_seg_pred_for_vis)
