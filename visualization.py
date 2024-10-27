@@ -1,10 +1,7 @@
 import cv2
 from matplotlib import pyplot as plt
-from matplotlib.pyplot import get_cmap
 import numpy as np
 from matplotlib.colors import ListedColormap
-from matplotlib import color_sequences
-import matplotlib
 
 
 def visualize_anomlay_over_img(img:np.ndarray, anomaly_pred: np.ndarray, threshold:float, label:np.ndarray = None,
