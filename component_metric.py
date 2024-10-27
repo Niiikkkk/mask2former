@@ -15,6 +15,8 @@ def get_threshold_from_PRC(anomaly_p: np.ndarray, label_pixel_gt: np.ndarray):
     """
 
     """compute precision-recall curve"""
+    print(anomaly_p.shape)
+    print(label_pixel_gt.shape)
     prec, rec, thresholds = precision_recall_curve(label_pixel_gt,
                                                    anomaly_p)
 
