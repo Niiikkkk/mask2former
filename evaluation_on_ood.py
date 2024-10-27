@@ -168,7 +168,7 @@ def func():
         "AUROC: " + str(res["AUROC"]) +
         " FPR@TPR95: " + str(res["FPR@TPR95"]) +
         " AUPRC: " + str(res["AUPRC"]) +
-        " sIoU_pred: " + str(final_res["prec_pred"]) + "\n")
+        " PPV: " + str(final_res["prec_pred"]) + "\n")
 
 if __name__=="__main__":
     func()

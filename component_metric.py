@@ -18,6 +18,7 @@ def get_threshold_from_PRC(anomaly_p: np.ndarray, label_pixel_gt: np.ndarray):
     prec, rec, thresholds = precision_recall_curve(label_pixel_gt,
                                                    anomaly_p)
     f1_scores = (2 * prec * rec) / (prec + rec)
+    print(f1_scores)
     idx = np.nanargmax(f1_scores)
     threshold_to_anomaly = thresholds[idx]
 
