@@ -137,8 +137,15 @@ def func():
             threshold_to_anomaly = get_threshold_from_PRC(prediction_[ood_gts != 255].squeeze(),
                                                           ood_gts[ood_gts != 255].squeeze())
             # get the instances of the anomaly and gt
+            seg_size = 500
+            gt_size = 100
+            if "FS_LostFound_full" in img_path:
+                #In LostFound, the objects are smaller, so we need to change the seg_size and gt_size into smaller values, otherwise we cut out
+                # everything...
+                seg_size = 50
+                gt_size = 10
             anomaly_instances, anomaly_seg_pred, _, anomaly_instances_for_vis, anomaly_seg_pred_for_vis = default_instancer(
-                prediction_.squeeze(), ood_gts.squeeze(), threshold_to_anomaly, 1000, 100)
+                prediction_.squeeze(), ood_gts.squeeze(), threshold_to_anomaly, seg_size, gt_size)
             # get the metrics
             result = segment_metrics(anomaly_instances, anomaly_seg_pred)
             results = np.append(results, result)
