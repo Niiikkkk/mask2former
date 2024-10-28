@@ -20,6 +20,7 @@ from sklearn.metrics import roc_curve, auc, average_precision_score, precision_r
 from ood_metrics import fpr_at_95_tpr, plot_pr
 from component_metric import segment_metrics, anomaly_instances_from_mask, aggregate, get_threshold_from_PRC, \
     default_instancer
+from uncertainty_metric import prediction_rejection_ratio
 from visualization import visualize_anomlay_over_img
 
 
