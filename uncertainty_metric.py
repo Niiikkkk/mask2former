@@ -39,7 +39,7 @@ def prediction_rejection_ratio(labels:np.ndarray, logits:np.ndarray, threshold:n
 
     #We have anomaly probs, so we have to take 1-probs
     """
-    The probs are the logits after the anomlay computation, so high means anomaly, low means normal.
+    The probs are the logits after the anomaly computation, so high means anomaly, low means normal.
     This means that the anomaly (high preds) have low confidence, so it should be rejected.
     Here we can 2 things:
     - take confidece = 1-probs and sort in descending order (so confidence is the previous step of the anomaly computation i.e. the normal prediction)
@@ -63,6 +63,8 @@ def prediction_rejection_ratio(labels:np.ndarray, logits:np.ndarray, threshold:n
     num_samples = preds.shape[0]
 
     errors = (labels[sorted_idx] != preds[sorted_idx]).float().numpy()
+    print(errors[-20:-1])
+    print(confidence[sorted_idx][-20:-1])
 
     rev_cum_errors = np.cumsum(errors) / num_samples
     fraction_data = np.array([float(i + 1) / float(num_samples) * 100.0 for i in range(num_samples)])
@@ -96,7 +98,7 @@ def prediction_rejection_ratio(labels:np.ndarray, logits:np.ndarray, threshold:n
     # reported from -100 to 100
     rejection_ratio = (auc_uns - auc_rnd) / (auc_orc - auc_rnd) * 100.0
 
-    # plot(fraction_data,orc,rev_cum_errors,random_rejection)
+    plot(fraction_data,orc,rev_cum_errors,random_rejection)
 
     return rejection_ratio
 
