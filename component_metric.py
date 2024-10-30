@@ -3,6 +3,7 @@
 import numpy as np
 from scipy.ndimage.measurements import label
 from easydict import EasyDict
+from skimage.filters.rank import threshold
 from sklearn.metrics import precision_recall_curve
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import get_cmap
@@ -15,17 +16,22 @@ def get_threshold_from_PRC(anomaly_p: np.ndarray, label_pixel_gt: np.ndarray):
     """
 
     """compute precision-recall curve"""
-    prec, rec, thresholds = precision_recall_curve(label_pixel_gt,
-                                                   anomaly_p)
 
-    f1_scores = (2 * prec * rec) / (prec + rec)
-    idx = np.nanargmax(f1_scores)
-    if len(thresholds) == 1:
-        threshold_to_anomaly = thresholds[0]
-    else:
-        threshold_to_anomaly = thresholds[idx]
+    n_ = anomaly_p.shape[0]
+    thresholds_array = []
 
-    return threshold_to_anomaly
+    for i in range(n_):
+        prec, rec, thresholds = precision_recall_curve(label_pixel_gt[i][label_pixel_gt[i] != 255],
+                                                       anomaly_p[i][label_pixel_gt[i] != 255])
+
+        f1_scores = (2 * prec * rec) / (prec + rec)
+        idx = np.nanargmax(f1_scores)
+        if len(thresholds) == 1:
+            thresholds_array.append(thresholds[0])
+        else:
+            thresholds_array.append(thresholds[idx])
+
+    return thresholds_array
 
 def default_instancer(anomaly_p: np.ndarray, label_pixel_gt: np.ndarray, thresh_p: float,
                       thresh_segsize: int, thresh_instsize: int = 0):

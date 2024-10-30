@@ -88,8 +88,8 @@ def func():
     db_name = str(args.input[0].split('/')[4])
     file.write(db_name + "\n")
 
-    predictions = np.array([])
-    gts = np.array([])
+    predictions = []
+    gts = []
     results = np.array([])
 
     for num, img_path in enumerate(tqdm.tqdm(args.input)):
@@ -112,7 +112,7 @@ def func():
             #     plt.savefig(os.path.join(cfg.OUTPUT_DIR, "test_out.png"))
             #     break
 
-            prediction_ = 1 - torch.max(prediction, axis=1)[0]
+            prediction_ = 1 - torch.max(prediction, dim=1)[0]
 
             pathGT = img_path.replace("images", "labels_masks")
 
@@ -141,8 +141,8 @@ def func():
 
             # compute component level metric
             # get the threshold in order to say "it's anomaly"
-            threshold_to_anomaly = get_threshold_from_PRC(prediction_[ood_gts != 255].squeeze(),
-                                                          ood_gts[ood_gts != 255].squeeze())
+            threshold_to_anomaly = get_threshold_from_PRC(prediction_,
+                                                          ood_gts)
             # get the instances of the anomaly and gt
             seg_size = 500
             gt_size = 100
@@ -164,10 +164,16 @@ def func():
             # Visualize anomaly over the img
             # visualize_anomlay_over_img(img, prediction_.squeeze(), threshold_to_anomaly)
             # visualize_instances_over_img(img,anomaly_seg_pred_for_vis)
-            predictions = np.append(predictions, prediction_)
-            gts = np.append(gts, ood_gts)
+            predictions.append(prediction_)
+            gts.append(ood_gts)
 
     # Eval...
+
+    predictions = np.concatenate(predictions, axis=0)
+    gts = np.concatenate(gts, axis=0)
+
+    threshold_to_anomaly = get_threshold_from_PRC(predictions, gts)
+    prr = prediction_rejection_ratio(gts, predictions, threshold=threshold_to_anomaly)
 
     final_res = aggregate(results)
     predictions = predictions[(gts != 255)]
@@ -187,7 +193,8 @@ def func():
         " FPR@TPR95: " + str(res["FPR@TPR95"]) +
         " AUPRC: " + str(res["AUPRC"]) +
         " PPV: " + str(final_res["prec_pred"]) +
-        " sIoU" + str(final_res["sIoU_gt"]) + "\n")
+        " sIoU: " + str(final_res["sIoU_gt"]) +
+        " PRR: " + str(prr) + "\n")
 
 if __name__=="__main__":
     func()

@@ -3,31 +3,49 @@ from sklearn.metrics import auc
 import torch
 import matplotlib.pyplot as plt
 
-def prediction_rejection_ratio(labels, logits, pred_labels, threshold):
+def prediction_rejection_ratio(labels:np.ndarray, logits:np.ndarray, threshold:np.ndarray):
+    """
+    Compute the prediction rejection ratio
+    Input:
+    - labels: the ground truth labels
+    - logits: the logits of the model (anomlay logits)
+    - threshold: the thresholds to say "it's anomaly" for each input image
+    """
     # Based on https://github.com/KaosEngineer/PriorNetworks/blob/master/prior_networks/assessment/rejection.py
 
     # compute area between base_error(1-x) and the rejection curve
     # compute area between base_error(1-x) and the oracle curve
     # take the ratio
 
-    input = np.where((logits <= threshold), 0, pred_labels)
-    input = np.where((logits > threshold), 1, input)
+    """
+    Compute the anomaly pred label
+    """
+    pred_labels = []
+    for i in range(len(threshold)):
+        label = np.zeros(logits[i].shape)
+        label[logits[i] <= threshold[i]] = 0
+        label[logits[i] > threshold[i]] = 1
+        pred_labels.append(label)
+        plt.imshow(label.squeeze())
+        plt.show()
 
-    plt.imshow(input.squeeze())
-    plt.show()
+    pred_labels = np.array(pred_labels)
+
 
     # Get class probabilities
     labels = torch.tensor(labels).view(-1)
     probs = torch.tensor(logits).view(-1)
-    preds = torch.tensor(input).view(-1)
+    preds = torch.tensor(pred_labels).view(-1)
 
-    print(probs.shape)
-    print(preds.shape)
-    print(labels.shape)
-
-    # confidence, preds = torch.max(probs, dim=1)  # Take as confidence the probability of the predicted class
-    # confidence = 1 - confidence #Anomaly confidence
-    confidence = probs
+    #We have anomaly probs, so we have to take 1-probs
+    """
+    The probs are the logits after the anomlay computation, so high means anomaly, low means normal.
+    This means that the anomaly (high preds) have low confidence, so it should be rejected.
+    Here we can 2 things:
+    - take confidece = 1-probs and sort in descending order (so confidence is the previous step of the anomaly computation i.e. the normal prediction)
+    - take confidence = probs and sort in ascending order (so confidence is the anomaly computation)
+    """
+    confidence = 1-probs
     preds = preds[labels!=255]
     labels = labels[labels!=255]
 
@@ -45,8 +63,6 @@ def prediction_rejection_ratio(labels, logits, pred_labels, threshold):
     num_samples = preds.shape[0]
 
     errors = (labels[sorted_idx] != preds[sorted_idx]).float().numpy()
-
-    print("Errors: ", len(errors[errors==1]))
 
     rev_cum_errors = np.cumsum(errors) / num_samples
     fraction_data = np.array([float(i + 1) / float(num_samples) * 100.0 for i in range(num_samples)])
