@@ -46,8 +46,8 @@ def prediction_rejection_ratio(labels:np.ndarray, logits:np.ndarray, threshold:n
     - take confidence = probs and sort in ascending order (so confidence is the anomaly computation)
     """
     confidence = 1-probs
-    preds = preds[labels!=255]
-    labels = labels[labels!=255]
+    preds = preds
+    labels = labels
 
     # the rejection plots needs to reject to the right the most uncertain/less confident samples
     # if uncertainty metric, high means reject, sort in ascending uncertainty;
@@ -98,7 +98,7 @@ def prediction_rejection_ratio(labels:np.ndarray, logits:np.ndarray, threshold:n
     # reported from -100 to 100
     rejection_ratio = (auc_uns - auc_rnd) / (auc_orc - auc_rnd) * 100.0
 
-    plot(fraction_data,orc,rev_cum_errors,random_rejection)
+    # plot(fraction_data,orc,rev_cum_errors,random_rejection)
 
     return rejection_ratio
 
