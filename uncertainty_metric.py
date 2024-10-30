@@ -1,30 +1,40 @@
 import numpy as np
 from sklearn.metrics import auc
 import torch
+import matplotlib.pyplot as plt
 
-def prediction_rejection_ratio(labels, logits, metric='prob'):
+def prediction_rejection_ratio(labels, logits, pred_labels, threshold):
     # Based on https://github.com/KaosEngineer/PriorNetworks/blob/master/prior_networks/assessment/rejection.py
 
     # compute area between base_error(1-x) and the rejection curve
     # compute area between base_error(1-x) and the oracle curve
     # take the ratio
 
-    labels = torch.tensor(labels)
-    logits = torch.tensor(logits)
+    input = np.where((logits <= threshold), 0, pred_labels)
+    input = np.where((logits > threshold), 1, input)
+
+    plt.imshow(input.squeeze())
+    plt.show()
 
     # Get class probabilities
-    probs = logits  # For maskformer we compute probs directly
+    labels = torch.tensor(labels).view(-1)
+    probs = torch.tensor(logits).view(-1)
+    preds = torch.tensor(input).view(-1)
 
-    if metric == 'prob':
-        confidence, preds = torch.max(probs, dim=1)  # Take as confidence the probability of the predicted class
-    elif metric == 'entropy':
-        probs = probs + 1e-16
-        confidence = torch.sum((torch.log(probs) * probs), axis=1)  # Negative entropy
-        preds = torch.argmax(probs, dim=1)
+    print(probs.shape)
+    print(preds.shape)
+    print(labels.shape)
+
+    # confidence, preds = torch.max(probs, dim=1)  # Take as confidence the probability of the predicted class
+    # confidence = 1 - confidence #Anomaly confidence
+    confidence = probs
+    preds = preds[labels!=255]
+    labels = labels[labels!=255]
 
     # the rejection plots needs to reject to the right the most uncertain/less confident samples
     # if uncertainty metric, high means reject, sort in ascending uncertainty;
     # if confidence metric, low means reject, sort in descending confidence
+
     sorted_idx = torch.argsort(confidence, descending=True)
 
     # reverse cumulative errors function (rev = from all to first, instead from first error to all)
@@ -34,10 +44,10 @@ def prediction_rejection_ratio(labels, logits, metric='prob'):
 
     num_samples = preds.shape[0]
 
-    errors = (torch.take_along_dim(labels,sorted_idx,dim=2) != torch.take_along_dim(preds, sorted_idx, dim=2)).float().numpy()
+    errors = (labels[sorted_idx] != preds[sorted_idx]).float().numpy()
 
-    print(errors)
-    print(errors.shape)
+    print("Errors: ", len(errors[errors==1]))
+
     rev_cum_errors = np.cumsum(errors) / num_samples
     fraction_data = np.array([float(i + 1) / float(num_samples) * 100.0 for i in range(num_samples)])
 
@@ -70,5 +80,30 @@ def prediction_rejection_ratio(labels, logits, metric='prob'):
     # reported from -100 to 100
     rejection_ratio = (auc_uns - auc_rnd) / (auc_orc - auc_rnd) * 100.0
 
+    # plot(fraction_data,orc,rev_cum_errors,random_rejection)
+
     return rejection_ratio
 
+
+def plot(percentages, orc, errors, random_rejection):
+    plt.plot(percentages, orc, lw=2)
+    plt.fill_between(percentages, orc, random_rejection, alpha=0.5)
+    plt.plot(percentages, errors[::-1], lw=2)
+    plt.fill_between(percentages, errors[::-1], random_rejection, alpha=0.0)
+    plt.plot(percentages, random_rejection, 'k--', lw=2)
+    plt.legend(['Oracle', 'Uncertainty', 'Random'])
+    plt.xlabel('Percentage of predictions rejected to oracle')
+    plt.ylabel('Classification Error (%)')
+    plt.show()
+    plt.close()
+
+    plt.plot(percentages, orc, lw=2)
+    plt.fill_between(percentages, orc, random_rejection, alpha=0.0)
+    plt.plot(percentages, errors[::-1], lw=2)
+    plt.fill_between(percentages, errors[::-1], random_rejection, alpha=0.5)
+    plt.plot(percentages, random_rejection, 'k--', lw=2)
+    plt.legend(['Oracle', 'Uncertainty', 'Random'])
+    plt.xlabel('Percentage of predictions rejected to oracle')
+    plt.ylabel('Classification Error (%)')
+    plt.show()
+    plt.close()
