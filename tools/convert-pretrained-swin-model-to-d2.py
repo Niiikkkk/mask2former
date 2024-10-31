@@ -22,9 +22,13 @@ INPUT:
 if __name__ == "__main__":
     input = sys.argv[1]
 
-    obj = torch.load(input, map_location="cpu")["model"]
+    obj = torch.load(input, map_location="cpu")
 
-    res = {"model": obj, "__author__": "third_party", "matching_heuristics": True}
+    for k in obj.keys():
+        print(k)
 
-    with open(sys.argv[2], "wb") as f:
-        pkl.dump(res, f)
+    #
+    # res = {"model": obj, "__author__": "third_party", "matching_heuristics": True}
+    #
+    # with open(sys.argv[2], "wb") as f:
+    #     pkl.dump(res, f)

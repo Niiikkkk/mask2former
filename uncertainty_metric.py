@@ -63,8 +63,6 @@ def prediction_rejection_ratio(labels:np.ndarray, logits:np.ndarray, threshold:n
     num_samples = preds.shape[0]
 
     errors = (labels[sorted_idx] != preds[sorted_idx]).float().numpy()
-    print(errors[-20:-1])
-    print(confidence[sorted_idx][-20:-1])
 
     rev_cum_errors = np.cumsum(errors) / num_samples
     fraction_data = np.array([float(i + 1) / float(num_samples) * 100.0 for i in range(num_samples)])

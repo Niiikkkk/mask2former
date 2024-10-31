@@ -3,7 +3,7 @@ OUTPUT_DIR: "/home/nberardo/mask2former/output/train/swin_small_bs16_90k/"
 MODEL:
   BACKBONE:
     NAME: "D2SwinTransformer"
-    FREEZE_AT: ...
+    FREEZE_AT: 4
   SWIN:
     EMBED_DIM: 96
     DEPTHS: [2, 2, 18, 2]
