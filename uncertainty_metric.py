@@ -26,8 +26,9 @@ def prediction_rejection_ratio(labels:np.ndarray, logits:np.ndarray, threshold:n
         label[logits[i] <= threshold[i]] = 0
         label[logits[i] > threshold[i]] = 1
         pred_labels.append(label)
-        plt.imshow(label.squeeze())
-        plt.show()
+        label[labels[i] == 255] = 0
+        # plt.imshow(label.squeeze())
+        # plt.show()
 
     pred_labels = np.array(pred_labels)
 
@@ -36,6 +37,10 @@ def prediction_rejection_ratio(labels:np.ndarray, logits:np.ndarray, threshold:n
     labels = torch.tensor(labels).view(-1)
     probs = torch.tensor(logits).view(-1)
     preds = torch.tensor(pred_labels).view(-1)
+
+    probs = probs[labels != 255]
+    preds = preds[labels != 255]
+    labels = labels[labels != 255]
 
     #We have anomaly probs, so we have to take 1-probs
     """
