@@ -20,15 +20,12 @@ INPUT:
 """
 
 if __name__ == "__main__":
+
     input = sys.argv[1]
 
-    obj = torch.load(input, map_location="cpu")
+    obj = torch.load(input, map_location="cpu")["model"]
 
-    for k in obj.keys():
-        print(k)
+    res = {"model": obj, "__author__": "third_party", "matching_heuristics": True}
 
-    #
-    # res = {"model": obj, "__author__": "third_party", "matching_heuristics": True}
-    #
-    # with open(sys.argv[2], "wb") as f:
-    #     pkl.dump(res, f)
+    with open(sys.argv[2], "wb") as f:
+        pkl.dump(res, f)
