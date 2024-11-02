@@ -3,12 +3,12 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --gres=gpu:2
-#SBATCH --job-name=m2f_bt
+#SBATCH --job-name=m2f_lora
 #SBATCH --mail-user=s319439@studenti.polito.it
 #SBATCH --mail-type=END
 #SBATCH --partition=cuda
-#SBATCH --output=/home/nberardo/mask2former/train_bt.log
-#SBATCH --error=/home/nberardo/mask2former/train_bt.err
+#SBATCH --output=/home/nberardo/mask2former/train_lora.log
+#SBATCH --error=/home/nberardo/mask2former/train_lora.err
 ###### 1 Load the module
 module load nvidia/cudasdk
 module load intel/python/3
