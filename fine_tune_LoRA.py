@@ -24,21 +24,21 @@ def main(args):
     trainer = Trainer(cfg)
     trainer.resume_or_load(resume=args.resume)
     model = trainer._trainer.model
-    print_named_modules(model)
     # print_trainable_params(model)
 
-    # sem_seg_head.pixel_decoder.transformer.encoder.layers.4.linear1
     lora_cfg = LoraConfig(
         r=16,
         lora_alpha=32,
         # we want to target query and value matrices in the attention blocks of the base model
         target_modules=r"sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.linear\d"
-                       r"|sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.self_attn\.\w+",
+                       r"|sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.self_attn\.\w+"
+                       r"|backbone\.res\d\.\d\.conv\d",
         lora_dropout=0.1,
         bias="none",
         modules_to_save=["predictor"],
     )
     lora_model = get_peft_model(model, lora_cfg)
+    print_trainable_params(lora_model)
     trainer._trainer.model = lora_model
     return trainer.train()
 
