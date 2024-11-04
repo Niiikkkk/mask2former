@@ -3,6 +3,7 @@ from detectron2.engine import default_argument_parser, launch
 from peft import LoraConfig, get_peft_model
 import torch
 from torch.nn.parallel import DistributedDataParallel
+from transformers import AutoModelForSemanticSegmentation, PreTrainedModel
 
 from train_net import Trainer, setup
 
@@ -43,6 +44,7 @@ def main(args):
         bias="none",
         modules_to_save=["predictor"],
     )
+
     lora_model = get_peft_model(model, lora_cfg)
     print_trainable_params(lora_model)
     trainer._trainer.model = lora_model
