@@ -1,5 +1,5 @@
 _BASE_: ../maskformer2_R50_bs16_90k.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/output/train/swin_small_bs16_90k/"
+OUTPUT_DIR: "/home/nberardo/mask2former/output/train/swin_small_patch4_window7_224/"
 MODEL:
   BACKBONE:
     NAME: "D2SwinTransformer"
@@ -12,6 +12,6 @@ MODEL:
     APE: False
     DROP_PATH_RATE: 0.3
     PATCH_NORM: True
-  WEIGHTS: "/home/nberardo/mask2former/backbone_weights/swin_s-5e29d889.pkl"
+  WEIGHTS: "/home/nberardo/mask2former/backbone_weights/swin_small_patch4_window7_224.pkl"
   PIXEL_MEAN: [123.675, 116.280, 103.530]
   PIXEL_STD: [58.395, 57.120, 57.375]
