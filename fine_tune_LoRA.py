@@ -2,6 +2,8 @@ from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.engine import default_argument_parser, launch
 from peft import LoraConfig, get_peft_model
 import torch
+from torch.nn.parallel import DistributedDataParallel
+
 from train_net import Trainer, setup
 
 def print_trainable_params(model: torch.nn.Module):
@@ -25,6 +27,9 @@ def main(args):
     trainer = Trainer(cfg)
     trainer.resume_or_load(resume=args.resume)
     model = trainer._trainer.model
+    if isinstance(model, DistributedDataParallel):
+        model = trainer._trainer.model.module
+
     # print_trainable_params(model)
 
     lora_cfg = LoraConfig(
