@@ -44,7 +44,7 @@ def main(args):
         bias="none",
         modules_to_save=["predictor"],
     )
-
+    mod = AutoModelForSemanticSegmentation.from_pretrained(cfg.MODEL.WEIGHTS)
     lora_model = get_peft_model(model, lora_cfg)
     print_trainable_params(lora_model)
     trainer._trainer.model = lora_model
