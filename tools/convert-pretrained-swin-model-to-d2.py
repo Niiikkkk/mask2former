@@ -30,6 +30,8 @@ if __name__ == "__main__":
     # with open(sys.argv[2], "wb") as f:
     #     pkl.dump(res, f)
 
-    model = torch.load("/home/nberardo/mask2former/backbone_weights/swin_small_patch4_window7_224.pkl", map_location="cpu")
+    with open("/home/nberardo/mask2former/backbone_weights/swin_small_patch4_window7_224.pkl", "wb") as f:
+        model = pkl.load(f)
+
     for k in model.keys():
         print(k)
