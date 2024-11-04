@@ -21,11 +21,15 @@ INPUT:
 
 if __name__ == "__main__":
 
-    input = sys.argv[1]
+    # input = sys.argv[1]
+    #
+    # obj = torch.load(input, map_location="cpu")["model"]
+    #
+    # res = {"model": obj, "__author__": "third_party", "matching_heuristics": True}
+    #
+    # with open(sys.argv[2], "wb") as f:
+    #     pkl.dump(res, f)
 
-    obj = torch.load(input, map_location="cpu")["model"]
-
-    res = {"model": obj, "__author__": "third_party", "matching_heuristics": True}
-
-    with open(sys.argv[2], "wb") as f:
-        pkl.dump(res, f)
+    model = torch.load("/home/nberardo/mask2former/backbone_weights/swin_small_patch4_window7_224.pkl", map_location="cpu")
+    for k in model.keys():
+        print(k)
