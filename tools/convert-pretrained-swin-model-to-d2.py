@@ -33,5 +33,5 @@ if __name__ == "__main__":
     with open("/home/nberardo/mask2former/backbone_weights/swin_small_patch4_window7_224.pkl", "rb") as f:
         model = pkl.load(f)
 
-    for k in model.keys():
+    for k in model["model"].keys():
         print(k)
