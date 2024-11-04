@@ -30,7 +30,7 @@ if __name__ == "__main__":
     # with open(sys.argv[2], "wb") as f:
     #     pkl.dump(res, f)
 
-    with open("/home/nberardo/mask2former/backbone_weights/swin_small_patch4_window7_224.pkl", "wb") as f:
+    with open("/home/nberardo/mask2former/backbone_weights/swin_small_patch4_window7_224.pkl", "rb") as f:
         model = pkl.load(f)
 
     for k in model.keys():
