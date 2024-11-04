@@ -21,6 +21,7 @@ def print_named_modules(model):
         print(name, module)
 
 def main(args):
+    cfg = setup(args)
     trainer = Trainer(cfg)
     trainer.resume_or_load(resume=args.resume)
     model = trainer._trainer.model
