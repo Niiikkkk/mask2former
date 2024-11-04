@@ -21,17 +21,17 @@ INPUT:
 
 if __name__ == "__main__":
 
-    # input = sys.argv[1]
-    #
-    # obj = torch.load(input, map_location="cpu")["model"]
-    #
-    # res = {"model": obj, "__author__": "third_party", "matching_heuristics": True}
-    #
-    # with open(sys.argv[2], "wb") as f:
-    #     pkl.dump(res, f)
+    input = sys.argv[1]
 
-    with open("/home/nberardo/mask2former/backbone_weights/swin_small_patch4_window7_224.pkl", "rb") as f:
-        model = pkl.load(f)
+    obj = torch.load(input, map_location="cpu")["model"]
 
-    for k in model["model"].keys():
-        print(k)
+    res = {"model": obj, "__author__": "third_party", "matching_heuristics": True}
+
+    with open(sys.argv[2], "wb") as f:
+        pkl.dump(res, f)
+
+    # with open("/home/nberardo/mask2former/backbone_weights/swin_small_patch4_window7_224.pkl", "rb") as f:
+    #     model = pkl.load(f)
+    #
+    # for k in model["model"].keys():
+    #     print(k)
