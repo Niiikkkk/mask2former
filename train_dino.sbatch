@@ -11,7 +11,6 @@
 #SBATCH --error=/home/nberardo/mask2former/train_dino.err
 ###### 1 Load the module
 module load nvidia/cudasdk
-module load intel/python/3
 # 2 Activate the virtual environment
 source /home/nberardo/miniconda/bin/activate
 conda activate venv
