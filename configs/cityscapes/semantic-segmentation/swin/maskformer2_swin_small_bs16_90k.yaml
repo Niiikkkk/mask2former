@@ -1,5 +1,5 @@
 _BASE_: ../maskformer2_R50_bs16_90k.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/output/train/swin_small_patch4_window7_224/"
+OUTPUT_DIR: "/home/nberardo/mask2former/output/train/swin_small_patch4_window7_224_unfreezed/"
 MODEL:
   BACKBONE:
     NAME: "D2SwinTransformer"
