@@ -10,7 +10,7 @@
 #SBATCH --output=/home/nberardo/mask2former/train_lora.log
 #SBATCH --error=/home/nberardo/mask2former/train_lora.err
 ###### 1 Load the module
-module load nvidia/cudasdk
+module load nvidia/cudasdk/11.8_test
 # 2 Activate the virtual environment
 source /home/nberardo/miniconda/bin/activate
 conda activate venv
