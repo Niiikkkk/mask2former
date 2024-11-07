@@ -24,6 +24,7 @@ def print_named_modules(model):
         print(name, module)
 
 def main(args):
+    print(torch.cuda.get_device_properties())
     device = torch.device("cuda")
     print(torch.rand(5).to(device))
     cfg = setup(args)
