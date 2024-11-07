@@ -25,7 +25,7 @@ def print_named_modules(model):
 
 def main(args):
     device = torch.device("cuda")
-    print(torch.utils.collect_env)
+    print(torch.utils.collect_env.main())
     print(torch.rand(5).to(device))
     cfg = setup(args)
     trainer = Trainer(cfg)
