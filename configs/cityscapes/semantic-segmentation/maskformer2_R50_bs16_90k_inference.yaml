@@ -1,7 +1,7 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
 OUTPUT_DIR: "/home/nberardo/mask2former/results/bt_FT_6k_1x10-5/"
 MODEL:
-  WEIGHTS: "/home/nberardo/mask2former/output/bt_FT_6k_1x10-5/model_final.pth"
+  WEIGHTS: "/home/nberardo/mask2former/output/train/bt_FT_6k_1x10-5/model_final.pth"
   BACKBONE:
     FREEZE_AT: 0
   META_ARCHITECTURE: "MaskFormer"
