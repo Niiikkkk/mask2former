@@ -13,7 +13,7 @@
 module load nvidia/cudasdk
 # 2 Activate the virtual environment
 source /home/nberardo/miniconda/bin/activate
-conda activate venv
+conda activate my_env
 # 3 Run the python script
 
 export DETECTRON2_DATASETS=/home/nberardo/Datasets
