@@ -37,7 +37,6 @@ def main(args):
     lora_cfg = LoraConfig(
         r=16,
         lora_alpha=32,
-        # we want to target query and value matrices in the attention blocks of the base model
         target_modules=r"sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.linear\d"
                        r"|sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.self_attn\.\w+"
                        r"|backbone\.res\d\.\d\.conv\d",
@@ -52,7 +51,7 @@ def main(args):
     else:
         trainer._trainer.model = lora_model
 
-    print(trainer._trainer.model.module)
+    print(trainer._trainer.model)
     trainer.train()
 
     # save model and model adapter
