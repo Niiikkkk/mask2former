@@ -24,7 +24,8 @@ def print_named_modules(model):
         print(name, module)
 
 def main(args):
-    device = torch.device("cuda")
+    print(torch.utils.collect_env.main())
+    return
     cfg = setup(args)
     trainer = Trainer(cfg)
     trainer.resume_or_load(resume=args.resume)
@@ -51,12 +52,7 @@ def main(args):
     else:
         trainer._trainer.model = lora_model
 
-    print(trainer._trainer.model)
-    trainer.train()
-
-    # save model and model adapter
-
-    return
+    return trainer.train()
 
 if __name__ == "__main__":
     args = default_argument_parser().parse_args()
