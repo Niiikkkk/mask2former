@@ -51,7 +51,13 @@ def main(args):
         trainer._trainer.model.module = lora_model
     else:
         trainer._trainer.model = lora_model
-    return trainer.train()
+
+    print(trainer._trainer.model.module)
+    trainer.train()
+
+    # save model and model adapter
+
+    return
 
 if __name__ == "__main__":
     args = default_argument_parser().parse_args()
