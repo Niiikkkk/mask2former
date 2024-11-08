@@ -25,8 +25,6 @@ def print_named_modules(model):
 
 def main(args):
     device = torch.device("cuda")
-    print(torch.utils.collect_env.main())
-    print(torch.rand(5).to(device))
     cfg = setup(args)
     trainer = Trainer(cfg)
     trainer.resume_or_load(resume=args.resume)
@@ -49,7 +47,10 @@ def main(args):
     )
     lora_model = inject_adapter_in_model(lora_cfg,model)
     print_trainable_params(lora_model)
-    trainer._trainer.model = lora_model
+    if isinstance(model, DistributedDataParallel):
+        trainer._trainer.model.module = lora_model
+    else:
+        trainer._trainer.model = lora_model
     return trainer.train()
 
 if __name__ == "__main__":
