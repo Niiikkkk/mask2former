@@ -4,6 +4,7 @@ from peft import LoraConfig, get_peft_model, inject_adapter_in_model
 import torch
 from torch.nn.parallel import DistributedDataParallel
 from transformers import AutoModelForSemanticSegmentation, PreTrainedModel
+from torch.utils.collect_env import main as collect_env
 
 from train_net import Trainer, setup
 
@@ -24,7 +25,7 @@ def print_named_modules(model):
         print(name, module)
 
 def main(args):
-    print(torch.utils.collect_env.main())
+    print(collect_env())
     return
     cfg = setup(args)
     trainer = Trainer(cfg)
