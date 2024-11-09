@@ -44,7 +44,8 @@ def main(args):
         bias="none",
         modules_to_save=["predictor"],
     )
-    lora_model = get_peft_model(model,lora_cfg)
+    lora_cfg.inference_mode = False
+    lora_model = inject_adapter_in_model(lora_cfg,model)
     if isinstance(model, DistributedDataParallel):
         trainer._trainer.model.module = lora_model
     else:
