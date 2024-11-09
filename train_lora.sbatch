@@ -7,16 +7,16 @@
 #SBATCH --mail-user=s319439@studenti.polito.it
 #SBATCH --mail-type=END
 #SBATCH --partition=cuda
-#SBATCH --output=/home/nberardo/mask2former/train_lora1.log
-#SBATCH --error=/home/nberardo/mask2former/train_lora1.err
+#SBATCH --output=/home/nberardo/mask2former/train_lora.log
+#SBATCH --error=/home/nberardo/mask2former/train_lora.err
 ###### 1 Load the module
 module load nvidia/cudasdk
-module load intel/python/3
-# 2 Activate the virtual environment
-source /home/nberardo/myenv/bin/activate
+#module load intel/python/3
+## 2 Activate the virtual environment
+#source /home/nberardo/myenv/bin/activate
 
-#source /home/nberardo/miniconda/bin/activate
-#conda activate my_env
+source /home/nberardo/miniconda/bin/activate
+conda activate my_env
 # 3 Run the python script
 
 export DETECTRON2_DATASETS=/home/nberardo/Datasets
