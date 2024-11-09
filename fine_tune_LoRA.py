@@ -56,15 +56,16 @@ def main(args):
     return trainer.train()
 
 if __name__ == "__main__":
-    args = default_argument_parser().parse_args()
-    cfg = setup(args)
-
-    launch(
-        main,
-        args.num_gpus,
-        num_machines=args.num_machines,
-        machine_rank=args.machine_rank,
-        dist_url=args.dist_url,
-        args=(args,),
-    )
+    print(collect_env())
+    # args = default_argument_parser().parse_args()
+    # cfg = setup(args)
+    #
+    # launch(
+    #     main,
+    #     args.num_gpus,
+    #     num_machines=args.num_machines,
+    #     machine_rank=args.machine_rank,
+    #     dist_url=args.dist_url,
+    #     args=(args,),
+    # )
 
