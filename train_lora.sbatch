@@ -11,17 +11,13 @@
 #SBATCH --error=/home/nberardo/mask2former/train_lora.err
 ###### 1 Load the module
 module load nvidia/cudasdk/11.6
-module load intel/python/3
+#module load intel/python/3
 ## 2 Activate the virtual environment
 #source /home/nberardo/myenv/bin/activate
 
 source /home/nberardo/miniconda/bin/activate
 conda activate my_env
 # 3 Run the python script
-
-echo $LD_LIBRARY_PATH
-nvcc --version
-nvidia-smi
 
 export DETECTRON2_DATASETS=/home/nberardo/Datasets
 export CUDA_HOME=/home/nberardo/cuda_11.8
