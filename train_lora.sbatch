@@ -19,6 +19,8 @@ source /home/nberardo/miniconda/bin/activate
 conda activate my_env
 # 3 Run the python script
 
+echo $LD_LIBRARY_PATH
+nvcc --version
 nvidia-smi
 
 export DETECTRON2_DATASETS=/home/nberardo/Datasets
