@@ -20,6 +20,11 @@ def print_trainable_params(model: torch.nn.Module):
 
     print(f"Total params: {total_params}, Trainable params: {trainable_params}")
 
+def change_model_dtype(model: torch.nn.Module, dtype: torch.dtype):
+    for p in model.parameters():
+        if p.requires_grad:
+            p.data = p.data.to(dtype)
+
 def print_named_modules(model):
     names = [(n, type(m)) for n, m in model.named_modules()]
     for name, module in names:
@@ -46,8 +51,9 @@ def main(args):
         modules_to_save=["predictor"],
     )
     lora_cfg.inference_mode = False
-    lora_model = get_peft_model(model,lora_cfg)
+    lora_model = inject_adapter_in_model(lora_cfg,model)
 
+    change_model_dtype(lora_model, torch.float16)
     print_trainable_params(lora_model)
 
     # lora_model.train()
