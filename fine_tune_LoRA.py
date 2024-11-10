@@ -53,7 +53,7 @@ def main(args):
     lora_cfg.inference_mode = False
     lora_model = inject_adapter_in_model(lora_cfg,model)
 
-    change_model_dtype(lora_model, torch.float16)
+    trainer._trainer.optimizer
     print_trainable_params(lora_model)
 
     # lora_model.train()
