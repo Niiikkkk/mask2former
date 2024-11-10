@@ -16,7 +16,7 @@ def print_trainable_params(model: torch.nn.Module):
         total_params += p.numel()
         if p.requires_grad:
             trainable_params += p.numel()
-            print(name + " has " + str(p.numel()) + " trainable parameters")
+            print(name + " has " + str(p.numel()) + " trainable parameters. Dtype = " + str(p.dtype))
 
     print(f"Total params: {total_params}, Trainable params: {trainable_params}")
 
