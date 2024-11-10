@@ -2,6 +2,7 @@ from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.engine import default_argument_parser, launch
 from peft import LoraConfig, get_peft_model, inject_adapter_in_model, LoraModel, PeftModel, cast_mixed_precision_params
 import torch
+from six import print_
 from torch.nn.parallel import DistributedDataParallel
 from transformers import AutoModelForSemanticSegmentation, PreTrainedModel
 from torch.utils.collect_env import main as collect_env
@@ -45,7 +46,9 @@ def main(args):
         modules_to_save=["predictor"],
     )
     lora_model = inject_adapter_in_model(lora_cfg,model)
-    cast_mixed_precision_params(lora_model,dtype=torch.float16)
+
+    print_trainable_params(lora_model)
+
     # lora_model.train()
     if isinstance(model, DistributedDataParallel):
         trainer._trainer.model.module = lora_model
