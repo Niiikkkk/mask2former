@@ -26,8 +26,6 @@ def print_named_modules(model):
         print(name, module)
 
 def main(args):
-    device = torch.device("cuda")
-    print(torch.rand(5).to(device))
     cfg = setup(args)
     trainer = Trainer(cfg)
     trainer.resume_or_load(resume=args.resume)
@@ -47,7 +45,8 @@ def main(args):
         bias="none",
         modules_to_save=["predictor"],
     )
-    lora_model = inject_adapter_in_model(lora_cfg,model)
+    lora_cfg.inference_mode = False
+    lora_model = get_peft_model(model,lora_cfg)
 
     print_trainable_params(lora_model)
 
