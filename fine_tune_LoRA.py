@@ -50,7 +50,7 @@ def main(args):
         bias="none",
         modules_to_save=["predictor"],
     )
-    lora_cfg.inference_mode = False
+
     lora_model = inject_adapter_in_model(lora_cfg,model)
 
     trainer._trainer.optimizer
