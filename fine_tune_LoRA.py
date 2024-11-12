@@ -32,9 +32,6 @@ def print_named_modules(model):
 
 def main(args):
     cfg = setup(args)
-    model = torch.load(cfg.OUTPUT_DIR + "/model_final.pth", map_location="cpu")
-    print(model)
-    return
     trainer = Trainer(cfg)
     trainer.resume_or_load(resume=args.resume)
     model = trainer._trainer.model
@@ -54,9 +51,7 @@ def main(args):
         modules_to_save=["predictor"],
     )
 
-    lora_model = inject_adapter_in_model(lora_cfg,model)
-
-    trainer._trainer.optimizer
+    lora_model = get_peft_model(model,lora_cfg)
     print_trainable_params(lora_model)
 
     # lora_model.train()
@@ -65,7 +60,10 @@ def main(args):
     else:
         trainer._trainer.model = lora_model
 
-    return trainer.train()
+    trainer.train()
+
+    lora_model.save_pretrained(save_directory=cfg.OUTPUT_DIR,)
+    return
 
 if __name__ == "__main__":
     args = default_argument_parser().parse_args()
