@@ -62,7 +62,7 @@ def main(args):
 
     trainer.train()
 
-    lora_model.save_pretrained(save_directory=cfg.OUTPUT_DIR,)
+    lora_model.save_pretrained(save_directory=cfg.OUTPUT_DIR + "/lora_model")
     return
 
 if __name__ == "__main__":
