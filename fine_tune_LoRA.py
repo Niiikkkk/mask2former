@@ -32,7 +32,7 @@ def print_named_modules(model):
 
 def main(args):
     cfg = setup(args)
-    model = torch.load(cfg.OUTPUT_DIR + "/model_final.pth")
+    model = torch.load(cfg.OUTPUT_DIR + "/model_final.pth", map_location="cpu")
     print(model)
     return
     trainer = Trainer(cfg)
