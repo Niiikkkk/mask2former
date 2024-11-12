@@ -31,10 +31,10 @@ def print_named_modules(model):
         print(name, module)
 
 def main(args):
-    model = torch.load(args.OUTPUT_DIR + "/model_final.pth")
+    cfg = setup(args)
+    model = torch.load(cfg.OUTPUT_DIR + "/model_final.pth")
     print(model)
     return
-    cfg = setup(args)
     trainer = Trainer(cfg)
     trainer.resume_or_load(resume=args.resume)
     model = trainer._trainer.model
