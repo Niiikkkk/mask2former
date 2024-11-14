@@ -1,3 +1,5 @@
+import os.path
+
 from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.engine import default_argument_parser, launch
 from peft import LoraConfig, get_peft_model, inject_adapter_in_model, LoraModel, PeftModel, cast_mixed_precision_params
@@ -62,7 +64,8 @@ def main(args):
 
     trainer.train()
 
-    lora_model.save_pretrained(save_directory=cfg.OUTPUT_DIR + "/lora_model")
+    lora_path = os.path.join(cfg.OUTPUT_DIR, "lora_model")
+    lora_model.save_pretrained(save_directory=lora_path)
     return
 
 if __name__ == "__main__":
