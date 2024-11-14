@@ -1,8 +1,8 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/output/train/bt_FT_LoRA_1k_1x10-4/"
+OUTPUT_DIR: "/home/nberardo/mask2former/output/train/bt_FT_LoRA_1k_5x10-5/"
 SOLVER:
-  BASE_LR: 0.0001
-  MAX_ITER: 500
+  BASE_LR: 0.00005
+  MAX_ITER: 1000
   AMP:
     ENABLED: False
 MODEL:
