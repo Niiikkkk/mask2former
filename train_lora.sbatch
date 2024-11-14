@@ -2,7 +2,7 @@
 #SBATCH --time=72:00:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:2
 #SBATCH --job-name=m2f_lora
 #SBATCH --mail-user=s319439@studenti.polito.it
 #SBATCH --mail-type=END
@@ -25,8 +25,8 @@ export CUDA_HOME=/home/nberardo/cuda_11.8
 #convert pth weights to pkl
 #python tools/convert-torchvision-to-d2.py /home/nberardo/simsiam/resnet50.pth /home/nberardo/mask2anomaly_v2/backbone_weights/simsiam_resnet50.pkl
 
-#python fine_tune_LoRA.py \
-#  --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_lora.yaml \
-#  --num-gpus 2
+python fine_tune_LoRA.py \
+  --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_lora.yaml \
+  --num-gpus 2
 
 python evaluation_lora.py --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_lora.yaml \
