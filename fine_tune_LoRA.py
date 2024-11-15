@@ -1,14 +1,10 @@
 import os.path
 
-from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.engine import default_argument_parser, launch
-from django.contrib.gis.geos.prototypes.io import wkb_w
 from peft import LoraConfig, get_peft_model, inject_adapter_in_model, LoraModel, PeftModel, cast_mixed_precision_params
 import torch
-from six import print_
 from torch.nn.parallel import DistributedDataParallel
-from transformers import AutoModelForSemanticSegmentation, PreTrainedModel
-from torch.utils.collect_env import main as collect_env
+
 
 from train_net import Trainer, setup
 
