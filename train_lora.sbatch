@@ -28,5 +28,3 @@ export CUDA_HOME=/home/nberardo/cuda_11.8
 python fine_tune_LoRA.py \
   --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_lora.yaml \
   --num-gpus 2
-
-#python evaluation_lora.py --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_lora.yaml
