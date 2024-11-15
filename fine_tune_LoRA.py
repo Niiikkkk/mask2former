@@ -66,8 +66,10 @@ def main(args):
 
     lora_path = os.path.join(cfg.OUTPUT_DIR, "lora_model")
     if isinstance(model, DistributedDataParallel):
-        trainer._trainer.module.model.save_pretrained(save_directory=lora_path)
+        print("Saving model to ", lora_path)
+        trainer._trainer.model.module.save_pretrained(save_directory=lora_path)
     else:
+        print("Saving model to ", lora_path)
         trainer._trainer.model.save_pretrained(save_directory=lora_path)
     return
 
