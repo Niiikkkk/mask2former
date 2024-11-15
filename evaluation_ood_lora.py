@@ -15,9 +15,9 @@ if __name__ == '__main__':
 
     model_id = os.path.join(cfg.OUTPUT_DIR, "lora_model")
 
-    #inference_model = PeftModel.from_pretrained(model,model_id)
+    inference_model = PeftModel.from_pretrained(model,model_id)
 
-    #print(inference_model)
+    print(inference_model)
 
-    res = Trainer.test(cfg,model)
+    res = Trainer.test(cfg,inference_model)
     print(res)
