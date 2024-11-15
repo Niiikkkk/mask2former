@@ -2,6 +2,7 @@ import os.path
 
 from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.engine import default_argument_parser, launch
+from django.contrib.gis.geos.prototypes.io import wkb_w
 from peft import LoraConfig, get_peft_model, inject_adapter_in_model, LoraModel, PeftModel, cast_mixed_precision_params
 import torch
 from six import print_
@@ -48,13 +49,16 @@ def main(args):
         target_modules=r"sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.linear\d"
                        r"|sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.self_attn\.\w+"
                        r"|backbone\.res\d\.\d\.conv\d",
-        lora_dropout=0.1,
+        # lora_dropout=0.1,
         bias="none",
         modules_to_save=["predictor"],
     )
 
     lora_model = get_peft_model(model,lora_cfg)
     print_trainable_params(lora_model)
+
+    optimizer = trainer.build_optimizer(cfg, lora_model)
+    trainer._trainer.optimizer = optimizer
 
     # lora_model.train()
     if isinstance(model, DistributedDataParallel):
