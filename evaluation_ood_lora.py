@@ -19,10 +19,9 @@ if __name__ == '__main__':
     lora_config = LoraConfig.from_pretrained(model_id)
 
     inference_model = get_peft_model(model,lora_config)
-    # inference_model.load_state_dict(torch.load(model_id + "/model.pth"))
-    # inference_model.eval()
+    inference_model.load_state_dict(torch.load(model_id + "/model.pth"))
+    inference_model.eval()
     # inference_model = PeftModel.from_pretrained(model,model_id)
-    inference_model.load_adapter(model_id,adapter_name="Lora")
 
     res = Trainer.test(cfg,inference_model)
     print(res)
