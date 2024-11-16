@@ -11,13 +11,15 @@ if __name__ == '__main__':
     args = default_argument_parser().parse_args()
     cfg = setup(args)
     model = Trainer.build_model(cfg)
-    DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(cfg.MODEL.WEIGHTS,resume=args.resume)
+    weights = os.path.join(cfg.OUTPUT_DIR, "model_final.pth")
+    DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(weights,resume=args.resume)
 
     model_id = os.path.join(cfg.OUTPUT_DIR, "lora_model")
 
     inference_model = PeftModel.from_pretrained(model,model_id)
 
+
     print(inference_model)
 
-    res = Trainer.test(cfg,inference_model)
+    res = Trainer.test(cfg,model)
     print(res)
