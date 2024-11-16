@@ -28,7 +28,7 @@ if __name__ == '__main__':
     )
 
     inference_model = get_peft_model(model,lora_config)
-    inference_model.load_state_dict(torch.load(cfg.OUTPUT_DIR + "/model_final.pth"))
+    inference_model.load_state_dict(torch.load(cfg.OUTPUT_DIR + "/model_final.pth")["model"])
     # inference_model = PeftModel.from_pretrained(model,model_id)
 
     res = Trainer.test(cfg,inference_model)
