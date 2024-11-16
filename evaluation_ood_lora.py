@@ -17,8 +17,5 @@ if __name__ == '__main__':
 
     inference_model = PeftModel.from_pretrained(model,model_id)
 
-
-    print(inference_model)
-
     res = Trainer.test(cfg,inference_model)
     print(res)
