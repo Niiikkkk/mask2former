@@ -16,21 +16,13 @@ if __name__ == '__main__':
 
     model_id = os.path.join(cfg.OUTPUT_DIR, "lora_model")
 
-    lora_config = LoraConfig(
-        r=16,
-        lora_alpha=32,
-        target_modules=r"sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.linear\d"
-                       r"|sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.self_attn\.\w+"
-                       r"|backbone\.res\d\.\d\.conv\d",
-        # lora_dropout=0.1,
-        bias="none",
-        modules_to_save=["predictor"],
-    )
+    lora_config = LoraConfig.from_pretrained(model_id)
 
     inference_model = get_peft_model(model,lora_config)
-    inference_model.load_state_dict(torch.load(model_id + "/model.pth"))
-    inference_model.eval()
+    # inference_model.load_state_dict(torch.load(model_id + "/model.pth"))
+    # inference_model.eval()
     # inference_model = PeftModel.from_pretrained(model,model_id)
+    inference_model.load_adapter(model_id,adapter_name="Lora")
 
     res = Trainer.test(cfg,inference_model)
     print(res)
