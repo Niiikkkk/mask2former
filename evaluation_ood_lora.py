@@ -20,5 +20,5 @@ if __name__ == '__main__':
 
     print(inference_model)
 
-    res = Trainer.test(cfg,model)
+    res = Trainer.test(cfg,inference_model)
     print(res)
