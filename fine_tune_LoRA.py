@@ -68,9 +68,11 @@ def main(args):
     if isinstance(model, DistributedDataParallel):
         print("Saving model to ", lora_path)
         trainer._trainer.model.module.save_pretrained(save_directory=lora_path)
+        torch.save(trainer._trainer.model.module.state_dict(), lora_path + "/model.pth")
     else:
         print("Saving model to ", lora_path)
         trainer._trainer.model.save_pretrained(save_directory=lora_path)
+        torch.save(trainer._trainer.model.state_dict(), lora_path + "/model.pth")
     return
 
 if __name__ == "__main__":
