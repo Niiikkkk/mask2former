@@ -23,5 +23,6 @@ if __name__ == '__main__':
     inference_model.eval()
     # inference_model = PeftModel.from_pretrained(model,model_id)
 
+
     res = Trainer.test(cfg,inference_model)
     print(res)
