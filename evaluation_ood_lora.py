@@ -6,11 +6,11 @@ from detectron2.engine import default_argument_parser
 from component_metric import get_threshold_from_PRC, segment_metrics, default_instancer, anomaly_instances_from_mask
 from peft import PeftConfig, PeftModel, get_peft_model, LoraConfig
 from train_net import Trainer, setup
-from evaluation_on_ood import func
+from evaluation_on_ood import func, parse_args
 import os
 
 if __name__ == '__main__':
-    args = default_argument_parser().parse_args()
+    args = parse_args()
     cfg = setup(args)
     model = Trainer.build_model(cfg)
     DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(cfg.MODEL.WEIGHTS,resume=args.resume)
