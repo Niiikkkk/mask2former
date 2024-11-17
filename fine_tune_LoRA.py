@@ -46,7 +46,7 @@ def main(args):
                        r"|sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.self_attn\.\w+"
                        r"|backbone\.res\d\.\d\.conv\d",
         # lora_dropout=0.1,
-        bias="none",
+        bias="lora_only",
         modules_to_save=["predictor"],
     )
 
