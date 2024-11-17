@@ -6,6 +6,7 @@ from detectron2.engine import default_argument_parser
 from component_metric import get_threshold_from_PRC, segment_metrics, default_instancer, anomaly_instances_from_mask
 from peft import PeftConfig, PeftModel, get_peft_model, LoraConfig
 from train_net import Trainer, setup
+from evaluation_on_ood import func
 import os
 
 if __name__ == '__main__':
@@ -23,6 +24,6 @@ if __name__ == '__main__':
     inference_model.eval()
     # inference_model = PeftModel.from_pretrained(model,model_id)
 
+    func(inference_model,args,cfg)
+    #res = Trainer.test(cfg,inference_model)
 
-    res = Trainer.test(cfg,inference_model)
-    print(res)

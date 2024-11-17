@@ -65,18 +65,7 @@ def plot_roc_curve(fpr, tpr):
     plt.ylabel('True Positive Rate')
     plt.show()
 
-def func():
-    args = parse_args()
-    cfg = setup_cfgs(args)
-    logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
-    logger.info("Arguments: " + str(args))
-
-    # model = DefaultTrainer.build_model(cfg)
-    # DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).load(cfg.MODEL.WEIGHTS)
-    # model.eval()
-
-
-    model = DefaultPredictor(cfg)
+def func(model, args, cfg):
 
     file_path = os.path.join(cfg.OUTPUT_DIR, 'results.txt')
 
@@ -192,9 +181,13 @@ def func():
         "AUROC: " + str(res["AUROC"]) +
         " FPR@TPR95: " + str(res["FPR@TPR95"]) +
         " AUPRC: " + str(res["AUPRC"]) +
-        " PPV: " + str(final_res["prec_pred"]) +
         " sIoU: " + str(final_res["sIoU_gt"]) +
         " PRR: " + str(prr) + "\n")
 
 if __name__=="__main__":
-    func()
+    args = parse_args()
+    cfg = setup_cfgs(args)
+    logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
+    logger.info("Arguments: " + str(args))
+    model = DefaultPredictor(cfg)
+    func(model,args,cfg)
