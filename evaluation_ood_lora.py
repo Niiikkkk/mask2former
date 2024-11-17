@@ -30,6 +30,6 @@ if __name__ == '__main__':
     predictor.model = inference_model
     # inference_model = PeftModel.from_pretrained(model,model_id)
 
-    func(predictor,args,cfg)
-    #res = Trainer.test(cfg,inference_model)
+    # func(predictor,args,cfg)
+    res = Trainer.test(cfg,predictor)
 
