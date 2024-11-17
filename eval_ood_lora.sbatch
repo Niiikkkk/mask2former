@@ -29,17 +29,17 @@ export CUDA_HOME=/home/nberardo/cuda_11.8
 
 #python register_RA.py
 
-python eval_ood_lora.py --input /home/nberardo/Datasets/RoadAnomaly21/images/*.png \
+python evaluation_ood_lora.py --input /home/nberardo/Datasets/RoadAnomaly21/images/*.png \
  --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference_lora.yaml
 
-python eval_ood_lora.py --input /home/nberardo/Datasets/RoadAnomaly/images/*.jpg \
+python evaluation_ood_lora.py --input /home/nberardo/Datasets/RoadAnomaly/images/*.jpg \
  --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference_lora.yaml
 
-python eval_ood_lora.py --input /home/nberardo/Datasets/RoadObsticle21/images/*.webp \
+python evaluation_ood_lora.py --input /home/nberardo/Datasets/RoadObsticle21/images/*.webp \
  --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference_lora.yaml
 
-python eval_ood_lora.py --input /home/nberardo/Datasets/FS_LostFound_full/images/*.png \
+python evaluation_ood_lora.py --input /home/nberardo/Datasets/FS_LostFound_full/images/*.png \
  --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference_lora.yaml
 
-python eval_ood_lora.py --input /home/nberardo/Datasets/fs_static/images/*.jpg \
+python evaluation_ood_lora.py --input /home/nberardo/Datasets/fs_static/images/*.jpg \
  --config_file /home/nberardo/mask2former/configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference_lora.yaml
