@@ -19,7 +19,8 @@ if __name__ == '__main__':
     lora_config = LoraConfig.from_pretrained(model_id)
 
     inference_model = get_peft_model(model.model,lora_config)
-    inference_model.load_state_dict(torch.load(model_id + "/model.pth"))
+    device = torch.cuda.current_device()
+    inference_model.load_state_dict(torch.load(model_id + "/model.pth", map_location="cuda:" + str(device)))
     inference_model.eval()
     # inference_model = PeftModel.from_pretrained(model,model_id)
 
