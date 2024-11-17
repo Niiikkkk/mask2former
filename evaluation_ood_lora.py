@@ -29,8 +29,6 @@ if __name__ == '__main__':
     inference_model.eval()
     # inference_model = PeftModel.from_pretrained(model,model_id)
 
-
-
     func(inference_model,args,cfg)
     #res = Trainer.test(cfg,inference_model)
 
