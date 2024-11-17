@@ -2,6 +2,7 @@ import numpy
 import torch
 from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.engine import default_argument_parser, DefaultPredictor
+from detectron2.utils.logger import setup_logger
 
 from component_metric import get_threshold_from_PRC, segment_metrics, default_instancer, anomaly_instances_from_mask
 from peft import PeftConfig, PeftModel, get_peft_model, LoraConfig
@@ -12,6 +13,10 @@ import os
 if __name__ == '__main__':
     args = parse_args()
     cfg = setup_cfgs(args)
+
+    logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
+    logger.info("Arguments: " + str(args))
+
     model = DefaultPredictor(cfg)
 
     model_id = cfg.MODEL.LORA_PATH
@@ -23,6 +28,8 @@ if __name__ == '__main__':
     inference_model.load_state_dict(torch.load(model_id + "/model.pth", map_location="cuda:" + str(device)))
     inference_model.eval()
     # inference_model = PeftModel.from_pretrained(model,model_id)
+
+
 
     func(inference_model,args,cfg)
     #res = Trainer.test(cfg,inference_model)
