@@ -17,18 +17,19 @@ if __name__ == '__main__':
     logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
     logger.info("Arguments: " + str(args))
 
-    model = DefaultPredictor(cfg)
+    predictor = DefaultPredictor(cfg)
 
     model_id = cfg.MODEL.LORA_PATH
 
     lora_config = LoraConfig.from_pretrained(model_id)
 
-    inference_model = get_peft_model(model.model,lora_config)
+    inference_model = get_peft_model(predictor.model,lora_config)
     device = torch.cuda.current_device()
     inference_model.load_state_dict(torch.load(model_id + "/model.pth", map_location="cuda:" + str(device)))
     inference_model.eval()
+    predictor.model = inference_model
     # inference_model = PeftModel.from_pretrained(model,model_id)
 
-    func(inference_model,args,cfg)
+    func(predictor,args,cfg)
     #res = Trainer.test(cfg,inference_model)
 
