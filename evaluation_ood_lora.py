@@ -1,7 +1,7 @@
 import numpy
 import torch
 from detectron2.checkpoint import DetectionCheckpointer
-from detectron2.engine import default_argument_parser
+from detectron2.engine import default_argument_parser, DefaultPredictor
 
 from component_metric import get_threshold_from_PRC, segment_metrics, default_instancer, anomaly_instances_from_mask
 from peft import PeftConfig, PeftModel, get_peft_model, LoraConfig
@@ -12,8 +12,7 @@ import os
 if __name__ == '__main__':
     args = parse_args()
     cfg = setup_cfgs(args)
-    model = Trainer.build_model(cfg)
-    DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(cfg.MODEL.BASE_WEIGHTS,resume=args.resume)
+    model = DefaultPredictor(cfg)
 
     model_id = cfg.MODEL.LORA_WEIGHTS
 
