@@ -74,7 +74,7 @@ def func(model, args, cfg):
         open(file_path, 'w').close()
     file = open(file_path, 'a')
 
-    print(model)
+    print(model.model)
 
 
     db_name = str(args.input[0].split('/')[4])
