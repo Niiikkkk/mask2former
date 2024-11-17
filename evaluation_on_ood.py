@@ -47,6 +47,7 @@ def parse_args():
 
 def setup_cfgs(args):
     cfg = get_cfg()
+    cfg.set_new_allowed(True)
     add_deeplab_config(cfg)
     add_maskformer2_config(cfg)
     cfg.merge_from_file(args.config_file)
