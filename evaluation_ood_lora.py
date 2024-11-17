@@ -14,7 +14,7 @@ if __name__ == '__main__':
     cfg = setup_cfgs(args)
     model = DefaultPredictor(cfg)
 
-    model_id = cfg.MODEL.LORA_WEIGHTS
+    model_id = cfg.MODEL.LORA_PATH
 
     lora_config = LoraConfig.from_pretrained(model_id)
 
