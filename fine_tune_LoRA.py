@@ -34,6 +34,8 @@ def main(args):
     trainer = Trainer(cfg)
     trainer.resume_or_load(resume=args.resume)
     model = trainer._trainer.model
+    print_named_modules(model)
+    return
     if isinstance(model, DistributedDataParallel):
         model = trainer._trainer.model.module
 
