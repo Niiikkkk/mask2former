@@ -6,16 +6,10 @@ import torch
 from torch.nn.parallel import DistributedDataParallel
 from train_net import Trainer, setup
 
-def print_trainable_params(model: torch.nn.Module):
-    total_params = 0
-    trainable_params = 0
+def print_params(model: torch.nn.Module):
     for name,p in model.named_parameters():
-        total_params += p.numel()
-        if p.requires_grad:
-            trainable_params += p.numel()
-            print(name + " has " + str(p.numel()) + " trainable parameters. Dtype = " + str(p.dtype))
+        print(name + " has " + str(p.numel()) + " trainable parameters. Dtype = " + str(p.dtype))
 
-    print(f"Total params: {total_params}, Trainable params: {trainable_params}")
 
 def change_model_dtype(model: torch.nn.Module, dtype: torch.dtype):
     for p in model.parameters():
@@ -422,6 +416,9 @@ def main(args):
     if isinstance(model, DistributedDataParallel):
         model = trainer._trainer.model.module
 
+    print_params(model)
+    return
+
     lora_cfg = LoraConfig(
         r=16,
         lora_alpha=32,
@@ -434,7 +431,8 @@ def main(args):
     )
 
     lora_model = get_peft_model(model,lora_cfg)
-    # print_trainable_params(lora_model)
+
+    lora_model.print_trainable_parameters()
 
     optimizer = trainer.build_optimizer(cfg, lora_model)
     trainer._trainer.optimizer = optimizer
