@@ -18,20 +18,26 @@ def main(args):
     config = {
         "lr": tune.loguniform(1e-6,1e-4)
     }
-    scheduler = ASHAScheduler(
-        metric="loss",
-        mode="min",
+
+    tuner = tune.Tuner(
+        tune.with_resources(
+            tune.with_parameters(train_ray, cfg=cfg),
+            resources={"cpu": 8, "gpu": 2}
+        ),
+        tune_config=tune.TuneConfig(
+            metric="loss",
+            mode="min",
+            num_samples=2,
+            scheduler=ASHAScheduler()
+        ),
+        param_space=config
     )
-    res = tune.run(
-        partial(train_ray,cfg=cfg),
-        resources_per_trial={"cpu": 8, "gpu": 2},
-        config=config,
-        num_samples=2,
-        scheduler=scheduler,
-    )
-    best = res.get_best_trial("loss","min", "last")
+
+    res = tuner.fit()
+
+    best = res.get_best_result("loss","min")
     print(best.config)
-    best_ckp = res.get_best_checkpoint(best,"loss","min").as_directory()
+    best_ckp = best.checkpoint.as_directory()
     print("Checkpoint dir: " + str(best_ckp))
     return
 
