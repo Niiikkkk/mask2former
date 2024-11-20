@@ -483,14 +483,12 @@ sem_seg_head.predictor.mask_embed.layers.2.bias has 256 trainable parameters. Dt
 
 def main(args):
     cfg = setup(args)
-    # trainer = Trainer(cfg)
-    # trainer.resume_or_load(resume=args.resume)
-    # model = trainer._trainer.model
-    #
-    # if isinstance(model, DistributedDataParallel):
-    #     model = trainer._trainer.model.module
+    trainer = Trainer(cfg)
+    trainer.resume_or_load(resume=args.resume)
+    model = trainer._trainer.model
 
-    model = Trainer.build_model(cfg)
+    if isinstance(model, DistributedDataParallel):
+        model = trainer._trainer.model.module
 
     lora_cfg = LoraConfig(
         r=16,
@@ -509,11 +507,7 @@ def main(args):
 
     lora_model = get_peft_model(model,lora_cfg)
 
-    print_trainable_params(lora_model)
-
     lora_model.print_trainable_parameters()
-
-    return
 
     optimizer = trainer.build_optimizer(cfg, lora_model)
     trainer._trainer.optimizer = optimizer
