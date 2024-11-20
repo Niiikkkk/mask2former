@@ -503,9 +503,20 @@ def main(args):
         bias="lora_only",
         modules_to_save=[],
     )
+
+    lora_cfg_old = LoraConfig(
+        r=16,
+        lora_alpha=32,
+        target_modules=r"sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.linear\d"
+                       r"|sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.self_attn\.\w+"
+                       r"|backbone\.res\d\.\d\.conv\d",
+        lora_dropout=0.1,
+        bias="lora_only",
+        modules_to_save=["predictor"],
+    )
     #sem_seg_head.predictor.transformer_self_attention_layers.8.self_attn.in_proj_weight
 
-    lora_model = get_peft_model(model,lora_cfg)
+    lora_model = get_peft_model(model,lora_cfg_old)
 
     lora_model.print_trainable_parameters()
 
