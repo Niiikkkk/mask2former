@@ -10,6 +10,11 @@ def print_params(model: torch.nn.Module):
     for name,p in model.named_parameters():
         print(name + " has " + str(p.numel()) + " trainable parameters. Dtype = " + str(p.dtype))
 
+def print_trainable_params(model: torch.nn.Module):
+    for name,p in model.named_parameters():
+        if p.requires_grad:
+            print(name + " has " + str(p.numel()) + " trainable parameters. Dtype = " + str(p.type()))
+
 
 def change_model_dtype(model: torch.nn.Module, dtype: torch.dtype):
     for p in model.parameters():
@@ -478,27 +483,37 @@ sem_seg_head.predictor.mask_embed.layers.2.bias has 256 trainable parameters. Dt
 
 def main(args):
     cfg = setup(args)
-    trainer = Trainer(cfg)
-    trainer.resume_or_load(resume=args.resume)
-    model = trainer._trainer.model
+    # trainer = Trainer(cfg)
+    # trainer.resume_or_load(resume=args.resume)
+    # model = trainer._trainer.model
+    #
+    # if isinstance(model, DistributedDataParallel):
+    #     model = trainer._trainer.model.module
 
-    if isinstance(model, DistributedDataParallel):
-        model = trainer._trainer.model.module
+    model = Trainer.build_model(cfg)
 
     lora_cfg = LoraConfig(
         r=16,
         lora_alpha=32,
-        target_modules=r"sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.linear\d"
-                       r"|sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.self_attn\.\w+"
-                       r"|backbone\.res\d\.\d\.conv\d",
+        # target_modules=r"sem_seg_head\.pixel_decoder\.
+        target_modules=r"sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.self_attn\.\w+"
+                       r"|backbone\.res\d\.\d\.conv\d"
+                       r"|sem_seg_head\.predictor\.transformer_ffn_layers\.\d\.linear.+"
+                       r"|sem_seg_head\.predictor\.transformer_cross_attention_layers\.\d\.multihead_attn\.\w+"
+                       r"|sem_seg_head\.predictor\.transformer_self_attention_layers\.\d\.self_attn\.\w+",
         lora_dropout=0.1,
         bias="lora_only",
-        modules_to_save=["predictor"],
+        modules_to_save=[],
     )
+    #sem_seg_head.predictor.transformer_self_attention_layers.8.self_attn.in_proj_weight
 
     lora_model = get_peft_model(model,lora_cfg)
 
+    print_trainable_params(lora_model)
+
     lora_model.print_trainable_parameters()
+
+    return
 
     optimizer = trainer.build_optimizer(cfg, lora_model)
     trainer._trainer.optimizer = optimizer
