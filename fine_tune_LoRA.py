@@ -516,7 +516,7 @@ def main(args):
     )
     #sem_seg_head.predictor.transformer_self_attention_layers.8.self_attn.in_proj_weight
 
-    lora_model = get_peft_model(model,lora_cfg_old)
+    lora_model = get_peft_model(model,lora_cfg)
 
     lora_model.print_trainable_parameters()
 
