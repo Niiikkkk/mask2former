@@ -216,15 +216,6 @@ class Trainer(DefaultTrainer):
                 if "query_feat" in name:
                     continue
                 m.requires_grad = False
-        elif cfg.MODEL.FREEZE_TRANSFORMER_DECODER_EXCEPT_MLP_AND_OOD_PRED:
-            for name, m in model.sem_seg_head.predictor.named_parameters():
-                if "class_embed" in name:
-                    continue
-                if "mask_embed" in name:
-                    continue
-                if "ood_pred" in name:
-                    continue
-                m.requires_grad = False
         elif cfg.MODEL.FREEZE_TRANSFORMER_DECODER_EXCEPT_MLP:
             for name, m in model.sem_seg_head.predictor.named_parameters():
                 if "class_embed" in name:
