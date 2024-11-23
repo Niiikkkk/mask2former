@@ -203,6 +203,7 @@ class Trainer(DefaultTrainer):
             torch.nn.LocalResponseNorm,
         )
 
+
         if cfg.MODEL.FREEZE_BACKBONE:
             for _, m in model.backbone.named_parameters():
                 m.requires_grad = False
