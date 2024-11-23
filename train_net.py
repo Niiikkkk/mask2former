@@ -343,9 +343,6 @@ def main(args):
     trainer = Trainer(cfg)
     trainer.resume_or_load(resume=args.resume)
 
-    print_trainable_params(trainer._trainer.model)
-    return
-
     return trainer.train()
 
 
