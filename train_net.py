@@ -203,6 +203,39 @@ class Trainer(DefaultTrainer):
             torch.nn.LocalResponseNorm,
         )
 
+        if cfg.MODEL.FREEZE_BACKBONE:
+            for _, m in model.backbone.named_parameters():
+                m.requires_grad = False
+        if cfg.MODEL.FREEZE_PIXEL_DECODER:
+            for _, m in model.sem_seg_head.pixel_decoder.named_parameters():
+                m.requires_grad = False
+        if cfg.MODEL.FREEZE_TRANSFORMER_DECODER_EXCEPT_OBJECT_QUERIES:
+            for name, m in model.sem_seg_head.predictor.named_parameters():
+                if "query_embed" in name:
+                    continue
+                if "query_feat" in name:
+                    continue
+                m.requires_grad = False
+        elif cfg.MODEL.FREEZE_TRANSFORMER_DECODER_EXCEPT_MLP_AND_OOD_PRED:
+            for name, m in model.sem_seg_head.predictor.named_parameters():
+                if "class_embed" in name:
+                    continue
+                if "mask_embed" in name:
+                    continue
+                if "ood_pred" in name:
+                    continue
+                m.requires_grad = False
+        elif cfg.MODEL.FREEZE_TRANSFORMER_DECODER_EXCEPT_MLP:
+            for name, m in model.sem_seg_head.predictor.named_parameters():
+                if "class_embed" in name:
+                    continue
+                if "mask_embed" in name:
+                    continue
+                m.requires_grad = False
+        elif cfg.MODEL.FREEZE_TRANSFORMER_DECODER:
+            for _, m in model.sem_seg_head.predictor.named_parameters():
+                m.requires_grad = False
+
         params: List[Dict[str, Any]] = []
         memo: Set[torch.nn.parameter.Parameter] = set()
         for module_name, module in model.named_modules():
@@ -283,6 +316,7 @@ def setup(args):
     Create configs and perform basic setups.
     """
     cfg = get_cfg()
+    cfg.set_new_allowed(True)
     # for poly lr schedule
     add_deeplab_config(cfg)
     add_maskformer2_config(cfg)
@@ -293,6 +327,11 @@ def setup(args):
     # Setup logger for "mask_former" module
     setup_logger(output=cfg.OUTPUT_DIR, distributed_rank=comm.get_rank(), name="mask2former")
     return cfg
+
+def print_trainable_params(model: torch.nn.Module):
+    for name,p in model.named_parameters():
+        if p.requires_grad:
+            print(name + " has " + str(p.numel()) + " trainable parameters. Dtype = " + str(p.type()))
 
 
 def main(args):
@@ -312,6 +351,10 @@ def main(args):
 
     trainer = Trainer(cfg)
     trainer.resume_or_load(resume=args.resume)
+
+    print_trainable_params(trainer._trainer.model)
+    return
+
     return trainer.train()
 
 
