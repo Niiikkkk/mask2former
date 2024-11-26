@@ -57,16 +57,16 @@ def draw_prediction(model, img_paths, img_out, ssl_name):
         prediction_img = torch.max(prediction,dim=1)[1].detach().cpu().numpy()
         save_prediction_path = os.path.join(img_out, ssl_name, "prediction_" + str(num) + ".png")
         print(save_prediction_path)
-        # print_img(prediction_img,save_prediction_path)
+        print_img(prediction_img,save_prediction_path)
         save_image_path = os.path.join(img_out, ssl_name, "image_" + str(num) + ".png")
         print(save_image_path)
-        # print_img(image,save_image_path)
+        print_img(image,save_image_path)
         pathGT = img_path.replace("leftImg8bit", "gtFine")
         pathGT = pathGT.replace("gtFine.png", "gtFine_color.png")
         label = read_image(pathGT, format="BGR")
         save_label_path = os.path.join(img_out, ssl_name, "label_" + str(num) + ".png")
         print(save_label_path)
-        # print_img(label,save_label_path)
+        print_img(label,save_label_path)
 
 
 if __name__ == "__main__":
