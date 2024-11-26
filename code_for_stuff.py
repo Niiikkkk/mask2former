@@ -51,6 +51,8 @@ def print_img(image_to_plot,path_to_save):
     plt.close()
 
 def draw_prediction(model, img_paths, img_out, ssl_name):
+    print(img_paths)
+    os.makedirs(os.path.join(img_out, ssl_name),exist_ok=True)
     for num,img_path in enumerate(img_paths):
         image = read_image(img_path, format="BGR")
         prediction = model(image)["sem_seg"]
