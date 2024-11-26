@@ -28,4 +28,4 @@ export CUDA_HOME=/home/nberardo/cuda_11.8
 python code_for_stuff.py \
   --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k.yaml \
   --input /home/nberardo/Datasets/cityscapes/leftImg8bit/test/berlin/berlin_000100_000019_leftImg8bit.png \
-  --output /home/nberardo/mask2former/predition_example/simsiam.png
+  --output /home/nberardo/mask2former/predition_example
