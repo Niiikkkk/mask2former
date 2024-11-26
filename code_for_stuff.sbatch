@@ -25,7 +25,7 @@ export CUDA_HOME=/home/nberardo/cuda_11.8
 #convert pth weights to pkl
 #python tools/convert-torchvision-to-d2.py /home/nberardo/simsiam/resnet50.pth /home/nberardo/mask2anomaly_v2/backbone_weights/simsiam_resnet50.pkl
 
-python train_net.py \
+python code_for_stuff.py \
   --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k.yaml \
   --input /home/nberardo/Datasets/cityscapes/leftImg8bit/test/berlin/berlin_000100_000019_leftImg8bit.png \
   --output /home/nberardo/mask2former/predition_example/simsiam.png

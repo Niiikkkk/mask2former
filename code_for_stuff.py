@@ -1,17 +1,21 @@
 import argparse
+import os.path
+
 import matplotlib.pyplot as plt
 import torch
 from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.config import get_cfg
+from detectron2.data.detection_utils import read_image
 from detectron2.engine import default_argument_parser, DefaultPredictor
 from detectron2.projects.deeplab import add_deeplab_config
+from tensorboardX.summary import image
 
 from mask2former import add_maskformer2_config
 from train_net import setup, Trainer
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Stuff')
-    parser.add_argument("--config_file",
+    parser.add_argument("--config-file",
         default="configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_TMP.yaml",
         metavar="FILE",
         help="path to config file",)
@@ -41,15 +45,33 @@ def setup_cfgs(args):
     cfg.freeze()
     return cfg
 
-def draw_prediction(model, image, output):
-    prediction = model(image)["sem_seg"]
-    out = torch.max(prediction,dim=1)[1].detach().cpu().numpy()
-    plt.imshow(out)
-    plt.savefig(output)
+def print_img(image_to_plot,path_to_save):
+    plt.imshow(image_to_plot)
+    plt.savefig(path_to_save)
+    plt.close()
+
+def draw_prediction(model, img_paths, img_out, ssl_name):
+    for img_path in img_paths:
+        image = read_image(img_path, format="BGR")
+        prediction = model(image)["sem_seg"]
+        prediction_img = torch.max(prediction,dim=1)[1].detach().cpu().numpy()
+        save_prediction_path = os.path.join(img_out, ssl_name, "prediction.png")
+        print(save_prediction_path)
+        # print_img(prediction_img,save_prediction_path)
+        save_image_path = os.path.join(img_out, ssl_name, "image.png")
+        print(save_image_path)
+        # print_img(image,save_image_path)
+        pathGT = img_path.replace("leftImg8bit", "gtFine")
+        pathGT = pathGT.replace("leftImg8bit.png", "gtFine_color.png")
+        label = read_image(pathGT, format="BGR")
+        save_label_path = os.path.join(img_out, ssl_name, "label.png")
+        print(save_label_path)
+        # print_img(label,save_label_path)
 
 
 if __name__ == "__main__":
     args = parse_args()
-    cfg = setup(args)
+    cfg = setup_cfgs(args)
     model = DefaultPredictor(cfg)
-    draw_prediction(model, args.input, args.output)
+    ssl_name = cfg.MODEL.WEIGHTS.split('/')[-2]
+    draw_prediction(model, args.input, args.output, ssl_name)
