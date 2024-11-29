@@ -120,6 +120,7 @@ def draw_prediction(model, img_paths, img_out, ssl_name):
 if __name__ == "__main__":
     args = parse_args()
     cfg = setup_cfgs(args)
+    cfg.defrost()
     models = ["simsiam", "bt", "bt-down-freezed", "bt-freezed", "dino", "dino-down-freezed", "dino-freezed", "moco-v1", "moco-v1-freezed_NEW",
               "moco_v1_downloaded", "moco-v1-freezed_NEW", "moco-v2", "moco-v2-freezed_NEW", "moco_v2_downloaded", "simsiam_freezed",
               "vicreg", "vicreg_down_freeze", "vicreg-freezed"]
