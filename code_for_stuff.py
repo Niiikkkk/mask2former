@@ -81,7 +81,7 @@ def decode_segmap(temp):
         r[temp == l] = label_colours[l][0]
         g[temp == l] = label_colours[l][1]
         b[temp == l] = label_colours[l][2]
-
+    print(temp.shape)
     rgb = np.zeros((temp.shape[0], temp.shape[1], 3))
     rgb[:, :, 0] = r / 255.0
     rgb[:, :, 1] = g / 255.0
