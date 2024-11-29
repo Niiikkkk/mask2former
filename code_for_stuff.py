@@ -94,7 +94,7 @@ def print_img(image_to_plot,path_to_save):
         plt.imshow(cv2.cvtColor(image_to_plot, cv2.COLOR_BGR2RGB))
     else:
         if "label" in path_to_save:
-            image_to_plot = torch.permute(image_to_plot,(2,0,1))
+            image_to_plot = np.transpose(image_to_plot,(2,0,1))
         plt.imshow(decode_segmap(image_to_plot[0]))
     plt.savefig(path_to_save)
     plt.close()
