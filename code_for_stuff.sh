@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source /home/nberardo/miniconda3/bin/activate
-
 python code_for_stuff.py \
   --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k.yaml \
   --input \
