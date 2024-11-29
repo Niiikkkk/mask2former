@@ -3,6 +3,7 @@ import os.path
 
 import matplotlib.pyplot as plt
 import torch
+import tqdm
 from detectron2.config import get_cfg
 from detectron2.data.detection_utils import read_image
 from detectron2.engine import DefaultPredictor
@@ -50,7 +51,7 @@ def print_img(image_to_plot,path_to_save):
 def draw_prediction(model, img_paths, img_out, ssl_name):
     print(img_paths)
     os.makedirs(os.path.join(img_out, ssl_name),exist_ok=True)
-    for num,img_path in enumerate(img_paths):
+    for num,img_path in enumerate(tqdm.tqdm(img_paths)):
         image = read_image(img_path, format="BGR")
         prediction = model(image)["sem_seg"]
         prediction_img = torch.max(prediction,dim=1)[1].detach().cpu().numpy()
