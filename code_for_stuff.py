@@ -95,7 +95,7 @@ def print_img(image_to_plot,path_to_save):
     else:
         if "label" in path_to_save:
             image_to_plot = torch.permute(image_to_plot,(2,0,1))
-        plt.imshow(decode_segmap(image_to_plot))
+        plt.imshow(decode_segmap(image_to_plot[0]))
     plt.savefig(path_to_save)
     plt.close()
 
