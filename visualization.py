@@ -1,4 +1,5 @@
 import cv2
+from detectron2.data.detection_utils import read_image
 from matplotlib import pyplot as plt
 import numpy as np
 from matplotlib.colors import ListedColormap
@@ -54,3 +55,11 @@ def visualize_instances_over_img(img:np.ndarray, instances:np.ndarray):
     plt.imshow(instances, cmap="magma", alpha=0.7, vmin=0, vmax=len(num_colors)-1)
     plt.show()
 
+
+if __name__ == "__main__":
+    img = read_image("/Users/nicholas.berardo/Desktop/fs_static/images/4.jpg", format="BGR")
+    img = np.where(img == 1, 100, img)
+    plt.axis("off")
+    plt.tight_layout()
+    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    plt.savefig("/Users/nicholas.berardo/Desktop/fs_static/images/FSS_4.png")
