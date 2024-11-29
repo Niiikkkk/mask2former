@@ -89,13 +89,11 @@ def decode_segmap(temp):
 
 def print_img(image_to_plot,path_to_save):
     print(image_to_plot.shape)
-    if "image" in path_to_save:
+    if "image" or "label" in path_to_save:
         plt.imshow(cv2.cvtColor(image_to_plot, cv2.COLOR_BGR2RGB))
     else:
         if "prediction" in path_to_save:
             plt.imshow(decode_segmap(image_to_plot[0]))
-        else:
-            plt.imshow(image_to_plot)
     plt.savefig(path_to_save)
     plt.clf()
 
