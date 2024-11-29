@@ -10,6 +10,7 @@ from detectron2.engine import DefaultPredictor
 from detectron2.projects.deeplab import add_deeplab_config
 import cv2
 import numpy as np
+from tensorboardX.summary import image
 
 from mask2former import add_maskformer2_config
 from register_RA import label_colours
@@ -81,7 +82,6 @@ def decode_segmap(temp):
         r[temp == l] = label_colours[l][0]
         g[temp == l] = label_colours[l][1]
         b[temp == l] = label_colours[l][2]
-    print(temp.shape)
     rgb = np.zeros((temp.shape[0], temp.shape[1], 3))
     rgb[:, :, 0] = r / 255.0
     rgb[:, :, 1] = g / 255.0
@@ -95,6 +95,7 @@ def print_img(image_to_plot,path_to_save):
     else:
         if "label" in path_to_save:
             image_to_plot = np.transpose(image_to_plot,(2,0,1))
+        print(image_to_plot)
         plt.imshow(decode_segmap(image_to_plot[0]))
     plt.savefig(path_to_save)
     plt.clf()
