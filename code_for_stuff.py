@@ -8,8 +8,12 @@ from detectron2.config import get_cfg
 from detectron2.data.detection_utils import read_image
 from detectron2.engine import DefaultPredictor
 from detectron2.projects.deeplab import add_deeplab_config
+import cv2
+import numpy as np
 
 from mask2former import add_maskformer2_config
+from register_RA import label_colours
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Stuff')
@@ -43,8 +47,52 @@ def setup_cfgs(args):
     cfg.freeze()
     return cfg
 
+colors = [#[  0,   0,   0],
+        [128, 64, 128],
+        [244, 35, 232],
+        [70, 70, 70],
+        [102, 102, 156],
+        [190, 153, 153],
+        [153, 153, 153],
+        [250, 170, 30],
+        [220, 220, 0],
+        [107, 142, 35],
+        [152, 251, 152],
+        [0, 130, 180],
+        [220, 20, 60],
+        [255, 0, 0],
+        [0, 0, 142],
+        [0, 0, 70],
+        [0, 60, 100],
+        [0, 80, 100],
+        [0, 0, 230],
+        [119, 11, 32],
+    ]
+
+# makes a dictionary with key:value. For example 0:[128, 64, 128]
+label_colours = dict(zip(range(19), colors))
+
+def decode_segmap(temp):
+    r = temp.copy()
+    g = temp.copy()
+    b = temp.copy()
+    for l in range(0, 19):
+        r[temp == l] = label_colours[l][0]
+        g[temp == l] = label_colours[l][1]
+        b[temp == l] = label_colours[l][2]
+
+    rgb = np.zeros((temp.shape[0], temp.shape[1], 3))
+    rgb[:, :, 0] = r / 255.0
+    rgb[:, :, 1] = g / 255.0
+    rgb[:, :, 2] = b / 255.0
+    return rgb
+
+
 def print_img(image_to_plot,path_to_save):
-    plt.imshow(image_to_plot)
+    if "image" in path_to_save:
+        plt.imshow(cv2.cvtColor(image_to_plot, cv2.COLOR_BGR2RGB))
+    else:
+        plt.imshow(decode_segmap(image_to_plot))
     plt.savefig(path_to_save)
     plt.close()
 
