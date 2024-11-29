@@ -91,6 +91,8 @@ def decode_segmap(temp):
 def print_img(image_to_plot,path_to_save):
     print(image_to_plot.shape, path_to_save)
     sys.stdout.flush()
+    plt.axis("off")
+    plt.tight_layout()
     if "image" in path_to_save or "label" in path_to_save:
         plt.imshow(cv2.cvtColor(image_to_plot, cv2.COLOR_BGR2RGB))
     else:
@@ -118,6 +120,10 @@ def draw_prediction(model, img_paths, img_out, ssl_name):
 if __name__ == "__main__":
     args = parse_args()
     cfg = setup_cfgs(args)
-    model = DefaultPredictor(cfg)
-    ssl_name = cfg.MODEL.WEIGHTS.split('/')[-2]
-    draw_prediction(model, args.input, args.output, ssl_name)
+    models = ["simsiam", "bt", "bt-down-freezed", "bt-freezed", "dino", "dino-down-freezed", "dino-freezed", "moco-v1", "moco-v1-freezed_NEW",
+              "moco_v1_downloaded", "moco-v1-freezed_NEW", "moco-v2", "moco-v2-freezed_NEW", "moco_v2_downloaded", "simsiam_freezed",
+              "vicreg", "vicreg_down_freeze", "vicreg-freezed"]
+    for model_name in models:
+        cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", model_name, "model_final.pth")
+        model = DefaultPredictor(cfg)
+        draw_prediction(model, args.input, args.output, model_name)
