@@ -110,7 +110,7 @@ def draw_prediction(model, img_paths, img_out, ssl_name):
         save_image_path = os.path.join(img_out, ssl_name, "image_" + str(num) + ".png")
         print_img(image,save_image_path)
         pathGT = img_path.replace("leftImg8bit", "gtFine")
-        pathGT = pathGT.replace("gtFine.png", "gtFine_labelIds.png")
+        pathGT = pathGT.replace("gtFine.png", "gtFine_instanceIds.png")
         label = read_image(pathGT, format="BGR")
         save_label_path = os.path.join(img_out, ssl_name, "label_" + str(num) + ".png")
         print_img(label,save_label_path)
