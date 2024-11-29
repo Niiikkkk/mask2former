@@ -94,13 +94,12 @@ def print_img(image_to_plot,path_to_save):
     else:
         if "label" in path_to_save:
             image_to_plot = np.transpose(image_to_plot,(2,0,1))
-        print(image_to_plot)
+        print(image_to_plot.shape)
         plt.imshow(decode_segmap(image_to_plot[0]))
     plt.savefig(path_to_save)
     plt.clf()
 
 def draw_prediction(model, img_paths, img_out, ssl_name):
-    print(img_paths)
     os.makedirs(os.path.join(img_out, ssl_name),exist_ok=True)
     for num,img_path in enumerate(tqdm.tqdm(img_paths)):
         image = read_image(img_path, format="BGR")
@@ -111,7 +110,7 @@ def draw_prediction(model, img_paths, img_out, ssl_name):
         save_image_path = os.path.join(img_out, ssl_name, "image_" + str(num) + ".png")
         print_img(image,save_image_path)
         pathGT = img_path.replace("leftImg8bit", "gtFine")
-        pathGT = pathGT.replace("gtFine.png", "gtFine_labelTrainIds.png")
+        pathGT = pathGT.replace("gtFine.png", "gtFine_labelIds.png")
         label = read_image(pathGT, format="BGR")
         save_label_path = os.path.join(img_out, ssl_name, "label_" + str(num) + ".png")
         print_img(label,save_label_path)
