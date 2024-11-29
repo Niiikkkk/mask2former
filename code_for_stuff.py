@@ -93,6 +93,7 @@ def print_img(image_to_plot,path_to_save):
     if "image" in path_to_save:
         plt.imshow(cv2.cvtColor(image_to_plot, cv2.COLOR_BGR2RGB))
     else:
+        print(path_to_save)
         plt.imshow(decode_segmap(image_to_plot))
     plt.savefig(path_to_save)
     plt.close()
