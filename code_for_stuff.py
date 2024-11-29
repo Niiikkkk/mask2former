@@ -91,7 +91,7 @@ def decode_segmap(temp):
 def print_img(image_to_plot,path_to_save):
     print(image_to_plot.shape, path_to_save)
     sys.stdout.flush()
-    if "image" or "label" in path_to_save:
+    if "image" in path_to_save or "label" in path_to_save:
         plt.imshow(cv2.cvtColor(image_to_plot, cv2.COLOR_BGR2RGB))
     else:
         plt.imshow(decode_segmap(image_to_plot[0]))
