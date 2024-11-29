@@ -3,15 +3,12 @@ import os.path
 
 import matplotlib.pyplot as plt
 import torch
-from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.config import get_cfg
 from detectron2.data.detection_utils import read_image
-from detectron2.engine import default_argument_parser, DefaultPredictor
+from detectron2.engine import DefaultPredictor
 from detectron2.projects.deeplab import add_deeplab_config
-from tensorboardX.summary import image
 
 from mask2former import add_maskformer2_config
-from train_net import setup, Trainer
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Stuff')
