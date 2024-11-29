@@ -47,7 +47,8 @@ def setup_cfgs(args):
     cfg.freeze()
     return cfg
 
-colors = [#[  0,   0,   0],
+colors = [
+        #[  0,   0,   0],
         [128, 64, 128],
         [244, 35, 232],
         [70, 70, 70],
