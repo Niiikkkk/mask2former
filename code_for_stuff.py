@@ -97,7 +97,7 @@ def print_img(image_to_plot,path_to_save):
             image_to_plot = np.transpose(image_to_plot,(2,0,1))
         plt.imshow(decode_segmap(image_to_plot[0]))
     plt.savefig(path_to_save)
-    plt.close()
+    plt.clf()
 
 def draw_prediction(model, img_paths, img_out, ssl_name):
     print(img_paths)
@@ -111,7 +111,7 @@ def draw_prediction(model, img_paths, img_out, ssl_name):
         save_image_path = os.path.join(img_out, ssl_name, "image_" + str(num) + ".png")
         print_img(image,save_image_path)
         pathGT = img_path.replace("leftImg8bit", "gtFine")
-        pathGT = pathGT.replace("gtFine.png", "gtFine_color.png")
+        pathGT = pathGT.replace("gtFine.png", "gtFine_labelTrainIds.png")
         label = read_image(pathGT, format="BGR")
         save_label_path = os.path.join(img_out, ssl_name, "label_" + str(num) + ".png")
         print_img(label,save_label_path)
