@@ -102,7 +102,7 @@ def draw_prediction(model, img_paths, img_out, ssl_name):
     os.makedirs(os.path.join(img_out, ssl_name),exist_ok=True)
     for num,img_path in enumerate(tqdm.tqdm(img_paths)):
         image = read_image(img_path, format="BGR")
-        prediction = model(image)["sem_seg"].unsquezze(0)
+        prediction = model(image)["sem_seg"].unsqueze(0)
         prediction_img = torch.max(prediction,dim=1)[1].detach().cpu().numpy()
         save_prediction_path = os.path.join(img_out, ssl_name, "prediction_" + str(num) + ".png")
         print_img(prediction_img,save_prediction_path)
