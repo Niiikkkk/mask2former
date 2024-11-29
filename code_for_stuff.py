@@ -95,7 +95,7 @@ def print_img(image_to_plot,path_to_save):
         if "prediction" in path_to_save:
             plt.imshow(decode_segmap(image_to_plot[0]))
         else:
-            plt.imshow(image_to_plot)
+            plt.imshow(np.transpose(image_to_plot,(2,1,0)))
     plt.savefig(path_to_save)
     plt.clf()
 
