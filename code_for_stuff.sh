@@ -8,6 +8,6 @@ python code_for_stuff.py \
   /home/nberardo//Datasets/cityscapes/leftImg8bit/test/leverkusen/leverkusen_000010_000019_leftImg8bit.png \
   /home/nberardo//Datasets/cityscapes/leftImg8bit/test/mainz/mainz_000001_010853_leftImg8bit.png \
   /home/nberardo//Datasets/cityscapes/leftImg8bit/test/munich/munich_000110_000019_leftImg8bit.png \
-  --output /home/nberardo/mask2former/predition_example
+  --output /home/nberardo/mask2former/prediction_example
 
 
