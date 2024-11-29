@@ -10,7 +10,6 @@ from detectron2.engine import DefaultPredictor
 from detectron2.projects.deeplab import add_deeplab_config
 import cv2
 import numpy as np
-from tensorboardX.summary import image
 
 from mask2former import add_maskformer2_config
 from register_RA import label_colours
