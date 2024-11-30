@@ -124,7 +124,7 @@ if __name__ == "__main__":
     models = ["simsiam", "bt", "bt-down-freezed", "bt-freezed", "dino", "dino-down-freezed", "dino-freezed", "moco-v1", "moco-v1-freezed_NEW",
               "moco_v1_downloaded", "moco-v1-freezed_NEW", "moco-v2", "moco-v2-freezed_NEW", "moco_v2_downloaded", "simsiam_freezed",
               "vicreg", "vicreg_down_freeze", "vicreg-freezed"]
-    for model_name in models:
+    for model_name in ["bt-down-freezed"]:
         cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", model_name, "model_final.pth")
         model = DefaultPredictor(cfg)
         draw_prediction(model, args.input, args.output, model_name)
