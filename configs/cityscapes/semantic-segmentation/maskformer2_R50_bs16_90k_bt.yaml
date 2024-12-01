@@ -11,7 +11,7 @@ MODEL:
   FREEZE_TRANSFORMER_DECODER: False
   BACKBONE:
     FREEZE_AT: 0
-  WEIGHTS: "/home/nberardo/mask2former/output/train/bt-down-freezed/model_final.pth"
+  WEIGHTS: "/home/nberardo/mask2former/output/train/bt_FT_1k_5e-5/model_final.pth"
   META_ARCHITECTURE: "MaskFormer"
   RESNETS:
 
