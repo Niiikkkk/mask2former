@@ -1,6 +1,4 @@
 #!/bin/bash
-source /home/nberardo/miniconda3/bin/activate
-
 #export DETECTRON2_DATASETS=/home/nberardo/Datasets
 #export CUDA_HOME=/home/nberardo/cuda_11.8
 
@@ -9,4 +7,4 @@ source /home/nberardo/miniconda3/bin/activate
 
 python train_net.py \
   --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_bt.yaml \
-  --num-gpus 2
+  --num-gpus 1
