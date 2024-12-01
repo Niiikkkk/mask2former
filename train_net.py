@@ -4,6 +4,8 @@ MaskFormer Training Script.
 
 This script is a simplified version of the training script in detectron2/tools.
 """
+import sys
+
 try:
     # ignore ShapelyDeprecationWarning from fvcore
     from shapely.errors import ShapelyDeprecationWarning
@@ -328,6 +330,8 @@ def print_trainable_params(model: torch.nn.Module):
 def main(args):
     cfg = setup(args)
 
+    #Redirect err to file
+    sys.stderr = open(os.path.join(cfg.OUTPUT_DIR, "stderr.txt"), "w")
     if args.eval_only:
         model = Trainer.build_model(cfg)
         DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(
