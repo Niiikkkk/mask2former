@@ -1,4 +1,5 @@
 import argparse
+import sys
 
 import matplotlib.pyplot as plt
 from PIL import Image
@@ -68,6 +69,10 @@ def plot_roc_curve(fpr, tpr):
 def func(model, args, cfg):
 
     file_path = os.path.join(cfg.OUTPUT_DIR, 'results.txt')
+    stderr_file = os.path.join(cfg.OUTPUT_DIR, 'stderr.txt')
+    if not os.path.exists(stderr_file):
+        open(stderr_file, 'w').close()
+    sys.stderr = open(stderr_file, 'a')
 
     if not os.path.exists(file_path):
         open(file_path, 'w').close()
