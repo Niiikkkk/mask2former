@@ -101,6 +101,7 @@ def func(model, args, cfg):
             #     plt.savefig(os.path.join(cfg.OUTPUT_DIR, "test_out.png"))
             #     break
 
+            #THIS IS MSP 1-max(Scores)
             prediction_ = 1 - torch.max(prediction, dim=1)[0]
 
             pathGT = img_path.replace("images", "labels_masks")
@@ -182,6 +183,7 @@ def func(model, args, cfg):
         " FPR@TPR95: " + str(res["FPR@TPR95"]) +
         " AUPRC: " + str(res["AUPRC"]) +
         " sIoU: " + str(final_res["sIoU_gt"]) +
+        " PPV: " + str(final_res["prec_pred"]) +
         " PRR: " + str(prr) + "\n")
 
 if __name__=="__main__":
