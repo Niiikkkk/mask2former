@@ -81,6 +81,9 @@ def func(model, args, cfg):
     gts = []
     results = np.array([])
 
+    print(len(args.input))
+    return
+
     for num, img_path in enumerate(tqdm.tqdm(args.input)):
         with torch.no_grad():
             img = read_image(img_path, format="BGR")
