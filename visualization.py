@@ -6,7 +6,7 @@ from matplotlib.colors import ListedColormap
 
 
 def visualize_anomlay_over_img(img:np.ndarray, anomaly_pred: np.ndarray, threshold:float, label:np.ndarray = None,
-                               path_to_save:str = None):
+                               path_to_save:str = None, is_bgr = False):
     """
     Visualize the anomaly mask over the image
     Args:
@@ -31,7 +31,10 @@ def visualize_anomlay_over_img(img:np.ndarray, anomaly_pred: np.ndarray, thresho
 
     if label is not None:
         plt.subplot(1,2,1)
-    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    if is_bgr:
+        plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    else:
+        plt.imshow(img)
     plt.imshow(anomaly_mask ,alpha=0.7, cmap=binary_cmap, vmin=0, vmax=1)
 
     if label is not None:
