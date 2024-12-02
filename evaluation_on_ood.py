@@ -115,15 +115,6 @@ def func(model, args, cfg):
                 # RA21 has label 2 for anomaly, but we want it to be 1, so change it
                 ood_gts = np.where((ood_gts == 2), 1, ood_gts)
 
-            if num == num_image_to_print:
-                out_img = torch.max(prediction.squeeze(),dim=0)[1].detach().cpu().numpy()
-                plt.axis("off")
-                plt.tight_layout()
-                plt.imshow(decode_segmap(out_img))
-                visualize_anomlay_over_img(decode_segmap(out_img), prediction_, get_threshold_from_PRC(prediction_,ood_gts),
-                                           path_to_save=os.path.join(cfg.OUTPUT_DIR, db_name + "_" + str(num) + ".png"))
-                plt.clf()
-
             # Ignore the "void" label, that is 255
             # 0 => In distrubiton
             # 1 => Out of distribution
@@ -137,6 +128,16 @@ def func(model, args, cfg):
             # get the threshold in order to say "it's anomaly"
             threshold_to_anomaly = get_threshold_from_PRC(prediction_,
                                                           ood_gts)
+
+
+            if num == num_image_to_print:
+                out_img = torch.max(prediction.squeeze(),dim=0)[1].detach().cpu().numpy()
+                plt.axis("off")
+                plt.tight_layout()
+                plt.imshow(decode_segmap(out_img))
+                visualize_anomlay_over_img(decode_segmap(out_img), prediction_, threshold_to_anomaly,
+                                           path_to_save=os.path.join(cfg.OUTPUT_DIR, db_name + "_" + str(num) + ".png"))
+                plt.clf()
             # get the instances of the anomaly and gt
             seg_size = 500
             gt_size = 100
