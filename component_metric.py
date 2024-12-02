@@ -3,10 +3,7 @@
 import numpy as np
 from scipy.ndimage.measurements import label
 from easydict import EasyDict
-from skimage.filters.rank import threshold
 from sklearn.metrics import precision_recall_curve
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import get_cmap
 
 def get_threshold_from_PRC(anomaly_p: np.ndarray, label_pixel_gt: np.ndarray):
     """
