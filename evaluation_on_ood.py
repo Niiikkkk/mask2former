@@ -130,11 +130,11 @@ def func(model, args, cfg):
                                                           ood_gts)
 
 
+            #print anomaly over prediction
             if num == num_image_to_print:
                 out_img = torch.max(prediction.squeeze(),dim=0)[1].detach().cpu().numpy()
                 plt.axis("off")
                 plt.tight_layout()
-                plt.imshow(decode_segmap(out_img))
                 visualize_anomlay_over_img(decode_segmap(out_img), prediction_, threshold_to_anomaly,
                                            path_to_save=os.path.join(cfg.OUTPUT_DIR, db_name + "_" + str(num) + ".png"))
                 plt.clf()
