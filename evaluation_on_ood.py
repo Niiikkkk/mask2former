@@ -136,7 +136,9 @@ def func(model, args, cfg):
                 plt.axis("off")
                 plt.tight_layout()
                 visualize_anomlay_over_img(decode_segmap(out_img), prediction_.squeeze(), threshold_to_anomaly,
-                                           path_to_save=os.path.join(cfg.OUTPUT_DIR, db_name + "_" + str(num) + ".png"))
+                                           path_to_save=os.path.join(cfg.OUTPUT_DIR, db_name + "_" + str(num) + "_prediction.png"))
+                visualize_anomlay_over_img(img, prediction_.squeeze(), threshold_to_anomaly,
+                                           path_to_save=os.path.join(cfg.OUTPUT_DIR, db_name + "_" + str(num) + "_img.png"))
                 plt.clf()
             # get the instances of the anomaly and gt
             seg_size = 500
