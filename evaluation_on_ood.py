@@ -81,7 +81,9 @@ def func(model, args, cfg):
     gts = []
     results = np.array([])
 
-    print(len(args.input))
+    num_images = len(args.input)
+    print(num_images)
+    print(np.random.randint(num_images))
     return
 
     for num, img_path in enumerate(tqdm.tqdm(args.input)):
