@@ -10,6 +10,8 @@ from detectron2.engine import DefaultTrainer, default_setup, launch, DefaultPred
 from detectron2.projects.deeplab import add_deeplab_config
 
 from detectron2.utils.logger import setup_logger
+
+from code_for_stuff import decode_segmap
 from mask2former import add_maskformer2_config
 import os
 import tqdm
@@ -78,9 +80,7 @@ def func(model, args, cfg):
     results = np.array([])
 
     num_images = len(args.input)
-    print(num_images)
-    print(np.random.randint(num_images))
-    return
+    num_image_to_print = np.random.randint(num_images)
 
     for num, img_path in enumerate(tqdm.tqdm(args.input)):
         with torch.no_grad():
@@ -95,12 +95,11 @@ def func(model, args, cfg):
             # if num == 0:
             #     print(prediction.squeeze())
 
-            # if num == 0:
-            #     out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
-            #     plt.close()
-            #     plt.imshow(out_img)
-            #     plt.savefig(os.path.join(cfg.OUTPUT_DIR, "test_out.png"))
-            #     break
+            if num == num_image_to_print:
+                out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
+                plt.imshow(decode_segmap(out_img))
+                plt.savefig(os.path.join(cfg.OUTPUT_DIR, db_name + "_" + str(num) + ".png"))
+                plt.clf()
 
             #THIS IS MSP 1-max(Scores)
             prediction_ = 1 - torch.max(prediction, dim=1)[0]
