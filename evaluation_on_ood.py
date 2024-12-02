@@ -20,6 +20,7 @@ from ood_metrics import fpr_at_95_tpr, plot_pr
 from component_metric import segment_metrics, anomaly_instances_from_mask, aggregate, get_threshold_from_PRC, \
     default_instancer
 from uncertainty_metric import prediction_rejection_ratio
+from visualization import visualize_anomlay_over_img
 
 
 def parse_args():
@@ -95,12 +96,6 @@ def func(model, args, cfg):
             # if num == 0:
             #     print(prediction.squeeze())
 
-            if num == num_image_to_print:
-                out_img = torch.max(prediction.squeeze(),axis=0)[1].detach().cpu().numpy()
-                plt.imshow(decode_segmap(out_img))
-                plt.savefig(os.path.join(cfg.OUTPUT_DIR, db_name + "_" + str(num) + ".png"))
-                plt.clf()
-
             #THIS IS MSP 1-max(Scores)
             prediction_ = 1 - torch.max(prediction, dim=1)[0]
 
@@ -119,6 +114,15 @@ def func(model, args, cfg):
             if "RoadAnomaly" in pathGT:
                 # RA21 has label 2 for anomaly, but we want it to be 1, so change it
                 ood_gts = np.where((ood_gts == 2), 1, ood_gts)
+
+            if num == num_image_to_print:
+                out_img = torch.max(prediction.squeeze(),dim=0)[1].detach().cpu().numpy()
+                plt.axis("off")
+                plt.tight_layout()
+                plt.imshow(decode_segmap(out_img))
+                visualize_anomlay_over_img(decode_segmap(out_img), prediction_, get_threshold_from_PRC(prediction_,ood_gts),
+                                           path_to_save=os.path.join(cfg.OUTPUT_DIR, db_name + "_" + str(num) + ".png"))
+                plt.clf()
 
             # Ignore the "void" label, that is 255
             # 0 => In distrubiton
