@@ -135,7 +135,7 @@ def func(model, args, cfg):
                 out_img = torch.max(prediction.squeeze(),dim=0)[1].detach().cpu().numpy()
                 plt.axis("off")
                 plt.tight_layout()
-                visualize_anomlay_over_img(img, prediction_, threshold_to_anomaly,
+                visualize_anomlay_over_img(decode_segmap(out_img), prediction_.squeeze(), threshold_to_anomaly,
                                            path_to_save=os.path.join(cfg.OUTPUT_DIR, db_name + "_" + str(num) + ".png"))
                 plt.clf()
             # get the instances of the anomaly and gt
