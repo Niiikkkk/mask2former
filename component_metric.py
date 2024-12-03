@@ -17,9 +17,9 @@ def get_threshold_from_PRC(anomaly_p: np.ndarray, label_pixel_gt: np.ndarray):
     n_ = anomaly_p.shape[0]
     thresholds_array = []
 
-    for i in range(n_):
-        print(np.unique(label_pixel_gt[i]))
+    print(np.unique(label_pixel_gt))
 
+    for i in range(n_):
         prec, rec, thresholds = precision_recall_curve(label_pixel_gt[i][label_pixel_gt[i] != 255],
                                                        anomaly_p[i][label_pixel_gt[i] != 255])
 
