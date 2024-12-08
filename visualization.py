@@ -24,6 +24,7 @@ def visualize_anomlay_over_img(img:np.ndarray, anomaly_pred: np.ndarray, thresho
     if label is not None:
         label_mask = np.zeros(label.shape)
         label_mask[label == 1] = 1
+        anomaly_mask[label == 255] = 0
 
     binary_cmap = ListedColormap(["black","red"])
     plt.axis("off")
