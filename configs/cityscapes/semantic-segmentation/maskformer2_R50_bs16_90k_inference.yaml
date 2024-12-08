@@ -1,7 +1,7 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/results/vicreg-freezed/"
+OUTPUT_DIR: "/home/nberardo/mask2former/results/dino/"
 MODEL:
-  WEIGHTS: "/home/nberardo/mask2former/output/train/vicreg-freezed/model_final.pth"
+  WEIGHTS: "/home/nberardo/mask2former/output/train/dino/model_final.pth"
   BACKBONE:
     FREEZE_AT: 0
   META_ARCHITECTURE: "MaskFormer"
