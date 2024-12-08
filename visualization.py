@@ -31,7 +31,9 @@ def visualize_anomlay_over_img(img:np.ndarray, anomaly_pred: np.ndarray, thresho
     plt.tight_layout()
 
     if label is not None:
-        plt.subplot(1,2,1)
+        plt.subplot(2,1,1)
+        plt.axis("off")
+        plt.tight_layout()
     if is_bgr:
         plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
     else:
@@ -39,7 +41,9 @@ def visualize_anomlay_over_img(img:np.ndarray, anomaly_pred: np.ndarray, thresho
     plt.imshow(anomaly_mask ,alpha=0.7, cmap=binary_cmap, vmin=0, vmax=1)
 
     if label is not None:
-        plt.subplot(1,2,2)
+        plt.subplot(2,1,2)
+        plt.axis("off")
+        plt.tight_layout()
         plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
         plt.imshow(label_mask ,alpha=0.7, cmap=binary_cmap, vmin=0, vmax=1)
     if not path_to_save:
