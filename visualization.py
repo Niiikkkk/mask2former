@@ -32,6 +32,7 @@ def visualize_anomlay_over_img(img:np.ndarray, anomaly_pred: np.ndarray, thresho
 
     if label is not None:
         plt.subplot(2,1,1)
+        plt.xlabel("Prediction")
         plt.axis("off")
         plt.tight_layout()
     if is_bgr:
@@ -42,6 +43,7 @@ def visualize_anomlay_over_img(img:np.ndarray, anomaly_pred: np.ndarray, thresho
 
     if label is not None:
         plt.subplot(2,1,2)
+        plt.xlabel("Ground Truth")
         plt.axis("off")
         plt.tight_layout()
         plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
