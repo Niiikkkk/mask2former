@@ -147,7 +147,6 @@ def func(model, args, cfg):
                                            ,is_bgr=True,label=ood_gts.squeeze())
                 plt.clf()
 
-            continue
             # get the instances of the anomaly and gt
             seg_size = 500
             gt_size = 100
@@ -173,7 +172,6 @@ def func(model, args, cfg):
             gts.append(ood_gts)
 
     # Eval...
-    return
     predictions = np.concatenate(predictions, axis=0)
     gts = np.concatenate(gts, axis=0)
 
