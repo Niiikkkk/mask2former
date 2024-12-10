@@ -19,7 +19,7 @@ MODEL:
     #ADDED BY ME: if use SyncBN, set NORM: "SyncBN", but only if I have more than 1 GPU. Otherwise SyncBN will call the distributed that isn't initialized...
     #If gpu = 1 then use normal BN
 
-    NORM: "SyncBN"
+    NORM: "BN"
   SEM_SEG_HEAD:
     NAME: "MaskFormerHead"
     IGNORE_VALUE: 255
