@@ -134,6 +134,7 @@ if __name__ == "__main__":
               "vicreg", "vicreg_down_freeze", "vicreg-freezed"]
     for model_name in models:
         cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", model_name, "model_final.pth")
+        cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results", model_name)
         model = DefaultPredictor(cfg)
         func(model,args,cfg)
     # for i in range(30):
