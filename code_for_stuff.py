@@ -12,6 +12,7 @@ from detectron2.engine import DefaultPredictor
 from detectron2.projects.deeplab import add_deeplab_config
 import cv2
 import numpy as np
+from evaluation_on_ood import func
 
 from component_metric import get_threshold_from_PRC
 from mask2former import add_maskformer2_config
@@ -120,18 +121,30 @@ def draw_prediction(model, img_paths, img_out, ssl_name):
 
 
 if __name__ == "__main__":
+    args = parse_args()
+    cfg = setup_cfgs(args)
+    cfg.defrost()
+    models = ["simsiam", "bt", "bt-down-freezed", "bt-freezed", "dino", "dino-down-freezed", "dino-freezed", "moco-v1",
+              "moco-v1-freezed_NEW",
+              "moco_v1_downloaded", "moco-v1-freezed_NEW", "moco-v2", "moco-v2-freezed_NEW", "moco_v2_downloaded",
+              "simsiam_freezed",
+              "vicreg", "vicreg_down_freeze", "vicreg-freezed"]
+    for model_name in ["bt-down-freezed"]:
+        cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", model_name, "model_final.pth")
+        model = DefaultPredictor(cfg)
+        func(model,args,cfg)
     # for i in range(30):
     #     x = np.asarray(Image.open(f"/Users/nicholas.berardo/Desktop/fs_static/labels_masks/{i}.png"))
     #     print(np.unique(x))
-    args = parse_args()
-    cfg = setup_cfgs(args)
-    predictor = DefaultPredictor(cfg)
-    img = read_image("/Users/nicholas.berardo/Desktop/fs_static/images/1.jpg", format="BGR")
-    gt = np.asarray(Image.open("/Users/nicholas.berardo/Desktop/fs_static/labels_masks/1.png"))
-    pred = predictor(img)["sem_seg"].unsqueeze(0)
-
-    th = get_threshold_from_PRC(1-torch.max(pred,dim=1)[0], np.expand_dims(gt,0))
-    print(th)
-
-    plt.imshow(torch.max(pred.squeeze(),dim=0)[1])
-    plt.show()
+    # args = parse_args()
+    # cfg = setup_cfgs(args)
+    # predictor = DefaultPredictor(cfg)
+    # img = read_image("/Users/nicholas.berardo/Desktop/fs_static/images/1.jpg", format="BGR")
+    # gt = np.asarray(Image.open("/Users/nicholas.berardo/Desktop/fs_static/labels_masks/1.png"))
+    # pred = predictor(img)["sem_seg"].unsqueeze(0)
+    #
+    # th = get_threshold_from_PRC(1-torch.max(pred,dim=1)[0], np.expand_dims(gt,0))
+    # print(th)
+    #
+    # plt.imshow(torch.max(pred.squeeze(),dim=0)[1])
+    # plt.show()
