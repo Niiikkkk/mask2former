@@ -12,6 +12,8 @@ from detectron2.engine import DefaultPredictor
 from detectron2.projects.deeplab import add_deeplab_config
 import cv2
 import numpy as np
+from detectron2.utils.logger import setup_logger
+
 from evaluation_on_ood import func
 
 from component_metric import get_threshold_from_PRC
@@ -123,6 +125,7 @@ def draw_prediction(model, img_paths, img_out, ssl_name):
 if __name__ == "__main__":
     args = parse_args()
     cfg = setup_cfgs(args)
+    logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
     cfg.defrost()
     models = ["simsiam", "bt", "bt-down-freezed", "bt-freezed", "dino", "dino-down-freezed", "dino-freezed", "moco-v1",
               "moco-v1-freezed_NEW",
