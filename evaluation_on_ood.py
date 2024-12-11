@@ -120,6 +120,8 @@ def func(model, args, cfg):
 
             #Some labels are just 0 and 255 (like in FS_static), so skip those images
             if 1 not in ood_gts:
+                if num_image_to_print == num:
+                    num_image_to_print+=1
                 continue
 
             # Ignore the "void" label, that is 255
