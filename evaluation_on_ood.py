@@ -120,6 +120,10 @@ def func(model, args, cfg):
                 # RA21 has label 2 for anomaly, but we want it to be 1, so change it
                 ood_gts = np.where((ood_gts == 2), 1, ood_gts)
 
+            #Some labels are just 0 and 255 (like in FS_static), so skip those images
+            if 1 not in ood_gts:
+                continue
+
             # Ignore the "void" label, that is 255
             # 0 => In distrubiton
             # 1 => Out of distribution
