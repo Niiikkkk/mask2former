@@ -132,7 +132,8 @@ if __name__ == "__main__":
               #"moco-v1-freezed_NEW",
               #"moco_v1_downloaded", "moco-v2", "moco-v2-freezed_NEW", "moco_v2_downloaded",
               #"simsiam_freezed",
-              "vicreg", "vicreg_down_freeze", "vicreg-freezed"]
+              #"vicreg", "vicreg_down_freeze", "vicreg-freezed"
+              "no_pre"]
     for model_name in models:
         cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", model_name, "model_final.pth")
         cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results", model_name)
