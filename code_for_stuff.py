@@ -127,7 +127,8 @@ if __name__ == "__main__":
     cfg = setup_cfgs(args)
     logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
     cfg.defrost()
-    models = ["simsiam", "bt", "bt-down-freezed", "bt-freezed", "dino", "dino-down-freezed", "dino-freezed", "moco-v1",
+    models = [#"simsiam", "bt", "bt-down-freezed", "bt-freezed", "dino",
+              "dino-down-freezed", "dino-freezed", "moco-v1",
               "moco-v1-freezed_NEW",
               "moco_v1_downloaded", "moco-v1-freezed_NEW", "moco-v2", "moco-v2-freezed_NEW", "moco_v2_downloaded",
               "simsiam_freezed",
