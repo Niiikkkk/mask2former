@@ -11,8 +11,6 @@ from detectron2.engine import DefaultTrainer, default_setup, launch, DefaultPred
 from detectron2.projects.deeplab import add_deeplab_config
 
 from detectron2.utils.logger import setup_logger
-
-from code_for_stuff import decode_segmap
 from mask2former import add_maskformer2_config
 import os
 import tqdm
