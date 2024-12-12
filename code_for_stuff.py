@@ -146,6 +146,8 @@ if __name__ == "__main__":
     args = parse_args()
     cfg = setup_cfgs(args)
     predictor = DefaultPredictor(cfg)
+    for n,p in predictor.model.named_parameters():
+        print(n)
     # img = read_image("/Users/nicholas.berardo/Desktop/fs_static/images/1.jpg", format="BGR")
     # gt = np.asarray(Image.open("/Users/nicholas.berardo/Desktop/fs_static/labels_masks/1.png"))
     # pred = predictor(img)["sem_seg"].unsqueeze(0)
