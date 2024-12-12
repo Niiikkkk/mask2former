@@ -123,28 +123,30 @@ def draw_prediction(model, img_paths, img_out, ssl_name):
 
 
 if __name__ == "__main__":
-    args = parse_args()
-    cfg = setup_cfgs(args)
-    logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
-    cfg.defrost()
-    models = [#"simsiam", "bt", "bt-down-freezed", "bt-freezed", "dino",
-              #"dino-down-freezed", "dino-freezed", "moco-v1",
-              #"moco-v1-freezed_NEW",
-              #"moco_v1_downloaded", "moco-v2", "moco-v2-freezed_NEW", "moco_v2_downloaded",
-              #"simsiam_freezed",
-              #"vicreg", "vicreg_down_freeze", "vicreg-freezed"
-              "no_pre"]
-    for model_name in models:
-        cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", model_name, "model_final.pth")
-        cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results", model_name)
-        model = DefaultPredictor(cfg)
-        func(model,args,cfg)
+
+    # args = parse_args()
+    # cfg = setup_cfgs(args)
+    # logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
+    # cfg.defrost()
+    # models = [#"simsiam", "bt", "bt-down-freezed", "bt-freezed", "dino",
+    #           #"dino-down-freezed", "dino-freezed", "moco-v1",
+    #           #"moco-v1-freezed_NEW",
+    #           #"moco_v1_downloaded", "moco-v2", "moco-v2-freezed_NEW", "moco_v2_downloaded",
+    #           #"simsiam_freezed",
+    #           #"vicreg", "vicreg_down_freeze", "vicreg-freezed"
+    #           "no_pre"]
+    # for model_name in models:
+    #     cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", model_name, "model_final.pth")
+    #     cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results", model_name)
+    #     model = DefaultPredictor(cfg)
+    #     func(model,args,cfg)
     # for i in range(30):
     #     x = np.asarray(Image.open(f"/Users/nicholas.berardo/Desktop/fs_static/labels_masks/{i}.png"))
     #     print(np.unique(x))
-    # args = parse_args()
-    # cfg = setup_cfgs(args)
-    # predictor = DefaultPredictor(cfg)
+    args = parse_args()
+    cfg = setup_cfgs(args)
+    predictor = DefaultPredictor(cfg)
+    print(predictor.model)
     # img = read_image("/Users/nicholas.berardo/Desktop/fs_static/images/1.jpg", format="BGR")
     # gt = np.asarray(Image.open("/Users/nicholas.berardo/Desktop/fs_static/labels_masks/1.png"))
     # pred = predictor(img)["sem_seg"].unsqueeze(0)
