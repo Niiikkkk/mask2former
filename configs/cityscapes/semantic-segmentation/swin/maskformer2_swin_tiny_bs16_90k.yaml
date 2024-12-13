@@ -1,5 +1,5 @@
 _BASE_: ../maskformer2_R50_bs16_90k.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/output/train/swin_freezed"
+OUTPUT_DIR: "/home/nberardo/mask2former/output/train/swin"
 MODEL:
   FREEZE_BACKBONE: False
   FREEZE_PIXEL_DECODER: False
