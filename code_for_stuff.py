@@ -146,10 +146,10 @@ if __name__ == "__main__":
     args = parse_args()
     cfg = setup_cfgs(args)
     predictor = DefaultPredictor(cfg)
-    for n,p in predictor.model.named_parameters():
-        print(n)
-    # img = read_image("/Users/nicholas.berardo/Desktop/fs_static/images/1.jpg", format="BGR")
-    # gt = np.asarray(Image.open("/Users/nicholas.berardo/Desktop/fs_static/labels_masks/1.png"))
+    # img = read_image("/Users/nicholas.berardo/Desktop/FS_LostFound_full/images/1.png", format="BGR")
+    for i in range(100):
+        gt = np.asarray(Image.open(f"/Users/nicholas.berardo/Desktop/FS_LostFound_full/labels_masks/{i}.png"))
+        print(np.unique(gt))
     # pred = predictor(img)["sem_seg"].unsqueeze(0)
     #
     # th = get_threshold_from_PRC(1-torch.max(pred,dim=1)[0], np.expand_dims(gt,0))
