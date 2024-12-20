@@ -129,7 +129,7 @@ if __name__ == "__main__":
     logger = setup_logger(name="fvcore")
     cfg.defrost()
     models = [
-        "bt_FT_4k_8e-5_all",
+        # "bt_FT_4k_8e-5_all",
         "bt_FT_4k_7e-5_all",
         "bt_FT_5k_8e-5_all",
         "bt_FT_6k_8e-5_all",
@@ -139,6 +139,7 @@ if __name__ == "__main__":
         #To test
         "bt_FT_1k_5e-5_all",
     ]
+    args.input = "/home/nberardo/Datasets/fs_static/images/*.jpg"
 
     for model in models:
         cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", model, "model_final.pth")
