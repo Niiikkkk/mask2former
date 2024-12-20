@@ -129,8 +129,8 @@ if __name__ == "__main__":
     logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
     cfg.defrost()
     models = [
-        "bt_FT_4k_8e-5_all",
-        "bt_FT_4k_7e-5_all",
+        # "bt_FT_4k_8e-5_all",
+        # "bt_FT_4k_7e-5_all",
         "bt_FT_5k_8e-5_all",
         "bt_FT_6k_8e-5_all",
         "bt_FT_6k_5e-5_all",
