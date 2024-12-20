@@ -68,6 +68,8 @@ def func(model, args, cfg):
 
     file_path = os.path.join(cfg.OUTPUT_DIR, 'results.txt')
     stderr_file = os.path.join(cfg.OUTPUT_DIR, 'stderr.txt')
+    os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
+
     if not os.path.exists(stderr_file):
         open(stderr_file, 'w').close()
     sys.stderr = open(stderr_file, 'a')
