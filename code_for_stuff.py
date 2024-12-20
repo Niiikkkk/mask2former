@@ -126,8 +126,6 @@ if __name__ == "__main__":
 
     args = parse_args()
     cfg = setup_cfgs(args)
-    logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
-    logger.info("Arguments: " + str(args))
     cfg.defrost()
     models = [
         # "bt_FT_4k_8e-5_all",
@@ -141,6 +139,7 @@ if __name__ == "__main__":
     for model in models:
         cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", model, "model_final.pth")
         cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results/", model)
+        logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
         model = DefaultPredictor(cfg)
         func(model,args,cfg)
 
