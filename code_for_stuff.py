@@ -123,107 +123,25 @@ def draw_prediction(model, img_paths, img_out, ssl_name):
 
 
 if __name__ == "__main__":
-    import re
-    import pandas as pd
 
-    # Input text
-    log_text = """
-    ==> output/train/bt_FT_1k_5e-5_all/log.txt <==
-[12/15 17:32:50] d2.evaluation.testing INFO: copypaste: 75.4052,59.5973,89.9280,78.8584
+    args = parse_args()
+    cfg = setup_cfgs(args)
+    logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
+    cfg.defrost()
+    models = [
+        "bt_FT_4k_8e-5_all",
+        "bt_FT_4k_7e-5_all",
+        "bt_FT_5k_8e-5_all",
+        "bt_FT_6k_8e-5_all",
+        "bt_FT_6k_5e-5_all",
+        "bt_FT_10k_6e-5_all",
+    ]
 
-==> output/train/bt_FT_2k_5e-5_all/log.txt <==
-[12/15 23:26:55] d2.evaluation.testing INFO: copypaste: 76.2235,59.9747,90.0530,78.9100
-
-==> output/train/bt_FT_3k_5e-5_all/log.txt <==
-[12/17 08:59:08] d2.evaluation.testing INFO: copypaste: 76.1618,59.4823,90.1587,78.6892
-
-==> output/train/bt_FT_4k_5e-5_all/log.txt <==
-[12/09 23:54:26] d2.evaluation.testing INFO: copypaste: 76.6192,60.1636,90.2520,78.9513
-
-==> output/train/bt_FT_6k_5e-5_all/log.txt <==
-[12/10 00:32:13] d2.evaluation.testing INFO: copypaste: 77.0318,60.8969,90.3209,79.1844
-
-==> output/train/bt_FT_8k_5e-5_all/log.txt <==
-[12/11 11:18:18] d2.evaluation.testing INFO: copypaste: 76.6515,59.8754,90.3702,79.1428
-[mask2former]nberardo@legionlogin$ tail -n 1 output/train/bt_FT_*_all/log.txt
-==> output/train/bt_FT_10k_6e-5_all/log.txt <==
-[12/15 14:21:19] d2.evaluation.testing INFO: copypaste: 76.9926,60.3748,90.3635,79.2698
-
-==> output/train/bt_FT_10k_8e-5_all/log.txt <==
-[12/15 19:21:31] d2.evaluation.testing INFO: copypaste: 76.7753,60.7187,90.4986,79.5119
-
-==> output/train/bt_FT_1k_5e-5_all/log.txt <==
-[12/15 17:32:50] d2.evaluation.testing INFO: copypaste: 75.4052,59.5973,89.9280,78.8584
-
-==> output/train/bt_FT_1k_8e-5_all/log.txt <==
-[12/15 16:51:51] d2.evaluation.testing INFO: copypaste: 76.2154,59.5658,89.9708,78.7960
-
-==> output/train/bt_FT_2k_5e-5_all/log.txt <==
-[12/15 23:26:55] d2.evaluation.testing INFO: copypaste: 76.2235,59.9747,90.0530,78.9100
-
-==> output/train/bt_FT_2k_8e-5_all/log.txt <==
-[12/10 22:45:17] d2.evaluation.testing INFO: copypaste: 75.8184,59.3647,90.0933,79.1881
-
-==> output/train/bt_FT_3k_5e-5_all/log.txt <==
-[12/17 08:59:08] d2.evaluation.testing INFO: copypaste: 76.1618,59.4823,90.1587,78.6892
-
-==> output/train/bt_FT_3k_7e-5_all/log.txt <==
-[12/11 15:18:36] d2.evaluation.testing INFO: copypaste: 76.8083,60.5168,90.2169,79.0699
-
-==> output/train/bt_FT_4k_1e-5_all/log.txt <==
-[12/10 09:22:41] d2.evaluation.testing INFO: copypaste: 75.4533,59.1702,89.7927,78.3116
-
-==> output/train/bt_FT_4k_5e-5_all/log.txt <==
-[12/09 23:54:26] d2.evaluation.testing INFO: copypaste: 76.6192,60.1636,90.2520,78.9513
-
-==> output/train/bt_FT_4k_7e-5_all/log.txt <==
-[12/10 10:35:45] d2.evaluation.testing INFO: copypaste: 77.1114,60.7443,90.3433,79.3092
-
-==> output/train/bt_FT_4k_8e-5_all/log.txt <==
-[12/11 00:01:16] d2.evaluation.testing INFO: copypaste: 77.1644,60.8179,90.3321,78.8898
-
-==> output/train/bt_FT_5k_6e-5_all/log.txt <==
-[12/14 19:55:32] d2.evaluation.testing INFO: copypaste: 76.8534,60.0818,90.3595,79.1145
-
-==> output/train/bt_FT_5k_8e-5_all/log.txt <==
-[12/14 10:56:56] d2.evaluation.testing INFO: copypaste: 77.0594,60.5294,90.4127,79.2953
-
-==> output/train/bt_FT_6k_1e-5_all/log.txt <==
-[12/10 09:53:13] d2.evaluation.testing INFO: copypaste: 76.0060,60.0646,89.9362,78.4674
-
-==> output/train/bt_FT_6k_5e-5_all/log.txt <==
-[12/10 00:32:13] d2.evaluation.testing INFO: copypaste: 77.0318,60.8969,90.3209,79.1844
-
-==> output/train/bt_FT_6k_7e-5_all/log.txt <==
-[12/13 15:15:25] d2.evaluation.testing INFO: copypaste: 75.9201,59.8979,90.3266,78.9301
-
-==> output/train/bt_FT_6k_8e-5_all/log.txt <==
-[12/11 01:45:08] d2.evaluation.testing INFO: copypaste: 77.0464,60.1364,90.3529,79.0557
-
-==> output/train/bt_FT_8k_3e-5_all/log.txt <==
-[12/11 14:11:32] d2.evaluation.testing INFO: copypaste: 76.4949,59.5953,90.1895,79.0693
-
-==> output/train/bt_FT_8k_5e-5_all/log.txt <==
-[12/11 11:18:18] d2.evaluation.testing INFO: copypaste: 76.6515,59.8754,90.3702,79.1428
-    """
-
-    # Regular expression to extract iter, lr, FT, and mIoU
-    pattern = r"==> output/train/bt_FT_(\d+k)_(\d+e-?\d+)_(\w+)/log.txt <==\n.*?copypaste: (\d+\.\d+)"
-
-    # Extract matches
-    matches = re.findall(pattern, log_text)
-
-    # Format data for the DataFrame
-    data = []
-    for iter_, lr, ft, miou in matches:
-        data.append((iter_, lr, ft, float(miou)))
-
-    # Create DataFrame with separate columns
-    df = pd.DataFrame(data, columns=["Iteration", "Learning Rate", "FT", "mIoU"])
-
-    # Save to Excel
-    df.to_excel("results_split.xlsx", index=False)
-    print("Excel file 'results_split.xlsx' has been created successfully.")
+    for model in models:
+        cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", model, "model_final.pth")
+        cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results/", model)
+        model = DefaultPredictor(cfg)
+        func(model,args,cfg)
 
     # args = parse_args()
     # cfg = setup_cfgs(args)
