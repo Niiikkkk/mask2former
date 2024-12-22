@@ -1,24 +1,23 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/results/my_swin_freezed/"
+OUTPUT_DIR: "/home/nberardo/mask2former/results/m2f_r101/"
 MODEL:
-  WEIGHTS: "/home/nberardo/mask2former/output/train/swin_freezed/model_final.pth"
-  BACKBONE:
-    NAME: "D2SwinTransformer"
-  SWIN:
-    EMBED_DIM: 96
-    DEPTHS: [ 2, 2, 6, 2 ]
-    NUM_HEADS: [ 3, 6, 12, 24 ]
-    WINDOW_SIZE: 7
-    APE: False
-    DROP_PATH_RATE: 0.3
-    PATCH_NORM: True
+  WEIGHTS: "/home/nberardo/mask2former/output/train/m2f_r101/model_final_257ce8.pkl"
+
   META_ARCHITECTURE: "MaskFormer"
   RESNETS:
-
-    #ADDED BY ME: if use SyncBN, set NORM: "SyncBN", but only if I have more than 1 GPU. Otherwise SyncBN will call the distributed that isn't initialized...
-    #If gpu = 1 then use normal BN
-
-    NORM: "BN"
+    DEPTH: 101
+    STEM_TYPE: "basic"  # not used
+    STEM_OUT_CHANNELS: 64
+    STRIDE_IN_1X1: False
+    OUT_FEATURES: [ "res2", "res3", "res4", "res5" ]
+    NORM: "SyncBN"
+    RES5_MULTI_GRID: [ 1, 1, 1 ]  # not used
+#  RESNETS:
+#
+#    #ADDED BY ME: if use SyncBN, set NORM: "SyncBN", but only if I have more than 1 GPU. Otherwise SyncBN will call the distributed that isn't initialized...
+#    #If gpu = 1 then use normal BN
+#
+#    NORM: "BN"
   SEM_SEG_HEAD:
     NAME: "MaskFormerHead"
     IGNORE_VALUE: 255
