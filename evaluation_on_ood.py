@@ -189,7 +189,7 @@ def func(model, args, cfg):
 
     threshold_to_anomaly = get_threshold_from_PRC(predictions, gts)
 
-    print("Threshold to anomaly: ", threshold_to_anomaly)
+    print("Threshold to anomaly (one for each image): ", threshold_to_anomaly)
     sys.stdout.flush()
 
     prr = prediction_rejection_ratio(gts, predictions, threshold=threshold_to_anomaly)
@@ -217,6 +217,8 @@ def func(model, args, cfg):
         " sIoU: " + str(final_res["sIoU_gt"]) +
         " PPV: " + str(final_res["prec_pred"]) +
         " PRR: " + str(prr) + "\n")
+
+    print("Done...")
 
 if __name__=="__main__":
     args = parse_args()

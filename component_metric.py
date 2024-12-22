@@ -187,9 +187,6 @@ def aggregate(frame_results: list, thresh_sIoU=np.linspace(0.25, 0.75, 11, endpo
         prec_pred_mean = sum(np.sum(r.prec_pred) for r in frame_results) / sum(len(r.prec_pred) for r in frame_results)
         ag_results = {"tp_mean" : 0., "fn_mean" : 0., "fp_mean" : 0., "f1_mean" : 0.,
                       "sIoU_gt" : sIoU_gt_mean, "sIoU_pred" : sIoU_pred_mean, "prec_pred": prec_pred_mean}
-        print("Mean sIoU GT   :", sIoU_gt_mean)
-        print("Mean sIoU PRED :", sIoU_pred_mean)
-        print("Mean Precision PRED :", prec_pred_mean)
         for t in thresh_sIoU:
             tp = sum(r["tp_" + str(int(t*100))] for r in frame_results)
             fn = sum(r["fn_" + str(int(t*100))] for r in frame_results)
@@ -214,10 +211,5 @@ def aggregate(frame_results: list, thresh_sIoU=np.linspace(0.25, 0.75, 11, endpo
         ag_results["fn_mean"] /= len(thresh_sIoU)
         ag_results["fp_mean"] /= len(thresh_sIoU)
         ag_results["f1_mean"] /= len(thresh_sIoU)
-        print("---sIoU thresh averaged")
-        print("Number of TPs  :", ag_results["tp_mean"])
-        print("Number of FNs  :", ag_results["fn_mean"])
-        print("Number of FPs  :", ag_results["fp_mean"])
-        print("F1 score       :", ag_results["f1_mean"])
 
         return ag_results
