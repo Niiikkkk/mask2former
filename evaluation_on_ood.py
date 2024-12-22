@@ -88,6 +88,8 @@ def func(model, args, cfg):
     num_images = len(args.input)
     num_image_to_print = np.random.randint(num_images)
 
+    print("Processing images...")
+
     for num, img_path in enumerate(tqdm(args.input)):
         with torch.no_grad():
             img = read_image(img_path, format="BGR")
@@ -182,8 +184,12 @@ def func(model, args, cfg):
     predictions = np.concatenate(predictions, axis=0)
     gts = np.concatenate(gts, axis=0)
 
+    print("1")
+
     threshold_to_anomaly = get_threshold_from_PRC(predictions, gts)
     prr = prediction_rejection_ratio(gts, predictions, threshold=threshold_to_anomaly)
+
+    print("2")
 
     final_res = aggregate(results)
     predictions = predictions[(gts != 255)]
