@@ -1,5 +1,5 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/results/bt_FT_1k_8e-5_all/"
+OUTPUT_DIR: "/home/nberardo/mask2former/results/m2f_swin_s/"
 MODEL:
   WEIGHTS: "/home/nberardo/mask2former/output/train/m2f_swin_s/model_final_fa26ae.pkl"
   BACKBONE:
