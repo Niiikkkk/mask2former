@@ -124,27 +124,34 @@ def draw_prediction(model, img_paths, img_out, ssl_name):
 
 if __name__ == "__main__":
 
+
     args = parse_args()
     cfg = setup_cfgs(args)
-    logger = setup_logger(name="fvcore")
-    cfg.defrost()
-    models = [
-        "bt_FT_4k_8e-5_all",
-        "bt_FT_4k_7e-5_all",
-        "bt_FT_5k_8e-5_all",
-        "bt_FT_6k_8e-5_all",
-        "bt_FT_6k_5e-5_all",
-        "bt_FT_10k_6e-5_all",
 
-        #To test
-        "bt_FT_1k_5e-5_all",
-    ]
+    model = DefaultPredictor(cfg)
+    num_train_param = sum(p.numel() for p in model.backbone.parameters() if p.requires_grad)
+    print(num_train_param)
 
-    for model in models:
-        cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", model, "model_final.pth")
-        cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results/", model)
-        model = DefaultPredictor(cfg)
-        func(model,args,cfg)
+
+    # logger = setup_logger(name="fvcore")
+    # cfg.defrost()
+    # models = [
+    #     "bt_FT_4k_8e-5_all",
+    #     "bt_FT_4k_7e-5_all",
+    #     "bt_FT_5k_8e-5_all",
+    #     "bt_FT_6k_8e-5_all",
+    #     "bt_FT_6k_5e-5_all",
+    #     "bt_FT_10k_6e-5_all",
+    #
+    #     #To test
+    #     "bt_FT_1k_5e-5_all",
+    # ]
+    #
+    # for model in models:
+    #     cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", model, "model_final.pth")
+    #     cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results/", model)
+    #     model = DefaultPredictor(cfg)
+    #     func(model,args,cfg)
 
     # args = parse_args()
     # cfg = setup_cfgs(args)
