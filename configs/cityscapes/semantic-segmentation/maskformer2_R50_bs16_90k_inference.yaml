@@ -6,13 +6,12 @@ MODEL:
     NAME: "D2SwinTransformer"
   SWIN:
     EMBED_DIM: 96
-    DEPTHS: [ 2, 2, 6, 2 ]
+    DEPTHS: [ 2, 2, 18, 2 ]
     NUM_HEADS: [ 3, 6, 12, 24 ]
     WINDOW_SIZE: 7
     APE: False
     DROP_PATH_RATE: 0.3
     PATCH_NORM: True
-  META_ARCHITECTURE: "MaskFormer"
   RESNETS:
 
     #ADDED BY ME: if use SyncBN, set NORM: "SyncBN", but only if I have more than 1 GPU. Otherwise SyncBN will call the distributed that isn't initialized...
