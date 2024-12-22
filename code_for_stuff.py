@@ -129,6 +129,7 @@ if __name__ == "__main__":
     cfg = setup_cfgs(args)
 
     model = DefaultPredictor(cfg)
+    print([p for p in model.model.parameters()])
     num_train_param = sum(p.numel() for p in model.model.backbone.parameters() if p.requires_grad)
     print(num_train_param)
 
