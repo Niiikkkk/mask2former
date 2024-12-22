@@ -185,11 +185,17 @@ def func(model, args, cfg):
     gts = np.concatenate(gts, axis=0)
 
     print("1")
+    sys.stdout.flush()
 
     threshold_to_anomaly = get_threshold_from_PRC(predictions, gts)
-    prr = prediction_rejection_ratio(gts, predictions, threshold=threshold_to_anomaly)
 
     print("2")
+    sys.stdout.flush()
+
+    prr = prediction_rejection_ratio(gts, predictions, threshold=threshold_to_anomaly)
+
+    print("3")
+    sys.stdout.flush()
 
     final_res = aggregate(results)
     predictions = predictions[(gts != 255)]
