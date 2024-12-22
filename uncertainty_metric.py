@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 from sklearn.metrics import auc
 import torch
@@ -64,6 +66,9 @@ def prediction_rejection_ratio(labels:np.ndarray, logits:np.ndarray, threshold:n
     rev_cum_errors = []
     # fraction of data rejected, to compute a certain value of rev_cum_errors
     fraction_data = []
+
+    print("tmp")
+    sys.stdout.flush()
 
     num_samples = preds.shape[0]
 
