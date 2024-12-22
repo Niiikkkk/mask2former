@@ -1,12 +1,12 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/results/m2f_swin_s/"
+OUTPUT_DIR: "/home/nberardo/mask2former/results/m2f_swin_t/"
 MODEL:
-  WEIGHTS: "/home/nberardo/mask2former/output/train/m2f_swin_s/model_final_fa26ae.pkl"
+  WEIGHTS: "/home/nberardo/mask2former/output/train/m2f_swin_t/model_final_2d58d4.pkl"
   BACKBONE:
     NAME: "D2SwinTransformer"
   SWIN:
     EMBED_DIM: 96
-    DEPTHS: [ 2, 2, 18, 2 ]
+    DEPTHS: [ 2, 2, 6, 2 ]
     NUM_HEADS: [ 3, 6, 12, 24 ]
     WINDOW_SIZE: 7
     APE: False
