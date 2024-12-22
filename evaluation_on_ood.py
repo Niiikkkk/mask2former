@@ -179,7 +179,7 @@ def func(model, args, cfg):
             predictions.append(prediction_)
             gts.append(ood_gts)
 
-    print("Starting evaluation...")
+    print(f"Starting evaluation on {db_name}...")
     # Eval...
     predictions = np.concatenate(predictions, axis=0)
     gts = np.concatenate(gts, axis=0)
@@ -212,12 +212,11 @@ def func(model, args, cfg):
         " PPV: " + str(final_res["prec_pred"]) +
         " PRR: " + str(prr) + "\n")
 
-    print("Done...")
+    print(f"Done {db_name}...")
 
 if __name__=="__main__":
     args = parse_args()
     cfg = setup_cfgs(args)
     logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
-    logger.info("Arguments: " + str(args))
     model = DefaultPredictor(cfg)
     func(model,args,cfg)
