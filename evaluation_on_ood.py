@@ -184,18 +184,12 @@ def func(model, args, cfg):
     predictions = np.concatenate(predictions, axis=0)
     gts = np.concatenate(gts, axis=0)
 
-    print("1")
-    sys.stdout.flush()
-
     threshold_to_anomaly = get_threshold_from_PRC(predictions, gts)
 
     print("Threshold to anomaly (one for each image): ", threshold_to_anomaly)
     sys.stdout.flush()
 
     prr = prediction_rejection_ratio(gts, predictions, threshold=threshold_to_anomaly)
-
-    print("3")
-    sys.stdout.flush()
 
     final_res = aggregate(results)
     predictions = predictions[(gts != 255)]

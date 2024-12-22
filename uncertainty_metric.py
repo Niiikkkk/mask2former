@@ -67,9 +67,6 @@ def prediction_rejection_ratio(labels:np.ndarray, logits:np.ndarray, threshold:n
     # fraction of data rejected, to compute a certain value of rev_cum_errors
     fraction_data = []
 
-    print("tmp")
-    sys.stdout.flush()
-
     num_samples = preds.shape[0]
 
     errors = (labels[sorted_idx] != preds[sorted_idx]).float().numpy()
