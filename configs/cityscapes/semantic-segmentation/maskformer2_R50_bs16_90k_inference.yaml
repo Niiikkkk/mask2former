@@ -1,16 +1,24 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
 OUTPUT_DIR: "/home/nberardo/mask2former/results/bt_FT_1k_8e-5_all/"
 MODEL:
-  WEIGHTS: "/home/nberardo/mask2former/output/train/m2f_r50/model_final_cc1b1f.pkl"
+  WEIGHTS: "/home/nberardo/mask2former/output/train/m2f_r101/model_final_257ce8.pkl"
   BACKBONE:
     FREEZE_AT: 0
   META_ARCHITECTURE: "MaskFormer"
   RESNETS:
-
-    #ADDED BY ME: if use SyncBN, set NORM: "SyncBN", but only if I have more than 1 GPU. Otherwise SyncBN will call the distributed that isn't initialized...
-    #If gpu = 1 then use normal BN
-
-    NORM: "BN"
+    DEPTH: 101
+    STEM_TYPE: "basic"  # not used
+    STEM_OUT_CHANNELS: 64
+    STRIDE_IN_1X1: False
+    OUT_FEATURES: [ "res2", "res3", "res4", "res5" ]
+    NORM: "SyncBN"
+    RES5_MULTI_GRID: [ 1, 1, 1 ]  # not used
+#  RESNETS:
+#
+#    #ADDED BY ME: if use SyncBN, set NORM: "SyncBN", but only if I have more than 1 GPU. Otherwise SyncBN will call the distributed that isn't initialized...
+#    #If gpu = 1 then use normal BN
+#
+#    NORM: "BN"
   SEM_SEG_HEAD:
     NAME: "MaskFormerHead"
     IGNORE_VALUE: 255
