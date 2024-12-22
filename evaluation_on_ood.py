@@ -13,7 +13,7 @@ from detectron2.projects.deeplab import add_deeplab_config
 from detectron2.utils.logger import setup_logger
 from mask2former import add_maskformer2_config
 import os
-import tqdm
+from tqdm import tqdm
 from sklearn.metrics import roc_curve, auc, average_precision_score, precision_recall_curve
 from ood_metrics import fpr_at_95_tpr, plot_pr
 from component_metric import segment_metrics, anomaly_instances_from_mask, aggregate, get_threshold_from_PRC, \
@@ -88,7 +88,7 @@ def func(model, args, cfg):
     num_images = len(args.input)
     num_image_to_print = np.random.randint(num_images)
 
-    for num, img_path in enumerate(tqdm.tqdm(args.input)):
+    for num, img_path in enumerate(tqdm(args.input)):
         with torch.no_grad():
             img = read_image(img_path, format="BGR")
             # height, width = img.shape[:2]
@@ -177,6 +177,7 @@ def func(model, args, cfg):
             predictions.append(prediction_)
             gts.append(ood_gts)
 
+    print("Starting evaluation...")
     # Eval...
     predictions = np.concatenate(predictions, axis=0)
     gts = np.concatenate(gts, axis=0)
