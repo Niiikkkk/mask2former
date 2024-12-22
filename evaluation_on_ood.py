@@ -189,7 +189,7 @@ def func(model, args, cfg):
 
     threshold_to_anomaly = get_threshold_from_PRC(predictions, gts)
 
-    print("2")
+    print("Threshold to anomaly: ", threshold_to_anomaly)
     sys.stdout.flush()
 
     prr = prediction_rejection_ratio(gts, predictions, threshold=threshold_to_anomaly)
