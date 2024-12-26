@@ -140,7 +140,7 @@ if __name__ == "__main__":
     ]
 
     for model in models:
-        cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", model, "model_final_fa26ae.pkl")
+        cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", model, "model_final.pth")
         cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results/", model)
         model = DefaultPredictor(cfg)
         func(model,args,cfg)
