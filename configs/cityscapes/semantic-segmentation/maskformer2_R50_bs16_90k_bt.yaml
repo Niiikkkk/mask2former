@@ -1,9 +1,9 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/output/train/bt_down_tuned/"
-#SOLVER:
-#  IMS_PER_BATCH: 16
-#  BASE_LR: 0.00003
-#  MAX_ITER: 3000
+OUTPUT_DIR: "/home/nberardo/mask2former/output/train/simsiam_FT_3k_5e-5_all/"
+SOLVER:
+  IMS_PER_BATCH: 16
+  BASE_LR: 0.00005
+  MAX_ITER: 3000
 MODEL:
   FREEZE_BACKBONE: False
   FREEZE_PIXEL_DECODER: False
@@ -12,7 +12,7 @@ MODEL:
   FREEZE_TRANSFORMER_DECODER_EXCEPT_MLP: False
   BACKBONE:
     FREEZE_AT: 0
-  WEIGHTS: "/home/nberardo/mask2former/backbone_weights/bt_resnet50_1000_epochs.pkl"
+  WEIGHTS: "/home/nberardo/mask2former/output/train/simsiam_freezed/model_final.pth"
   META_ARCHITECTURE: "MaskFormer"
   RESNETS:
 
