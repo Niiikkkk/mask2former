@@ -1,7 +1,7 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/results/moco_v2_downloaded_FT_5k_8e-5_all/"
+OUTPUT_DIR: "/home/nberardo/mask2former/results/simsiam_FT_3k_8e-5_all/"
 MODEL:
-  WEIGHTS: "/home/nberardo/mask2former/output/train/moco_v2_downloaded_FT_5k_8e-5_all/model_final.pth"
+  WEIGHTS: "/home/nberardo/mask2former/output/train/simsiam_FT_3k_8e-5_all/model_final.pth"
 
   META_ARCHITECTURE: "MaskFormer"
 
