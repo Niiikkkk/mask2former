@@ -1,9 +1,14 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/predition_example/"
+OUTPUT_DIR: "/home/nberardo/mask2former/output/train/moco-v1"
 MODEL:
+  FREEZE_BACKBONE: False
+  FREEZE_PIXEL_DECODER: False
+  FREEZE_TRANSFORMER_DECODER: False
+  FREEZE_TRANSFORMER_DECODER_EXCEPT_OBJECT_QUERIES: False
+  FREEZE_TRANSFORMER_DECODER_EXCEPT_MLP: False
   BACKBONE:
     FREEZE_AT: 0
-  WEIGHTS: "/home/nberardo/mask2former/output/train/simsiam/model_final.pth"
+  WEIGHTS: "/home/nberardo/mask2former/backbone_weights/moco_v1_resnet50.pkl"
   META_ARCHITECTURE: "MaskFormer"
   RESNETS:
 
