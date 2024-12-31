@@ -1,5 +1,5 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/output/train/moco-v1"
+OUTPUT_DIR: "/home/nberardo/mask2former/output/FT/simsiam_freezed_500_"
 MODEL:
   FREEZE_BACKBONE: False
   FREEZE_PIXEL_DECODER: False
@@ -8,14 +8,14 @@ MODEL:
   FREEZE_TRANSFORMER_DECODER_EXCEPT_MLP: False
   BACKBONE:
     FREEZE_AT: 0
-  WEIGHTS: "/home/nberardo/mask2former/backbone_weights/moco_v1_resnet50.pkl"
+  WEIGHTS: "/home/nberardo/mask2former/output/train/simsiam_freezed/model_final.pth"
   META_ARCHITECTURE: "MaskFormer"
   RESNETS:
 
     #ADDED BY ME: if use SyncBN, set NORM: "SyncBN", but only if I have more than 1 GPU. Otherwise SyncBN will call the distributed that isn't initialized...
     #If gpu = 1 then use normal BN
 
-    NORM: "SyncBN"
+    NORM: "BN"
   SEM_SEG_HEAD:
     NAME: "MaskFormerHead"
     IGNORE_VALUE: 255
