@@ -1,9 +1,9 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/output/FT/moco2_FT_1000_1e-4_all/"
+OUTPUT_DIR: "/home/nberardo/mask2former/output/FT/moco2_FT_1500_1e-4_all/"
 SOLVER:
   IMS_PER_BATCH: 8
   BASE_LR: 0.0001
-  MAX_ITER: 1000
+  MAX_ITER: 1500
 MODEL:
   FREEZE_BACKBONE: False
   FREEZE_PIXEL_DECODER: False
