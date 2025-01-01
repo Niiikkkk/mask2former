@@ -136,11 +136,18 @@ if __name__ == "__main__":
     logger = setup_logger(name="fvcore")
     cfg.defrost()
     models = [
-        "m2f_swin_s"
+        "moco2_FT_1000_1e-4_all",
+        "moco2_FT_1000_4e-5_all",
+        "moco2_FT_1500_1e-4_all",
+        "moco2_FT_500_5e-5_all",
+        "simsiam_FT_1000_1e-6_all",
+        "simsiam_FT_500_8e-5_all",
+        "moco2_FT_1000_1e-5_all",
+        "moco2_FT_1000_9e-5_all",  "moco2_FT_1500_9e-5_all",  "simsiam_FT_1000_1e-4_all",  "simsiam_FT_500_1e-4_all"
     ]
 
     for model in models:
-        cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", model, "model_final.pth")
+        cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/FT", model, "model_final.pth")
         cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results/", model)
         model = DefaultPredictor(cfg)
         func(model,args,cfg)
