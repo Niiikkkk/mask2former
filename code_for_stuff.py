@@ -143,7 +143,10 @@ if __name__ == "__main__":
         "simsiam_FT_1000_1e-6_all",
         "simsiam_FT_500_8e-5_all",
         "moco2_FT_1000_1e-5_all",
-        "moco2_FT_1000_9e-5_all",  "moco2_FT_1500_9e-5_all",  "simsiam_FT_1000_1e-4_all",  "simsiam_FT_500_1e-4_all"
+        "moco2_FT_1000_9e-5_all",
+        "moco2_FT_1500_9e-5_all",
+        "simsiam_FT_1000_1e-4_all",
+        "simsiam_FT_500_1e-4_all"
     ]
 
     for model in models:
