@@ -487,8 +487,6 @@ def main(args):
     trainer.resume_or_load(resume=args.resume)
     model = trainer._trainer.model
 
-    print_named_modules(model)
-
     if isinstance(model, DistributedDataParallel):
         model = trainer._trainer.model.module
 
@@ -520,7 +518,7 @@ def main(args):
     lora_model = get_peft_model(model,lora_cfg_old)
 
 
-
+    print_named_modules(model)
     return
 
     optimizer = trainer.build_optimizer(cfg, lora_model)
