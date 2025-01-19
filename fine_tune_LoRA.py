@@ -519,6 +519,7 @@ def main(args):
 
 
     lora_model.print_trainable_parameters()
+    return
 
     optimizer = trainer.build_optimizer(cfg, lora_model)
     trainer._trainer.optimizer = optimizer

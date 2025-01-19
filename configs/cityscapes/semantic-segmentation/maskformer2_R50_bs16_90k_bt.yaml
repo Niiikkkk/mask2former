@@ -1,5 +1,6 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
-OUTPUT_DIR: "/home/nberardo/mask2former/output/FT/moco_v1_downloaded_2k_2e-5_all/"
+#OUTPUT_DIR: "/home/nberardo/mask2former/output/FT/moco_v1_downloaded_2k_2e-5_all/"
+OUTPUT_DIR: "/home/nberardo/mask2former/output/LORA/moco_v2_downloaded/"
 SOLVER:
   IMS_PER_BATCH: 8
   BASE_LR: 0.00002
@@ -12,7 +13,7 @@ MODEL:
   FREEZE_TRANSFORMER_DECODER_EXCEPT_MLP: False
   BACKBONE:
     FREEZE_AT: 0
-  WEIGHTS: "/home/nberardo/mask2former/output/train/moco_v1_downloaded/model_final.pth"
+  WEIGHTS: "/home/nberardo/mask2former/output/train/moco_v2_downloaded/model_final.pth"
   META_ARCHITECTURE: "MaskFormer"
   RESNETS:
 
