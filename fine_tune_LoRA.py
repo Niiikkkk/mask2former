@@ -519,7 +519,7 @@ def main(args):
 
     lora_model = get_peft_model(model,lora_cfg_old)
 
-    # print_named_modules(lora_model)
+    print_named_modules(lora_model)
     return
 
     optimizer = trainer.build_optimizer(cfg, lora_model)
