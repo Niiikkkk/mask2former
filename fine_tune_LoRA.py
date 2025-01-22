@@ -514,7 +514,7 @@ def main(args):
                        r"|backbone\.res\d\.\d\.conv\d",
         lora_dropout=0.1,
         bias="lora_only",
-        modules_to_save=["sem_seg_head.predictor"],
+        modules_to_save=["sem_seg_head.predictor.transformer_ffn_layers"],
     )
 
     lora_model = get_peft_model(model,lora_cfg_old)
