@@ -1,4 +1,5 @@
 import os.path
+import sys
 
 from detectron2.engine import default_argument_parser, launch
 from peft import LoraConfig, get_peft_model, inject_adapter_in_model, LoraModel, PeftModel, cast_mixed_precision_params
@@ -485,6 +486,12 @@ def main(args):
     cfg = setup(args)
     trainer = Trainer(cfg)
     trainer.resume_or_load(resume=args.resume)
+
+    stderr_file = os.path.join(cfg.OUTPUT_DIR, 'stderr.txt')
+    if not os.path.exists(stderr_file):
+        open(stderr_file, 'w').close()
+    sys.stderr = open(stderr_file, 'a')
+
     model = trainer._trainer.model
 
     print_named_modules(model)
