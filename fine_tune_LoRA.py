@@ -542,6 +542,16 @@ def main(args):
     else:
         trainer._trainer.model = lora_model
 
+    lora_path = os.path.join(cfg.OUTPUT_DIR, "lora_model")
+    if isinstance(model, DistributedDataParallel):
+        print("Saving Distributed Model to ", lora_path)
+        trainer._trainer.model.module.save_pretrained(save_directory=lora_path)
+        # torch.save(trainer._trainer.model.module.state_dict(), lora_path + "/model.pth")
+    else:
+        print("Saving Model to ", lora_path)
+        trainer._trainer.model.save_pretrained(save_directory=lora_path)
+        # torch.save(trainer._trainer.model.state_dict(), lora_path + "/model.pth")
+    return
     trainer.train()
 
     lora_path = os.path.join(cfg.OUTPUT_DIR, "lora_model")
