@@ -136,17 +136,14 @@ if __name__ == "__main__":
     logger = setup_logger(name="fvcore")
     cfg.defrost()
     models = [
-        "moco2_FT_1000_1e-4_all",
-        "moco2_FT_1000_4e-5_all",
-        "moco2_FT_1500_1e-4_all",
-        "moco2_FT_500_5e-5_all",
-        "simsiam_FT_1000_1e-6_all",
-        "simsiam_FT_500_8e-5_all",
-        "moco2_FT_1000_1e-5_all",
-        "moco2_FT_1000_9e-5_all",
-        "moco2_FT_1500_9e-5_all",
-        "simsiam_FT_1000_1e-4_all",
-        "simsiam_FT_500_1e-4_all"
+        "moco_v2_downloaded_FT_1k_8e-5_all",
+        "moco_v2_downloaded_FT_1k_9e-5_all",
+        "moco_v2_downloaded_FT_2k_8e-5_all",
+        "moco_v2_downloaded_FT_2k_9e-5_all",
+        "moco_v2_downloaded_FT_3k_8e-5_all",
+        "moco_v2_downloaded_FT_4k_8e-5_all",
+        "moco_v2_downloaded_FT_5k_8e-5_all",
+        "moco_v2_downloaded_FT_7k_8e-5_all",
     ]
 
     for model in models:
