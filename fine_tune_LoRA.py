@@ -510,7 +510,7 @@ def main(args):
                        r"|sem_seg_head\.predictor\.transformer_self_attention_layers\.\d\.self_attn\.\w+",
         lora_dropout=0.1,
         bias="lora_only",
-        modules_to_save=[
+        modules_to_save=["backbone",
                          "sem_seg_head.predictor.mask_embed",
                          "sem_seg_head.pixel_decoder.input_proj.0",
                          "sem_seg_head.pixel_decoder.input_proj.1",

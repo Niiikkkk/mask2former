@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     predictor = DefaultPredictor(cfg)
 
-    model_id = cfg.MODEL.LORA_PATH
+    model_id = os.path.join(cfg.OUTPUT_DIR,"lora_model")
 
     lora_config = LoraConfig.from_pretrained(model_id)
 
@@ -30,6 +30,6 @@ if __name__ == '__main__':
     predictor.model = inference_model
     # inference_model = PeftModel.from_pretrained(model,model_id)
 
-    func(predictor,args,cfg)
-    # res = Trainer.test(cfg,predictor)
+    # func(predictor,args,cfg)
+    res = Trainer.test(cfg,predictor)
 

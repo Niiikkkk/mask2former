@@ -2,7 +2,6 @@ _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
 OUTPUT_DIR: "/home/nberardo/mask2former/results/bt_FT_LoRA_6k_5e-5_new/"
 MODEL:
   WEIGHTS: "/home/nberardo/mask2former/output/train/bt-down-freezed/model_final.pth"
-  LORA_PATH: "/home/nberardo/mask2former/output/train/bt_FT_LoRA_6k_5e-5_new/lora_model"
   BACKBONE:
     FREEZE_AT: 0
   META_ARCHITECTURE: "MaskFormer"
