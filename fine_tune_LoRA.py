@@ -550,12 +550,10 @@ def main(args):
         # torch.save(trainer._trainer.model.module.state_dict(), lora_path + "/model.pth")
     else:
         print("Saving Model to ", lora_path)
-        print("ciao")
         # trainer._trainer.model.save_pretrained(save_directory=lora_path)
-        out_state_dict = get_peft_model_state_dict(trainer._trainer.model)
-
-        torch.save(out_state_dict, lora_path + "/model.pth")
         lora_cfg.save_pretrained(lora_path)
+        out_state_dict = get_peft_model_state_dict(trainer._trainer.model)
+        torch.save(out_state_dict, lora_path + "/model.pth")
         # torch.save(trainer._trainer.model.state_dict(), lora_path + "/model.pth")
     return
     trainer.train()
