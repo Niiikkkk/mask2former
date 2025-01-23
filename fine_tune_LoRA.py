@@ -2,7 +2,8 @@ import os.path
 import sys
 
 from detectron2.engine import default_argument_parser, launch
-from peft import LoraConfig, get_peft_model, inject_adapter_in_model, LoraModel, PeftModel, cast_mixed_precision_params
+from peft import LoraConfig, get_peft_model, inject_adapter_in_model, LoraModel, PeftModel, cast_mixed_precision_params, \
+    get_peft_model_state_dict
 import torch
 from torch.nn.parallel import DistributedDataParallel
 from train_net import Trainer, setup
@@ -545,12 +546,17 @@ def main(args):
     lora_path = os.path.join(cfg.OUTPUT_DIR, "lora_model")
     if isinstance(model, DistributedDataParallel):
         print("Saving Distributed Model to ", lora_path)
-        # trainer._trainer.model.module.save_pretrained(save_directory=lora_path)
-        torch.save(trainer._trainer.model.module.state_dict(), lora_path + "/model.pth")
+        trainer._trainer.model.module.save_pretrained(save_directory=lora_path)
+        # torch.save(trainer._trainer.model.module.state_dict(), lora_path + "/model.pth")
     else:
         print("Saving Model to ", lora_path)
+        print("ciao")
         # trainer._trainer.model.save_pretrained(save_directory=lora_path)
-        torch.save(trainer._trainer.model.state_dict(), lora_path + "/model.pth")
+        out_state_dict = get_peft_model_state_dict(trainer._trainer.model)
+
+        torch.save(out_state_dict, lora_path + "/model.pth")
+        lora_cfg.save_pretrained(lora_path)
+        # torch.save(trainer._trainer.model.state_dict(), lora_path + "/model.pth")
     return
     trainer.train()
 
@@ -558,11 +564,12 @@ def main(args):
     if isinstance(model, DistributedDataParallel):
         print("Saving model to ", lora_path)
         trainer._trainer.model.module.save_pretrained(save_directory=lora_path)
+
         torch.save(trainer._trainer.model.module.state_dict(), lora_path + "/model.pth")
     else:
         print("Saving model to ", lora_path)
-        trainer._trainer.model.save_pretrained(save_directory=lora_path)
-        torch.save(trainer._trainer.model.state_dict(), lora_path + "/model.pth")
+        # trainer._trainer.model.save_pretrained(save_directory=lora_path)
+        # torch.save(trainer._trainer.model.state_dict(), lora_path + "/model.pth")
     return
 
 if __name__ == "__main__":
