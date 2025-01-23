@@ -136,8 +136,6 @@ if __name__ == "__main__":
     logger = setup_logger(name="fvcore")
     cfg.defrost()
     models = [
-        "moco_v1_downloaded_2k_8e-5_all",
-        "moco_v1_downloaded_5k_6e-5_all",
         "moco_v1_downloaded_5k_8e-5_all",
     ]
 
