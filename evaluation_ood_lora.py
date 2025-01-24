@@ -6,7 +6,7 @@ from detectron2.utils.logger import setup_logger
 
 from component_metric import get_threshold_from_PRC, segment_metrics, default_instancer, anomaly_instances_from_mask
 from peft import PeftConfig, PeftModel, get_peft_model, LoraConfig, LoraModel
-from train_net import Trainer
+from train_net import Trainer, setup
 from evaluation_on_ood import func, parse_args, setup_cfgs
 import os
 import sys
@@ -14,36 +14,62 @@ import detectron2.utils.comm as comm
 from detectron2.evaluation import verify_results
 
 if __name__ == '__main__':
-    args = parse_args()
-    cfg = setup_cfgs(args)
+    # args = parse_args()
+    # cfg = setup_cfgs(args)
+    #
+    # logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
+    # logger.info("Arguments: " + str(args))
+    #
+    # stderr_file = os.path.join(cfg.OUTPUT_DIR, 'stderr.txt')
+    # if not os.path.exists(stderr_file):
+    #     open(stderr_file, 'w').close()
+    # sys.stderr = open(stderr_file, 'a')
+    #
+    # predictor = DefaultPredictor(cfg)
+    #
+    # model_id = os.path.join(cfg.OUTPUT_DIR,"lora_model")
+    #
+    # logger.info(f"Loading LORA model from {model_id}")
+    # lora_config = LoraConfig.from_pretrained(model_id)
+    # inference_model = PeftModel.from_pretrained(predictor.model,model_id,is_trainable=True)
+    # inference_model.eval()
+    #
+    # predictor.model = inference_model
+    # predictor.model.print_trainable_parameters()
+    # # OOD check
+    # # func(predictor,args,cfg)
+    #
+    # # ID CHECK
+    # res = Trainer.test(cfg,inference_model)
+    # if cfg.TEST.AUG.ENABLED:
+    #     res.update(Trainer.test_with_TTA(cfg, inference_model))
+    # if comm.is_main_process():
+    #     verify_results(cfg, res)
+    # logger.info(f"Results: {res}")
 
-    logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
-    logger.info("Arguments: " + str(args))
+    args = default_argument_parser().parse_args()
+    cfg = setup(args)
+    trainer = Trainer(cfg)
+    trainer.resume_or_load(resume=args.resume)
 
     stderr_file = os.path.join(cfg.OUTPUT_DIR, 'stderr.txt')
     if not os.path.exists(stderr_file):
         open(stderr_file, 'w').close()
     sys.stderr = open(stderr_file, 'a')
 
-    predictor = DefaultPredictor(cfg)
+    model = trainer._trainer.model
+    model_id = os.path.join(cfg.OUTPUT_DIR, "lora_model")
+    lora_model = PeftModel.from_pretrained(model, model_id, is_trainable=True)
 
-    model_id = os.path.join(cfg.OUTPUT_DIR,"lora_model")
+    lora_model.print_trainable_parameters()
 
-    logger.info(f"Loading LORA model from {model_id}")
-    lora_config = LoraConfig.from_pretrained(model_id)
-    inference_model = PeftModel.from_pretrained(predictor.model,model_id,is_trainable=True)
-    inference_model.eval()
+    optimizer = trainer.build_optimizer(cfg, lora_model)
+    trainer._trainer.optimizer = optimizer
+    trainer.scheduler = trainer.build_lr_scheduler(cfg, optimizer)
 
-    predictor.model = inference_model
-    predictor.model.print_trainable_parameters()
-    # OOD check
-    # func(predictor,args,cfg)
+    # lora_model.train()
+    trainer._trainer.model = lora_model
 
-    # ID CHECK
-    res = Trainer.test(cfg,inference_model)
-    if cfg.TEST.AUG.ENABLED:
-        res.update(Trainer.test_with_TTA(cfg, inference_model))
-    if comm.is_main_process():
-        verify_results(cfg, res)
-    logger.info(f"Results: {res}")
+    trainer.train()
+
 

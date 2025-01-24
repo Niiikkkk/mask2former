@@ -496,7 +496,6 @@ def main(args):
     sys.stderr = open(stderr_file, 'a')
 
     model = trainer._trainer.model
-    tmp_model = deepcopy(model)
 
     if isinstance(model, DistributedDataParallel):
         model = trainer._trainer.model.module
@@ -559,15 +558,10 @@ def main(args):
         # out_state_dict = get_peft_model_state_dict(trainer._trainer.model)
         # safe_save_file(out_state_dict, lora_path + "/adapter_model.safetensors", metadata={"format": "pt"})
 
-    lora_config = LoraConfig.from_pretrained(lora_path)
-    inference_model = PeftModel.from_pretrained(tmp_model, lora_path)
-
-    print(inference_model.state_dict() == trainer._trainer.model.state_dict())
     return
 
 if __name__ == "__main__":
     args = default_argument_parser().parse_args()
-    cfg = setup(args)
 
     launch(
         main,
