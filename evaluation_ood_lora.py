@@ -9,6 +9,7 @@ from peft import PeftConfig, PeftModel, get_peft_model, LoraConfig, LoraModel
 from train_net import Trainer
 from evaluation_on_ood import func, parse_args, setup_cfgs
 import os
+import sys
 
 if __name__ == '__main__':
     args = parse_args()
@@ -16,6 +17,11 @@ if __name__ == '__main__':
 
     logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
     logger.info("Arguments: " + str(args))
+
+    stderr_file = os.path.join(cfg.OUTPUT_DIR, 'stderr.txt')
+    if not os.path.exists(stderr_file):
+        open(stderr_file, 'w').close()
+    sys.stderr = open(stderr_file, 'a')
 
     predictor = DefaultPredictor(cfg)
 
