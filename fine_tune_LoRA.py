@@ -544,31 +544,19 @@ def main(args):
     else:
         trainer._trainer.model = lora_model
 
-    lora_path = os.path.join(cfg.OUTPUT_DIR, "lora_model")
-    if isinstance(model, DistributedDataParallel):
-        print("Saving Distributed Model to ", lora_path)
-        trainer._trainer.model.module.save_pretrained(save_directory=lora_path)
-        # torch.save(trainer._trainer.model.module.state_dict(), lora_path + "/model.pth")
-    else:
-        print("Saving Model to ", lora_path)
-        # trainer._trainer.model.save_pretrained(save_directory=lora_path)
-        lora_cfg.save_pretrained(lora_path)
-        out_state_dict = get_peft_model_state_dict(trainer._trainer.model)
-        safe_save_file(out_state_dict, lora_path + "/adapter_model.safetensors", metadata={"format": "pt"})
-        # torch.save(trainer._trainer.model.state_dict(), lora_path + "/model.pth")
-    return
     trainer.train()
 
     lora_path = os.path.join(cfg.OUTPUT_DIR, "lora_model")
     if isinstance(model, DistributedDataParallel):
-        print("Saving model to ", lora_path)
-        trainer._trainer.model.module.save_pretrained(save_directory=lora_path)
-
-        torch.save(trainer._trainer.model.module.state_dict(), lora_path + "/model.pth")
+        print("Saving Dist Model to ", lora_path)
+        lora_cfg.save_pretrained(lora_path)
+        out_state_dict = get_peft_model_state_dict(trainer._trainer.model.module)
+        safe_save_file(out_state_dict, lora_path + "/adapter_model.safetensors", metadata={"format": "pt"})
     else:
-        print("Saving model to ", lora_path)
-        # trainer._trainer.model.save_pretrained(save_directory=lora_path)
-        # torch.save(trainer._trainer.model.state_dict(), lora_path + "/model.pth")
+        print("Saving Model to ", lora_path)
+        lora_cfg.save_pretrained(lora_path)
+        out_state_dict = get_peft_model_state_dict(trainer._trainer.model)
+        safe_save_file(out_state_dict, lora_path + "/adapter_model.safetensors", metadata={"format": "pt"})
     return
 
 if __name__ == "__main__":
