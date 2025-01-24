@@ -44,4 +44,5 @@ if __name__ == '__main__':
         res.update(Trainer.test_with_TTA(cfg, predictor.model))
     if comm.is_main_process():
         verify_results(cfg, res)
+    print(res)
 
