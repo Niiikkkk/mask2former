@@ -31,7 +31,9 @@ if __name__ == '__main__':
 
     logger.info(f"Loading LORA model from {model_id}")
     lora_config = LoraConfig.from_pretrained(model_id)
-    inference_model = PeftModel.from_pretrained(predictor.model,model_id)
+    inference_model = PeftModel.from_pretrained(predictor.model,model_id,is_trainable=True)
+    inference_model.eval()
+
     predictor.model = inference_model
     # OOD check
     # func(predictor,args,cfg)
