@@ -34,7 +34,7 @@ if __name__ == '__main__':
     inference_model = PeftModel.from_pretrained(predictor.model,model_id)
 
     print(inference_model)
-    return
+    exit()
 
     inference_model.eval()
     predictor.model = inference_model
