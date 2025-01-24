@@ -63,7 +63,7 @@ if __name__ == '__main__':
     model_id = os.path.join(cfg.OUTPUT_DIR, "lora_model")
     print("Loading LORA weights...")
     lora_cfg = PeftConfig.from_pretrained(model_id)
-    lora_model = PeftModel.from_pretrained(model, model_id, is_trainable=True)
+    lora_model = get_peft_model(model,lora_cfg)
 
     lora_model.print_trainable_parameters()
 
