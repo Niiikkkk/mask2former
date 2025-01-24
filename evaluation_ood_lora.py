@@ -64,6 +64,7 @@ if __name__ == '__main__':
     print("Loading LORA weights...")
     lora_cfg = PeftConfig.from_pretrained(model_id)
     lora_model = get_peft_model(model,lora_cfg)
+    lora_model.load_adapter(model_id,adapter_name="default")
 
     lora_model.print_trainable_parameters()
 
