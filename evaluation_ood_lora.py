@@ -35,6 +35,7 @@ if __name__ == '__main__':
     inference_model.eval()
 
     predictor.model = inference_model
+    predictor.model.print_trainable_parameters()
     # OOD check
     # func(predictor,args,cfg)
 

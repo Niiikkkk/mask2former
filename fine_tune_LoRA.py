@@ -552,7 +552,7 @@ def main(args):
         safe_save_file(out_state_dict, lora_path + "/adapter_model.safetensors", metadata={"format": "pt"})
     else:
         print("Saving Model to ", lora_path)
-        trainer._trainer.model.save_pretrained(lora_path,safe_serialization=False)
+        trainer._trainer.model.save_pretrained(lora_path)
         # lora_cfg.save_pretrained(lora_path)
         # out_state_dict = get_peft_model_state_dict(trainer._trainer.model)
         # safe_save_file(out_state_dict, lora_path + "/adapter_model.safetensors", metadata={"format": "pt"})
