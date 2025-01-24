@@ -64,11 +64,14 @@ if __name__ == '__main__':
 
     lora_model.print_trainable_parameters()
 
+    print("Building optimizer...")
     optimizer = trainer.build_optimizer(cfg, lora_model)
     trainer._trainer.optimizer = optimizer
+    print("Building scheduler...")
     trainer.scheduler = trainer.build_lr_scheduler(cfg, optimizer)
 
     # lora_model.train()
+    print("Starting training...")
     trainer._trainer.model = lora_model
 
     trainer.train()
