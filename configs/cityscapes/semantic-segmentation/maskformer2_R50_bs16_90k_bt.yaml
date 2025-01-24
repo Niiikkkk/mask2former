@@ -1,10 +1,10 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
 #OUTPUT_DIR: "/home/nberardo/mask2former/output/FT/dino_2k_2e-6_all/"
-OUTPUT_DIR: "/home/nberardo/mask2former/output/LORA/moco_v2_downloaded-2k_8e-5_predictor_noFFN/"
+OUTPUT_DIR: "/home/nberardo/mask2former/output/LORA/moco_v2_downloaded-4k_8e-5_predictor_noFFN/"
 SOLVER:
   IMS_PER_BATCH: 8
   BASE_LR: 0.00008
-  MAX_ITER: 2000
+  MAX_ITER: 4000
 MODEL:
   FREEZE_BACKBONE: False
   FREEZE_PIXEL_DECODER: False
