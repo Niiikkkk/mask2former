@@ -10,6 +10,8 @@ from train_net import Trainer
 from evaluation_on_ood import func, parse_args, setup_cfgs
 import os
 import sys
+import detectron2.utils.comm as comm
+from detectron2.evaluation import verify_results
 
 if __name__ == '__main__':
     args = parse_args()
@@ -35,5 +37,11 @@ if __name__ == '__main__':
     # inference_model = PeftModel.from_pretrained(model,model_id)
 
     # func(predictor,args,cfg)
+
+    # ID CHECK
     res = Trainer.test(cfg,predictor.model)
+    if cfg.TEST.AUG.ENABLED:
+        res.update(Trainer.test_with_TTA(cfg, predictor.model))
+    if comm.is_main_process():
+        verify_results(cfg, res)
 

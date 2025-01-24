@@ -347,7 +347,6 @@ def main(args):
     trainer = Trainer(cfg)
     trainer.resume_or_load(resume=args.resume)
 
-
     return trainer.train()
 
 

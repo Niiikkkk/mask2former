@@ -516,6 +516,7 @@ def main(args):
                          "sem_seg_head.pixel_decoder.input_proj.0",
                          "sem_seg_head.pixel_decoder.input_proj.1",
                          "sem_seg_head.pixel_decoder.input_proj.2"],
+        #query_embed, query_feat, class_embed, mask_embed.
     )
 
     lora_cfg_old = LoraConfig(
