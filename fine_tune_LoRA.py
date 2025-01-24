@@ -513,8 +513,9 @@ def main(args):
                          "sem_seg_head.pixel_decoder.input_proj.0",
                          "sem_seg_head.pixel_decoder.input_proj.1",
                          "sem_seg_head.pixel_decoder.input_proj.2",
-                         "sem_seg_head.predictor.query_embed",
-                         "sem_seg_head.predictor.query_feat",],
+                         "sem_seg_head.predictor.query_embed.weight",
+                         "sem_seg_head.predictor.query_feat.weight",
+                         "sem_seg_head.predictor.class_embed.weight",],
         #query_embed, query_feat, class_embed, mask_embed.
     )
 
