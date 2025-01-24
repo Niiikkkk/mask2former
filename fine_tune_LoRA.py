@@ -6,6 +6,7 @@ from detectron2.engine import default_argument_parser, launch
 from peft import LoraConfig, get_peft_model, inject_adapter_in_model, LoraModel, PeftModel, cast_mixed_precision_params, \
     get_peft_model_state_dict
 import torch
+from tools.lightning_train_net import train
 from torch.nn.parallel import DistributedDataParallel
 from train_net import Trainer, setup
 from safetensors.torch import save_file as safe_save_file
@@ -548,15 +549,10 @@ def main(args):
     lora_path = os.path.join(cfg.OUTPUT_DIR, "lora_model")
     if isinstance(model, DistributedDataParallel):
         print("Saving Dist Model to ", lora_path)
-        lora_cfg.save_pretrained(lora_path)
-        out_state_dict = get_peft_model_state_dict(trainer._trainer.model.module)
-        safe_save_file(out_state_dict, lora_path + "/adapter_model.safetensors", metadata={"format": "pt"})
+        trainer._trainer.model.module.save_pretrained(lora_path)
     else:
         print("Saving Model to ", lora_path)
         trainer._trainer.model.save_pretrained(lora_path)
-        # lora_cfg.save_pretrained(lora_path)
-        # out_state_dict = get_peft_model_state_dict(trainer._trainer.model)
-        # safe_save_file(out_state_dict, lora_path + "/adapter_model.safetensors", metadata={"format": "pt"})
 
     return
 
