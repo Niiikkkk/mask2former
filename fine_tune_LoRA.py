@@ -6,7 +6,6 @@ from detectron2.engine import default_argument_parser, launch
 from peft import LoraConfig, get_peft_model, inject_adapter_in_model, LoraModel, PeftModel, cast_mixed_precision_params, \
     get_peft_model_state_dict
 import torch
-from tools.lightning_train_net import train
 from torch.nn.parallel import DistributedDataParallel
 from train_net import Trainer, setup
 from safetensors.torch import save_file as safe_save_file
