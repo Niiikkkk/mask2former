@@ -1,5 +1,3 @@
-from copy import deepcopy
-
 import numpy
 import torch
 from detectron2.checkpoint import DetectionCheckpointer
@@ -59,12 +57,10 @@ if __name__ == '__main__':
         open(stderr_file, 'w').close()
     sys.stderr = open(stderr_file, 'a')
 
-    model = deepcopy(trainer._trainer.model)
+    model = trainer._trainer.model
     model_id = os.path.join(cfg.OUTPUT_DIR, "lora_model")
     print("Loading LORA weights...")
-    lora_cfg = PeftConfig.from_pretrained(model_id)
-    lora_model = get_peft_model(model,lora_cfg)
-    lora_model.load_adapter(model_id,adapter_name="default")
+    lora_model = PeftModel.from_pretrained(model, model_id, is_trainable=True)
 
     lora_model.print_trainable_parameters()
 
