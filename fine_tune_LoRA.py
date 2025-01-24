@@ -500,6 +500,8 @@ def main(args):
     if isinstance(model, DistributedDataParallel):
         model = trainer._trainer.model.module
 
+    print_named_modules(model)
+
     lora_cfg = LoraConfig(
         r=16,
         lora_alpha=32,
@@ -513,9 +515,9 @@ def main(args):
                          "sem_seg_head.pixel_decoder.input_proj.0",
                          "sem_seg_head.pixel_decoder.input_proj.1",
                          "sem_seg_head.pixel_decoder.input_proj.2",
-                         "sem_seg_head.predictor.query_embed.weight",
-                         "sem_seg_head.predictor.query_feat.weight",
-                         "sem_seg_head.predictor.class_embed.weight",],
+                         "sem_seg_head.predictor.query_embed",
+                         "sem_seg_head.predictor.query_feat",
+                         "sem_seg_head.predictor.class_embed",],
         #query_embed, query_feat, class_embed, mask_embed.
     )
 
