@@ -1,5 +1,6 @@
 import os.path
 import sys
+from copy import deepcopy
 
 from detectron2.engine import default_argument_parser, launch
 from peft import LoraConfig, get_peft_model, inject_adapter_in_model, LoraModel, PeftModel, cast_mixed_precision_params, \
@@ -495,6 +496,7 @@ def main(args):
     sys.stderr = open(stderr_file, 'a')
 
     model = trainer._trainer.model
+    tmp_model = deepcopy(model)
 
     if isinstance(model, DistributedDataParallel):
         model = trainer._trainer.model.module
@@ -556,6 +558,11 @@ def main(args):
         # lora_cfg.save_pretrained(lora_path)
         # out_state_dict = get_peft_model_state_dict(trainer._trainer.model)
         # safe_save_file(out_state_dict, lora_path + "/adapter_model.safetensors", metadata={"format": "pt"})
+
+    lora_config = LoraConfig.from_pretrained(lora_path)
+    inference_model = PeftModel.from_pretrained(tmp_model, lora_path)
+
+    print(inference_model.state_dict() == trainer._trainer.model.state_dict())
     return
 
 if __name__ == "__main__":
