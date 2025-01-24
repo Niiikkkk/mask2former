@@ -29,5 +29,5 @@ if __name__ == '__main__':
     # inference_model = PeftModel.from_pretrained(model,model_id)
 
     # func(predictor,args,cfg)
-    res = Trainer.test(cfg,predictor)
+    res = Trainer.test(cfg,predictor.model)
 
