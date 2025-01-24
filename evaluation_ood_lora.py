@@ -29,13 +29,16 @@ if __name__ == '__main__':
 
     model_id = os.path.join(cfg.OUTPUT_DIR,"lora_model")
 
+    logger.info(f"Loading LORA model from {model_id}")
     lora_config = LoraConfig.from_pretrained(model_id)
     inference_model = PeftModel.from_pretrained(predictor.model,model_id)
 
+    print(inference_model)
+
     inference_model.eval()
     predictor.model = inference_model
-    # inference_model = PeftModel.from_pretrained(model,model_id)
 
+    # OOD check
     # func(predictor,args,cfg)
 
     # ID CHECK
@@ -44,5 +47,5 @@ if __name__ == '__main__':
         res.update(Trainer.test_with_TTA(cfg, predictor.model))
     if comm.is_main_process():
         verify_results(cfg, res)
-    print(res)
+    logger.info(f"Results: {res}")
 
