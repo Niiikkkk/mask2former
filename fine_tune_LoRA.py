@@ -500,8 +500,6 @@ def main(args):
     if isinstance(model, DistributedDataParallel):
         model = trainer._trainer.model.module
 
-    print_named_modules(model)
-
     lora_cfg = LoraConfig(
         r=16,
         lora_alpha=32,
@@ -544,6 +542,7 @@ def main(args):
     lora_model = get_peft_model(model,lora_cfg)
 
     lora_model.print_trainable_parameters()
+    print_named_modules(lora_model)
 
     optimizer = trainer.build_optimizer(cfg, lora_model)
     trainer._trainer.optimizer = optimizer
