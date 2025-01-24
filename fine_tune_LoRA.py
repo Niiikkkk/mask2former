@@ -504,6 +504,24 @@ def main(args):
         r=16,
         lora_alpha=32,
         # target_modules=r"sem_seg_head\.pixel_decoder\.
+        target_modules=r"|sem_seg_head\.predictor\.transformer_ffn_layers\.\d\.linear.+"
+                       r"|sem_seg_head\.predictor\.transformer_cross_attention_layers\.\d\.multihead_attn\.\w+"
+                       r"|sem_seg_head\.predictor\.transformer_self_attention_layers\.\d\.self_attn\.\w+",
+        lora_dropout=0.1,
+        bias="lora_only",
+        modules_to_save=["sem_seg_head.predictor.mask_embed",
+                         "sem_seg_head.pixel_decoder.input_proj.0",
+                         "sem_seg_head.pixel_decoder.input_proj.1",
+                         "sem_seg_head.pixel_decoder.input_proj.2",
+                         "sem_seg_head.predictor.query_embed",
+                         "sem_seg_head.predictor.query_feat",],
+        #query_embed, query_feat, class_embed, mask_embed.
+    )
+
+    lora_cfg_old = LoraConfig(
+        r=16,
+        lora_alpha=32,
+        # target_modules=r"sem_seg_head\.pixel_decoder\.
         target_modules=r"sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.self_attn\.\w+"
                        r"|sem_seg_head\.predictor\.transformer_ffn_layers\.\d\.linear.+"
                        r"|sem_seg_head\.predictor\.transformer_cross_attention_layers\.\d\.multihead_attn\.\w+"
@@ -518,16 +536,6 @@ def main(args):
         #query_embed, query_feat, class_embed, mask_embed.
     )
 
-    lora_cfg_old = LoraConfig(
-        r=16,
-        lora_alpha=32,
-        target_modules=r"sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.linear\d"
-                       r"|sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.self_attn\.\w+"
-                       r"|backbone\.res\d\.\d\.conv\d",
-        lora_dropout=0.1,
-        bias="lora_only",
-        modules_to_save=[],
-    )
 
     lora_model = get_peft_model(model,lora_cfg)
 
