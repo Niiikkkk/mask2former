@@ -7,6 +7,7 @@ from peft import LoraConfig, get_peft_model, inject_adapter_in_model, LoraModel,
 import torch
 from torch.nn.parallel import DistributedDataParallel
 from train_net import Trainer, setup
+from safetensors.torch import save_file as safe_save_file
 
 def print_params(model: torch.nn.Module):
     for name,p in model.named_parameters():
@@ -553,7 +554,7 @@ def main(args):
         # trainer._trainer.model.save_pretrained(save_directory=lora_path)
         lora_cfg.save_pretrained(lora_path)
         out_state_dict = get_peft_model_state_dict(trainer._trainer.model)
-        torch.save(out_state_dict, lora_path + "/model.pth")
+        safe_save_file(out_state_dict, lora_path + "/adapter_model.safetensors", metadata={"format": "pt"})
         # torch.save(trainer._trainer.model.state_dict(), lora_path + "/model.pth")
     return
     trainer.train()
