@@ -27,15 +27,16 @@ if __name__ == '__main__':
 
     predictor = DefaultPredictor(cfg)
 
-    # model_id = os.path.join(cfg.OUTPUT_DIR,"lora_model")
-    #
-    # logger.info(f"Loading LORA model from {model_id}")
-    # lora_config = LoraConfig.from_pretrained(model_id)
-    # inference_model = PeftModel.from_pretrained(predictor.model,model_id,is_trainable=True)
-    # inference_model.eval()
-    #
-    # predictor.model = inference_model
-    # predictor.model.print_trainable_parameters()
+    model_id = os.path.join(cfg.OUTPUT_DIR,"lora_model")
+
+    logger.info(f"Loading LORA model from {model_id}")
+    lora_config = LoraConfig.from_pretrained(model_id)
+    inference_model = PeftModel.from_pretrained(predictor.model,model_id)
+
+    predictor.model = inference_model
+    predictor.model.print_trainable_parameters()
+
+
     # OOD check
     # func(predictor,args,cfg)
 
