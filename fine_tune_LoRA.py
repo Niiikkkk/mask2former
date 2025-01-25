@@ -520,7 +520,7 @@ def main(args):
         #query_embed, query_feat, class_embed, mask_embed.
     )
 
-    ##GUARDARE PERCHE SENZA LA PRIMA TARGET MODULES, DA ERRORE
+    ##CONTROLLARE I TRAINABLE PARAMS!!!! E TUTTI I PARAMS
 
 
 
