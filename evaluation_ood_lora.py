@@ -33,7 +33,7 @@ if __name__ == '__main__':
     lora_config = LoraConfig.from_pretrained(model_id)
     inference_model = PeftModel.from_pretrained(predictor.model,model_id)
 
-    predictor.model.print_trainable_parameters()
+    inference_model.print_trainable_parameters()
 
 
     # OOD check
