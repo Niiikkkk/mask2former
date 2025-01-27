@@ -575,8 +575,8 @@ def main(args):
     loaded = PeftModel.from_pretrained(tmp_model, lora_path)
     x = torch.rand(3, 512, 512).cuda()
     inputs = {"image": x, "height": 512, "width": 512}
-    y_peft = trainer._trainer.model([inputs])[0]
-    y_loaded = loaded([inputs])[0]
+    y_peft = trainer._trainer.model([inputs])
+    y_loaded = loaded([inputs])
     torch.allclose(y_peft, y_loaded)
 
     return
