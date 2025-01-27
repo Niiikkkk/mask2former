@@ -569,14 +569,15 @@ def main(args):
         print("Saving Model to ", lora_path)
         trainer._trainer.model.save_pretrained(lora_path)
         print_trainable_params(trainer._trainer.model)
-        torch.save(trainer._trainer.model.state_dict(),lora_path+"model.pth")
+        torch.save(trainer._trainer.model.requires_grad_(True).state_dict(),lora_path+"/model.pth")
+        # torch.save(trainer._trainer.model.state_dict(),lora_path+"/model.pth")
 
 
     #TEST:
     trainer._trainer.model.eval()
     lora_cfg = LoraConfig.from_pretrained(lora_path)
     loaded = get_peft_model(tmp_model, lora_cfg)
-    loaded.load_state_dict(torch.load(lora_path+"model.pth"))
+    loaded.load_state_dict(torch.load(lora_path+"/model.pth"))
     loaded.eval()
     x = torch.rand(3, 512, 512).cuda()
     inputs = {"image": x, "height": 512, "width": 512}
