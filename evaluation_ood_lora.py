@@ -34,6 +34,7 @@ if __name__ == '__main__':
     inference_model = PeftModel.from_pretrained(predictor.model,model_id)
 
     state_dict = torch.load(os.path.join(cfg.OUTPUT_DIR,"model_final.pth"),map_location='cpu')
+    print(state_dict["model"].keys())
     inference_model.load_state_dict(state_dict["model"])
 
     inference_model.print_trainable_parameters()
