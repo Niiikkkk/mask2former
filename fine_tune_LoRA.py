@@ -569,7 +569,8 @@ def main(args):
         print("Saving Model to ", lora_path)
         trainer._trainer.model.save_pretrained(lora_path)
         print_trainable_params(trainer._trainer.model)
-        print(trainer._trainer.model.state_dict().keys())
+        for name, param in trainer._trainer.model.named_parameters():
+            print(name, param.requires_grad)
         torch.save(trainer._trainer.model.state_dict(),lora_path+"/model.pth")
 
 
