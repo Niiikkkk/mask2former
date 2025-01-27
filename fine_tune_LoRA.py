@@ -577,9 +577,8 @@ def main(args):
     loaded.eval()
     x = torch.rand(3, 512, 512).cuda()
     inputs = {"image": x, "height": 512, "width": 512}
-    y_peft = trainer._trainer.model([inputs])[0]
-    y_loaded = loaded([inputs])[0]
-    print(y_loaded)
+    y_peft = trainer._trainer.model([inputs])[0]["sem_seg"]
+    y_loaded = loaded([inputs])[0]["sem_seg"]
     torch.allclose(y_peft, y_loaded)
 
     return
