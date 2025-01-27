@@ -572,8 +572,7 @@ def main(args):
 
     #TEST:
     print_named_modules(tmp_model)
-    tst_model = get_peft_model(tmp_model, lora_cfg)
-    loaded = PeftModel.from_pretrained(tst_model, lora_path)
+    loaded = PeftModel.from_pretrained(tmp_model, lora_path)
     x = torch.rand(1, 3, 512, 512).cuda()
     y_peft = trainer._trainer.model(x)
     y_loaded = loaded(x)
