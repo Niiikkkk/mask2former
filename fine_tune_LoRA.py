@@ -499,6 +499,7 @@ def main(args):
     tmp_model = deepcopy(model)
 
     if isinstance(model, DistributedDataParallel):
+        print("Model is DistributedDataParallel")
         model = trainer._trainer.model.module
 
     lora_cfg = LoraConfig(
