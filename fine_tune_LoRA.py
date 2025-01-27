@@ -571,8 +571,10 @@ def main(args):
 
 
     #TEST:
+    trainer._trainer.model.eval()
     print_named_modules(tmp_model)
     loaded = PeftModel.from_pretrained(tmp_model, lora_path)
+    loaded.eval()
     x = torch.rand(3, 512, 512).cuda()
     inputs = {"image": x, "height": 512, "width": 512}
     y_peft = trainer._trainer.model([inputs])
