@@ -579,6 +579,7 @@ def main(args):
     inputs = {"image": x, "height": 512, "width": 512}
     y_peft = trainer._trainer.model([inputs])[0]
     y_loaded = loaded([inputs])[0]
+    print(y_loaded)
     torch.allclose(y_peft, y_loaded)
 
     return
