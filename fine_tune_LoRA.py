@@ -512,11 +512,11 @@ def main(args):
                        r"|sem_seg_head\.predictor\.transformer_self_attention_layers\.\d\.self_attn\.\w+",
         lora_dropout=0.1,
         bias="lora_only",
-        # modules_to_save=["sem_seg_head.predictor.mask_embed",
-        #                  "sem_seg_head.pixel_decoder.input_proj.0",
-        #                  "sem_seg_head.pixel_decoder.input_proj.1",
-        #                  "sem_seg_head.pixel_decoder.input_proj.2"],
-                          # "sem_seg_head.predictor.query_embed",
+        modules_to_save=["sem_seg_head.predictor.mask_embed",
+                         "sem_seg_head.pixel_decoder.input_proj.0",
+                         "sem_seg_head.pixel_decoder.input_proj.1",
+                         "sem_seg_head.pixel_decoder.input_proj.2"],
+                         # "sem_seg_head.predictor.query_embed",
                          # "sem_seg_head.predictor.query_feat",
                          # "sem_seg_head.predictor.class_embed"],
         #query_embed, query_feat, class_embed, mask_embed.
@@ -573,9 +573,9 @@ def main(args):
 
     #TEST:
     trainer._trainer.model.eval()
-    # lora_cfg = LoraConfig.from_pretrained(lora_path)
-    loaded = PeftModel.from_pretrained(tmp_model, lora_path)
-    # loaded.load_state_dict(torch.load(lora_path+"model.pth"))
+    lora_cfg = LoraConfig.from_pretrained(lora_path)
+    loaded = get_peft_model(tmp_model, lora_cfg)
+    loaded.load_state_dict(torch.load(lora_path+"model.pth"))
     loaded.eval()
     x = torch.rand(3, 512, 512).cuda()
     inputs = {"image": x, "height": 512, "width": 512}
