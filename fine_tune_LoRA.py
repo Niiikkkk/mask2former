@@ -496,6 +496,7 @@ def main(args):
     sys.stderr = open(stderr_file, 'a')
 
     model = trainer._trainer.model
+    tmp_model = deepcopy(model)
 
     if isinstance(model, DistributedDataParallel):
         model = trainer._trainer.model.module
@@ -566,6 +567,15 @@ def main(args):
     else:
         print("Saving Model to ", lora_path)
         trainer._trainer.model.save_pretrained(lora_path)
+
+
+    #TEST:
+    tst_model = get_peft_model(tmp_model, lora_cfg)
+    loaded = PeftModel.from_pretrained(tst_model, lora_path)
+    x = torch.rand(1, 3, 512, 512).cuda()
+    y_peft = trainer._trainer.model(x)
+    y_loaded = loaded(x)
+    torch.allclose(y_peft, y_loaded)
 
     return
 
