@@ -573,7 +573,7 @@ def main(args):
 
     #TEST:
     trainer._trainer.model.eval()
-    loaded = PeftModel.from_pretrained(tmp_model, lora_path)
+    loaded = get_peft_model(tmp_model, lora_cfg)
     loaded.load_state_dict(torch.load(lora_path+"model.pth"))
     loaded.eval()
     x = torch.rand(3, 512, 512).cuda()
