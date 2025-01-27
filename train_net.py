@@ -66,7 +66,7 @@ class Trainer(DefaultTrainer):
     Extension of the Trainer class adapted to MaskFormer.
     """
 
-    @classmethod
+    # @classmethod
     # def build_evaluator(cls, cfg, dataset_name, output_folder=None):
     #     """
     #     Create evaluator(s) for a given dataset.
