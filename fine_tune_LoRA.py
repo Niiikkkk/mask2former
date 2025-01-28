@@ -558,6 +558,7 @@ def main(args):
 
     lora_model = get_peft_model(model,deepcopy(lora_cfg))
 
+    print_trainable_params(lora_model)
     lora_model.print_trainable_parameters()
 
     optimizer = trainer.build_optimizer(cfg, lora_model)
