@@ -99,7 +99,7 @@ def main(args):
     trainable, total = lora_model.get_nb_trainable_parameters()
 
     logger.info("Number of trainable parameters after LoRA: " + str(trainable) + " Total: " + str(total) +
-                f" Percentage:  + {100*trainable/total:4f}")
+                f" Percentage: {100*trainable/total} %")
 
     optimizer = trainer.build_optimizer(cfg, lora_model)
     trainer._trainer.optimizer = optimizer
