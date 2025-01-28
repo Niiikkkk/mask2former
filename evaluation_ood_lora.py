@@ -33,6 +33,7 @@ if __name__ == '__main__':
     lora_config = LoraConfig.from_pretrained(lora_path)
     inference_model = get_peft_model(predictor.model,lora_config)
     inference_model.load_state_dict(torch.load(lora_path+"/model.pth"),strict=False)
+    inference_model.merge_and_unload()
     predictor.model = inference_model
 
     # OOD check
