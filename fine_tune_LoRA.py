@@ -572,9 +572,11 @@ def main(args):
 
         #PROVARE A SALVARE SOLO I PESI TRAINABLE E LOADDARLI
 
+        model_weights = {}
         for n, p in trainer._trainer.model.named_parameters():
             if p.requires_grad:
-                print(trainer._trainer.model.state_dict()[n])
+                model_weights[n] = trainer._trainer.model.state_dict()[n]
+        print(model_weights)
         torch.save(trainer._trainer.model.state_dict(),lora_path+"/model.pth")
 
 
