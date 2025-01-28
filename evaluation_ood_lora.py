@@ -14,8 +14,8 @@ import detectron2.utils.comm as comm
 from detectron2.evaluation import verify_results
 
 if __name__ == '__main__':
-    args = parse_args()
-    cfg = setup_cfgs(args)
+    args = default_argument_parser().parse_args()
+    cfg = setup(args)
 
     logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
     logger.info("Arguments: " + str(args))

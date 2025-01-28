@@ -93,11 +93,10 @@ def main(args):
         #query_embed, query_feat, class_embed, mask_embed.
     )
 
+    logger...
     lora_model = get_peft_model(model,deepcopy(lora_cfg))
-    lora_model.merge_and_unload()
 
     lora_model.print_trainable_parameters()
-    print_total_params(lora_model)
 
     optimizer = trainer.build_optimizer(cfg, lora_model)
     trainer._trainer.optimizer = optimizer
@@ -127,7 +126,6 @@ def main(args):
     trainer._trainer.model.eval()
     lora_cfg = LoraConfig.from_pretrained(lora_path)
     loaded = get_peft_model(tmp_model, lora_cfg)
-    loaded.merge_and_unload()
     loaded.load_state_dict(torch.load(lora_path+"/model.pth"),strict=False)
     loaded.eval()
     x = torch.rand(3, 512, 512).cuda()
