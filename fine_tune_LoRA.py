@@ -97,10 +97,11 @@ def main(args):
     )
 
     print_total_params(model)
-    return
+
     lora_model = get_peft_model(model,deepcopy(lora_cfg))
 
     lora_model.print_trainable_parameters()
+    return
 
     optimizer = trainer.build_optimizer(cfg, lora_model)
     trainer._trainer.optimizer = optimizer
