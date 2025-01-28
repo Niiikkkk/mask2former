@@ -69,7 +69,8 @@ def main(args):
                          "sem_seg_head.pixel_decoder.input_proj.2",
                          "sem_seg_head.predictor.query_embed",
                          "sem_seg_head.predictor.query_feat",
-                         "sem_seg_head.predictor.class_embed"],
+                         "sem_seg_head.predictor.class_embed",
+                         "backbone"],
         #query_embed, query_feat, class_embed, mask_embed.
     )
 
