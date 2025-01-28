@@ -100,6 +100,7 @@ def main(args):
 
     lora_model.print_trainable_parameters()
     print_total_params(lora_model)
+    print("CIAO")
     return
 
     optimizer = trainer.build_optimizer(cfg, lora_model)
