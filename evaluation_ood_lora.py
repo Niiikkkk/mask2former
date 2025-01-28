@@ -32,6 +32,7 @@ if __name__ == '__main__':
     logger.info(f"Loading LORA model from {lora_path}")
     lora_config = LoraConfig.from_pretrained(lora_path)
     inference_model = get_peft_model(predictor.model,lora_config)
+    inference_model.merge_and_unload()
     inference_model.load_state_dict(torch.load(lora_path+"/model.pth"),strict=False)
     predictor.model = inference_model
 
