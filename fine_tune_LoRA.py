@@ -583,7 +583,7 @@ def main(args):
     trainer._trainer.model.eval()
     lora_cfg = LoraConfig.from_pretrained(lora_path)
     loaded = get_peft_model(tmp_model, lora_cfg)
-    loaded.load_state_dict(torch.load(lora_path+"/model.pth"))
+    loaded.load_state_dict(torch.load(lora_path+"/model.pth"),strict=False)
     loaded.eval()
     x = torch.rand(3, 512, 512).cuda()
     inputs = {"image": x, "height": 512, "width": 512}
