@@ -568,23 +568,23 @@ def main(args):
     else:
         print("Saving Model to ", lora_path)
         trainer._trainer.model.save_pretrained(lora_path)
-        print_trainable_params(trainer._trainer.model)
-
-        #PROVARE A SALVARE SOLO I PESI TRAINABLE E LOADDARLI
-
-        model_weights = {}
-        for n, p in trainer._trainer.model.named_parameters():
-            if p.requires_grad:
-                model_weights[n] = trainer._trainer.model.state_dict()[n]
-                print(n)
-        torch.save(model_weights,lora_path+"/model.pth")
+        # print_trainable_params(trainer._trainer.model)
+        #
+        # #PROVARE A SALVARE SOLO I PESI TRAINABLE E LOADDARLI
+        #
+        # model_weights = {}
+        # for n, p in trainer._trainer.model.named_parameters():
+        #     if p.requires_grad:
+        #         model_weights[n] = trainer._trainer.model.state_dict()[n]
+        #         print(n)
+        # torch.save(model_weights,lora_path+"/model.pth")
 
 
     #TEST:
     trainer._trainer.model.eval()
     lora_cfg = LoraConfig.from_pretrained(lora_path)
-    loaded = get_peft_model(tmp_model, lora_cfg)
-    loaded.load_state_dict(torch.load(lora_path+"/model.pth"),strict=False)
+    loaded = PeftModel.from_pretrained(tmp_model, lora_path)
+    # loaded.load_state_dict(torch.load(lora_path+"/model.pth"),strict=False)
     loaded.eval()
     x = torch.rand(3, 512, 512).cuda()
     inputs = {"image": x, "height": 512, "width": 512}
