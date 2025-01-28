@@ -577,8 +577,7 @@ def main(args):
         trainer._trainer.model.module.save_pretrained(lora_path)
     else:
         print("Saving Model to ", lora_path)
-        trainer._trainer.model.save_pretrained(lora_path)
-        #PROVARE A SALVARE SOLO I PESI TRAINABLE E LOADDARLI
+        lora_cfg.save_pretrained(lora_path)
 
         model_weights = get_lora_weights(trainer._trainer.model)
         torch.save(model_weights,lora_path+"/model.pth")
@@ -597,9 +596,6 @@ def main(args):
     print(torch.allclose(y_peft, y_loaded))
 
     return
-
-    "base_model.model.sem_seg_head.pixel_decoder.input_proj.0.modules_to_save.default.1.weight"
-    "base_model.model.sem_seg_head.pixel_decoder.pixel_decoder.input_proj.0.modules_to_save.default.1.weight"
 
 if __name__ == "__main__":
     args = default_argument_parser().parse_args()
