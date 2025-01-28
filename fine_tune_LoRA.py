@@ -22,6 +22,7 @@ def print_named_modules(model):
 
 def print_total_params(model: torch.nn.Module):
     total_params = sum(p.numel() for n,p in model.named_parameters())
+    print(n for n,p in model.named_parameters())
     print("Total params: ", total_params)
     return total_params
 
