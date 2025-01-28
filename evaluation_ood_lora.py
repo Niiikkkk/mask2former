@@ -24,27 +24,24 @@ if __name__ == '__main__':
     if not os.path.exists(stderr_file):
         open(stderr_file, 'w').close()
     sys.stderr = open(stderr_file, 'a')
-
     predictor = DefaultPredictor(cfg)
 
-    model_id = os.path.join(cfg.OUTPUT_DIR,"lora_model")
+    lora_path = os.path.join(cfg.OUTPUT_DIR,"lora_model")
 
-    logger.info(f"Loading LORA model from {model_id}")
-    lora_config = LoraConfig.from_pretrained(model_id)
-    inference_model = PeftModel.from_pretrained(predictor.model,model_id)
-
-    inference_model.merge_and_unload()
-
-    inference_model.print_trainable_parameters()
-
+    #LOADING LORA MODEL INTO ORIGINAL MODEL
+    logger.info(f"Loading LORA model from {lora_path}")
+    lora_config = LoraConfig.from_pretrained(lora_path)
+    inference_model = get_peft_model(predictor.model,lora_config)
+    inference_model.load_state_dict(torch.load(lora_path+"/model.pth"),strict=False)
+    predictor.model = inference_model
 
     # OOD check
     # func(predictor,args,cfg)
 
     # ID CHECK
-    res = Trainer.test(cfg,inference_model)
+    res = Trainer.test(cfg,predictor.model)
     if cfg.TEST.AUG.ENABLED:
-        res.update(Trainer.test_with_TTA(cfg, inference_model))
+        res.update(Trainer.test_with_TTA(cfg, predictor.model))
     if comm.is_main_process():
         verify_results(cfg, res)
     logger.info(f"Results: {res}")
