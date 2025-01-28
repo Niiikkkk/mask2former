@@ -568,15 +568,15 @@ def main(args):
     else:
         print("Saving Model to ", lora_path)
         trainer._trainer.model.save_pretrained(lora_path)
-        print_trainable_params(trainer._trainer.model)
-
         #PROVARE A SALVARE SOLO I PESI TRAINABLE E LOADDARLI
 
         model_weights = {}
         for n, p in trainer._trainer.model.named_parameters():
-            model_weights[n] = trainer._trainer.model.state_dict()[n]
+            if p.requires_grad:
+                model_weights[n] = trainer._trainer.model.state_dict()[n]
         for n, p in trainer._trainer.model.named_buffers():
-            model_weights[n] = p
+            if p.requires_grad:
+                model_weights[n] = p
         torch.save(model_weights,lora_path+"/model.pth")
 
 
