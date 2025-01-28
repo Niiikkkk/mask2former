@@ -55,14 +55,13 @@ def main(args):
         lora_alpha=32,
         # target_modules=r"sem_seg_head\.pixel_decoder\.
         target_modules=#r"sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.self_attn\.\w+"
-                        # r"backbone\.res\d\.\d\.conv\d"
-                        r"sem_seg_head\.predictor\.transformer_ffn_layers\.\d\.linear.+"
+                        r"backbone\.res\d\.\d\.conv\d"
+                        r"|sem_seg_head\.predictor\.transformer_ffn_layers\.\d\.linear.+"
                        r"|sem_seg_head\.predictor\.transformer_cross_attention_layers\.\d\.multihead_attn\.\w+"
                        r"|sem_seg_head\.predictor\.transformer_self_attention_layers\.\d\.self_attn\.\w+",
         lora_dropout=0.1,
         bias="lora_only",
-        modules_to_save=["backbone",
-                         "sem_seg_head.predictor.mask_embed",
+        modules_to_save=["sem_seg_head.predictor.mask_embed",
                          "sem_seg_head.pixel_decoder.input_proj.0",
                          "sem_seg_head.pixel_decoder.input_proj.1",
                          "sem_seg_head.pixel_decoder.input_proj.2",
@@ -94,15 +93,11 @@ def main(args):
         #query_embed, query_feat, class_embed, mask_embed.
     )
 
-    print_total_params(model)
-
     lora_model = get_peft_model(model,deepcopy(lora_cfg))
     lora_model.merge_and_unload()
 
     lora_model.print_trainable_parameters()
     print_total_params(lora_model)
-    print("CIAO")
-    return
 
     optimizer = trainer.build_optimizer(cfg, lora_model)
     trainer._trainer.optimizer = optimizer
