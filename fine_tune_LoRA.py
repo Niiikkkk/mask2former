@@ -576,6 +576,7 @@ def main(args):
         for n, p in trainer._trainer.model.named_parameters():
             if p.requires_grad:
                 model_weights[n] = trainer._trainer.model.state_dict()[n]
+                print(n)
         torch.save(model_weights,lora_path+"/model.pth")
 
 
@@ -592,6 +593,9 @@ def main(args):
     print(torch.allclose(y_peft, y_loaded))
 
     return
+
+    "base_model.model.sem_seg_head.pixel_decoder.input_proj.0.modules_to_save.default.1.weight"
+    "base_model.model.sem_seg_head.pixel_decoder.pixel_decoder.input_proj.0.modules_to_save.default.1.weight"
 
 if __name__ == "__main__":
     args = default_argument_parser().parse_args()
