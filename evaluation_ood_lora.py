@@ -37,14 +37,14 @@ if __name__ == '__main__':
     predictor.model = inference_model
 
     # OOD check
-    func(predictor,args,cfg)
+    # func(predictor,args,cfg)
 
     # ID CHECK
-    # res = Trainer.test(cfg,predictor.model)
-    # if cfg.TEST.AUG.ENABLED:
-    #     res.update(Trainer.test_with_TTA(cfg, predictor.model))
-    # if comm.is_main_process():
-    #     verify_results(cfg, res)
-    # logger.info(f"Results: {res}")
+    res = Trainer.test(cfg,predictor.model)
+    if cfg.TEST.AUG.ENABLED:
+        res.update(Trainer.test_with_TTA(cfg, predictor.model))
+    if comm.is_main_process():
+        verify_results(cfg, res)
+    logger.info(f"Results: {res}")
 
 
