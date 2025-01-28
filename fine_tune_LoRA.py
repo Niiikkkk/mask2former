@@ -517,7 +517,7 @@ def main(args):
         # target_modules=r"sem_seg_head\.pixel_decoder\.
         target_modules=#r"sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.self_attn\.\w+"
                         r"backbone\.res\d\.\d\.conv\d\.weight+"
-                        r"|sem_seg_head\.predictor\.transformer_ffn_layers\.\d\.linear\.+"
+                        r"|sem_seg_head\.predictor\.transformer_ffn_layers\.\d\.linear.+"
                        r"|sem_seg_head\.predictor\.transformer_cross_attention_layers\.\d\.multihead_attn\.\w+"
                        r"|sem_seg_head\.predictor\.transformer_self_attention_layers\.\d\.self_attn\.\w+",
         lora_dropout=0.1,
