@@ -575,6 +575,8 @@ def main(args):
         model_weights = {}
         for n, p in trainer._trainer.model.named_parameters():
             model_weights[n] = trainer._trainer.model.state_dict()[n]
+        for n, p in trainer._trainer.model.named_buffers():
+            model_weights[n] = trainer._trainer.model.state_dict()[n]
         torch.save(model_weights,lora_path+"/model.pth")
 
 
