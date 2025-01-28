@@ -115,10 +115,10 @@ def main(args):
 
     lora_path = os.path.join(cfg.OUTPUT_DIR, "lora_model")
     if isinstance(model, DistributedDataParallel):
-        print("Saving Dist Model to ", lora_path)
+        logger.info("Saving Dist Model to ", lora_path)
         trainer._trainer.model.module.save_pretrained(lora_path)
     else:
-        print("Saving Model to ", lora_path)
+        logger.info("Saving Model to ", lora_path)
         lora_cfg.save_pretrained(lora_path)
 
         model_weights = get_lora_weights(trainer._trainer.model)
