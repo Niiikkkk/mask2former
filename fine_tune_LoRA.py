@@ -3,6 +3,7 @@ import sys
 from copy import deepcopy
 
 from detectron2.engine import default_argument_parser, launch
+from detectron2.utils.logger import setup_logger
 from peft import LoraConfig, get_peft_model, inject_adapter_in_model, LoraModel, PeftModel, cast_mixed_precision_params, \
     get_peft_model_state_dict
 import torch
@@ -93,10 +94,11 @@ def main(args):
         #query_embed, query_feat, class_embed, mask_embed.
     )
 
-    logger...
+    logger = setup_logger(name="info", output=cfg.OUTPUT_DIR)
+    logger.info("Number of trainable parameters before LoRA: " + str(print_total_params(model)))
     lora_model = get_peft_model(model,deepcopy(lora_cfg))
 
-    lora_model.print_trainable_parameters()
+    logger.info(lora_model.print_trainable_parameters())
 
     optimizer = trainer.build_optimizer(cfg, lora_model)
     trainer._trainer.optimizer = optimizer

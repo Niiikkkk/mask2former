@@ -14,8 +14,8 @@ import detectron2.utils.comm as comm
 from detectron2.evaluation import verify_results
 
 if __name__ == '__main__':
-    args = default_argument_parser().parse_args()
-    cfg = setup(args)
+    args = parse_args()
+    cfg = setup_cfgs(args)
 
     logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
     logger.info("Arguments: " + str(args))
@@ -32,19 +32,18 @@ if __name__ == '__main__':
     logger.info(f"Loading LORA model from {lora_path}")
     lora_config = LoraConfig.from_pretrained(lora_path)
     inference_model = get_peft_model(predictor.model,lora_config)
-    inference_model.merge_and_unload()
     inference_model.load_state_dict(torch.load(lora_path+"/model.pth"),strict=False)
     predictor.model = inference_model
 
     # OOD check
-    # func(predictor,args,cfg)
+    func(predictor,args,cfg)
 
     # ID CHECK
-    res = Trainer.test(cfg,predictor.model)
-    if cfg.TEST.AUG.ENABLED:
-        res.update(Trainer.test_with_TTA(cfg, predictor.model))
-    if comm.is_main_process():
-        verify_results(cfg, res)
-    logger.info(f"Results: {res}")
+    # res = Trainer.test(cfg,predictor.model)
+    # if cfg.TEST.AUG.ENABLED:
+    #     res.update(Trainer.test_with_TTA(cfg, predictor.model))
+    # if comm.is_main_process():
+    #     verify_results(cfg, res)
+    # logger.info(f"Results: {res}")
 
 
