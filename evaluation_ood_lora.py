@@ -14,8 +14,8 @@ import detectron2.utils.comm as comm
 from detectron2.evaluation import verify_results
 
 if __name__ == '__main__':
-    args = default_argument_parser().parse_args()
-    cfg = setup(args)
+    args = parse_args()
+    cfg = setup_cfgs(args)
 
     logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
     logger.info("Arguments: " + str(args))
@@ -36,43 +36,14 @@ if __name__ == '__main__':
     predictor.model = inference_model
 
     # OOD check
-    # func(predictor,args,cfg)
+    func(predictor,args,cfg)
 
     # ID CHECK
-    res = Trainer.test(cfg,predictor.model)
-    if cfg.TEST.AUG.ENABLED:
-        res.update(Trainer.test_with_TTA(cfg, predictor.model))
-    if comm.is_main_process():
-        verify_results(cfg, res)
-    logger.info(f"Results: {res}")
-
-    # args = default_argument_parser().parse_args()
-    # cfg = setup(args)
-    # trainer = Trainer(cfg)
-    # trainer.resume_or_load(resume=args.resume)
-    #
-    # stderr_file = os.path.join(cfg.OUTPUT_DIR, 'stderr.txt')
-    # if not os.path.exists(stderr_file):
-    #     open(stderr_file, 'w').close()
-    # sys.stderr = open(stderr_file, 'a')
-    #
-    # model = trainer._trainer.model
-    # model_id = os.path.join(cfg.OUTPUT_DIR, "lora_model")
-    # print("Loading LORA weights...")
-    # lora_model = PeftModel.from_pretrained(model, model_id, is_trainable=True)
-    #
-    # lora_model.print_trainable_parameters()
-    #
-    # print("Building optimizer...")
-    # optimizer = trainer.build_optimizer(cfg, lora_model)
-    # trainer._trainer.optimizer = optimizer
-    # print("Building scheduler...")
-    # trainer.scheduler = trainer.build_lr_scheduler(cfg, optimizer)
-    #
-    # # lora_model.train()
-    # print("Starting training...")
-    # trainer._trainer.model = lora_model
-    #
-    # trainer.train()
+    # res = Trainer.test(cfg,predictor.model)
+    # if cfg.TEST.AUG.ENABLED:
+    #     res.update(Trainer.test_with_TTA(cfg, predictor.model))
+    # if comm.is_main_process():
+    #     verify_results(cfg, res)
+    # logger.info(f"Results: {res}")
 
 
