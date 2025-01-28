@@ -23,7 +23,6 @@ def print_named_modules(model):
 
 def print_total_params(model: torch.nn.Module):
     total_params = sum(p.numel() for n,p in model.named_parameters())
-    print("Total params: ", total_params)
     return total_params
 
 def get_lora_weights(model):
@@ -97,8 +96,10 @@ def main(args):
     logger = setup_logger(name="info", output=cfg.OUTPUT_DIR)
     logger.info("Number of trainable parameters before LoRA: " + str(print_total_params(model)))
     lora_model = get_peft_model(model,deepcopy(lora_cfg))
+    trainable, total = lora_model.get_nb_trainable_parameters()
 
-    logger.info(lora_model.print_trainable_parameters())
+    logger.info("Number of trainable parameters after LoRA: " + str(trainable) + " Total: " + str(total) +
+                f" Percentage:  + {100*trainable/total:4f}")
 
     optimizer = trainer.build_optimizer(cfg, lora_model)
     trainer._trainer.optimizer = optimizer
