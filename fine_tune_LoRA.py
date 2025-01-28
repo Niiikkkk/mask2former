@@ -576,8 +576,7 @@ def main(args):
         for n, p in trainer._trainer.model.named_parameters():
             if p.requires_grad:
                 model_weights[n] = trainer._trainer.model.state_dict()[n]
-        print(model_weights)
-        torch.save(trainer._trainer.model.state_dict(),lora_path+"/model.pth")
+        torch.save(model_weights,lora_path+"/model.pth")
 
 
     #TEST:
