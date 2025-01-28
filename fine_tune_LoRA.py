@@ -30,6 +30,16 @@ def print_named_modules(model):
     for name, module in names:
         print(name, module)
 
+def get_lora_weights(model):
+    model_weights = {}
+    for n, p in model.named_parameters():
+        if p.requires_grad:
+            model_weights[n] = model.state_dict()[n]
+    for n, p in model.named_buffers():
+        model_weights[n] = p
+    return model_weights
+
+
 
 """
 backbone.stem.conv1.weight has 9408 trainable parameters. Dtype = torch.float32
@@ -570,12 +580,7 @@ def main(args):
         trainer._trainer.model.save_pretrained(lora_path)
         #PROVARE A SALVARE SOLO I PESI TRAINABLE E LOADDARLI
 
-        model_weights = {}
-        for n, p in trainer._trainer.model.named_parameters():
-            if p.requires_grad:
-                model_weights[n] = trainer._trainer.model.state_dict()[n]
-        for n, p in trainer._trainer.model.named_buffers():
-            model_weights[n] = p
+        model_weights = get_lora_weights(trainer._trainer.model)
         torch.save(model_weights,lora_path+"/model.pth")
 
 
