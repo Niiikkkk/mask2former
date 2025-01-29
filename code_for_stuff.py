@@ -8,12 +8,13 @@ import tqdm
 from PIL import Image
 from detectron2.config import get_cfg
 from detectron2.data.detection_utils import read_image
-from detectron2.engine import DefaultPredictor, default_argument_parser
+from detectron2.engine import DefaultPredictor, default_argument_parser, default_setup
 from detectron2.projects.deeplab import add_deeplab_config
 import cv2
 import numpy as np
 from detectron2.utils.logger import setup_logger
 from peft import LoraConfig
+import detectron2.utils.comm as comm
 
 from evaluation_on_ood import func
 
@@ -54,6 +55,7 @@ def setup_cfgs(args):
     #     cfg.MODEL.WEIGHTS = args.weights
     cfg.freeze()
     return cfg
+
 
 colors = [
         #[  0,   0,   0],
@@ -250,7 +252,7 @@ def get_lora_config_predictor_only_noFFN_no_OQ():
 
 def id():
     args = default_argument_parser().parse_args()
-    cfg = setup(args)
+    cfg = setup_cfgs(args)
     cfg.defrost()
 
     lrs = [8e-5, 6e-5]
@@ -273,6 +275,7 @@ def id():
     for lr in lrs:
         for max_iter in max_iters:
             for lora in lora_configs:
+
                 cfg.OUTPUT_DIR = cfg.MODEL.WEIGHTS.replace("train","LORA").replace("model_final.pth","")
                 model_name = cfg.OUTPUT_DIR.split("/")[-2]
                 old_name = model_name
@@ -280,10 +283,13 @@ def id():
                 cfg.OUTPUT_DIR = cfg.OUTPUT_DIR.replace(old_name,model_name)
                 cfg.SOLVER.BASE_LR = lr
                 cfg.MAX_ITER = max_iter
+
+                default_setup(cfg, args)
+                # Setup logger for "mask_former" module
+                setup_logger(output=cfg.OUTPUT_DIR, distributed_rank=comm.get_rank(), name="mask2former")
                 logger = setup_logger(name="code", output=cfg.OUTPUT_DIR)
                 logger.info(f"Training with ---> lr: {lr} max_iter: {max_iter} LORA: {lora['name']}")
-                del logger
-                main(args,cfg)
+                main(args,cfg,lora["lora_cfg"])
 
             return
 
