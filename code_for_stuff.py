@@ -248,7 +248,6 @@ def get_lora_config_predictor_only_noFFN_no_OQ():
         # query_embed, query_feat, class_embed, mask
     return lora_cfg
 
-
 def id():
     args = default_argument_parser().parse_args()
     cfg = setup(args)
@@ -284,9 +283,6 @@ def id():
                 logger = setup_logger(name="info", output=cfg.OUTPUT_DIR)
                 logger.info(f"Training with ---> lr: {lr} max_iter: {max_iter} LORA: {lora['name']}")
                 main(args)
-
-
-
 
 if __name__ == "__main__":
     # ood()
