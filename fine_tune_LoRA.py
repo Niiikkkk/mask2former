@@ -34,7 +34,7 @@ def get_lora_weights(model):
         model_weights[n] = p
     return model_weights
 
-def main(cfg):
+def main(args,cfg):
     trainer = Trainer(cfg)
     trainer.resume_or_load(resume=args.resume)
 
@@ -149,6 +149,6 @@ if __name__ == "__main__":
         num_machines=args.num_machines,
         machine_rank=args.machine_rank,
         dist_url=args.dist_url,
-        args=(cfg,),
+        args=(args,cfg,),
     )
 
