@@ -283,6 +283,7 @@ def id():
                 logger = setup_logger(name="info", output=cfg.OUTPUT_DIR)
                 logger.info(f"Training with ---> lr: {lr} max_iter: {max_iter} LORA: {lora['name']}")
                 main(args)
+            return
 
 if __name__ == "__main__":
     # ood()
