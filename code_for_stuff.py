@@ -1,4 +1,5 @@
 import argparse
+import logging
 import os.path
 import sys
 
@@ -284,11 +285,13 @@ def id():
                 cfg.SOLVER.BASE_LR = lr
                 cfg.MAX_ITER = max_iter
 
+                loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
+                for log in loggers:
+                    log.handlers.clear()
                 default_setup(cfg, args)
                 # Setup logger for "mask_former" module
                 setup_logger(output=cfg.OUTPUT_DIR, distributed_rank=comm.get_rank(), name="mask2former")
-                logger = setup_logger(name="code", output=cfg.OUTPUT_DIR)
-                logger.info(f"Training with ---> lr: {lr} max_iter: {max_iter} LORA: {lora['name']}")
+                logging.getLogger("mask2former").handlers.clear()
                 main(args,cfg,lora["lora_cfg"])
 
             return
