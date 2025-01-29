@@ -138,6 +138,7 @@ def main(args,cfg):
     y_loaded = loaded([inputs])[0]["sem_seg"]
     print(torch.allclose(y_peft, y_loaded))
 
+    del logger
     return
 
 if __name__ == "__main__":

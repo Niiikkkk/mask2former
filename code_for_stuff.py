@@ -282,7 +282,7 @@ def id():
                 cfg.MAX_ITER = max_iter
                 logger = setup_logger(name="code", output=cfg.OUTPUT_DIR)
                 logger.info(f"Training with ---> lr: {lr} max_iter: {max_iter} LORA: {lora['name']}")
-                logger.disabled = True
+                del logger
                 main(args,cfg)
 
             return
