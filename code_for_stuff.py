@@ -8,16 +8,19 @@ import tqdm
 from PIL import Image
 from detectron2.config import get_cfg
 from detectron2.data.detection_utils import read_image
-from detectron2.engine import DefaultPredictor
+from detectron2.engine import DefaultPredictor, default_argument_parser
 from detectron2.projects.deeplab import add_deeplab_config
 import cv2
 import numpy as np
 from detectron2.utils.logger import setup_logger
+from peft import LoraConfig
 
 from evaluation_on_ood import func
 
 from component_metric import get_threshold_from_PRC
 from mask2former import add_maskformer2_config
+from train_net import setup, Trainer
+from fine_tune_LoRA import main
 
 
 def parse_args():
@@ -92,7 +95,6 @@ def decode_segmap(temp):
     rgb[:, :, 2] = b / 255.0
     return rgb
 
-
 def print_img(image_to_plot,path_to_save):
     print(image_to_plot.shape, path_to_save)
     sys.stdout.flush()
@@ -121,17 +123,9 @@ def draw_prediction(model, img_paths, img_out, ssl_name):
         save_label_path = os.path.join(img_out, ssl_name, "label_" + str(num) + ".png")
         print_img(label,save_label_path)
 
-
-if __name__ == "__main__":
-
-
+def ood():
     args = parse_args()
     cfg = setup_cfgs(args)
-
-    # model = DefaultPredictor(cfg)
-    # num_train_param = sum(p.numel() for p in model.model.backbone.parameters() if p.requires_grad)
-    # print(num_train_param)
-
 
     logger = setup_logger(name="fvcore")
     cfg.defrost()
@@ -147,38 +141,156 @@ if __name__ == "__main__":
         cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/FT", model, "model_final.pth")
         cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results/", model)
         model = DefaultPredictor(cfg)
-        func(model,args,cfg)
+        func(model, args, cfg)
 
-    # args = parse_args()
-    # cfg = setup_cfgs(args)
-    # logger = setup_logger(name="fvcore", output=cfg.OUTPUT_DIR)
-    # cfg.defrost()
-    # models = [#"simsiam", "bt", "bt-down-freezed", "bt-freezed", "dino",
-    #           #"dino-down-freezed", "dino-freezed", "moco-v1",
-    #           #"moco-v1-freezed_NEW",
-    #           #"moco_v1_downloaded", "moco-v2", "moco-v2-freezed_NEW", "moco_v2_downloaded",
-    #           #"simsiam_freezed",
-    #           #"vicreg", "vicreg_down_freeze", "vicreg-freezed"
-    #           "no_pre"]
-    # for model_name in models:
-    #     cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", model_name, "model_final.pth")
-    #     cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results", model_name)
-    #     model = DefaultPredictor(cfg)
-    #     func(model,args,cfg)
-    # for i in range(30):
-    #     x = np.asarray(Image.open(f"/Users/nicholas.berardo/Desktop/fs_static/labels_masks/{i}.png"))
-    #     print(np.unique(x))
-    # args = parse_args()
-    # cfg = setup_cfgs(args)
-    # predictor = DefaultPredictor(cfg)
-    # # img = read_image("/Users/nicholas.berardo/Desktop/FS_LostFound_full/images/1.png", format="BGR")
-    # for i in range(100):
-    #     gt = np.asarray(Image.open(f"/Users/nicholas.berardo/Desktop/FS_LostFound_full/labels_masks/{i}.png"))
-    #     print(np.unique(gt))
-    # pred = predictor(img)["sem_seg"].unsqueeze(0)
-    #
-    # th = get_threshold_from_PRC(1-torch.max(pred,dim=1)[0], np.expand_dims(gt,0))
-    # print(th)
-    #
-    # plt.imshow(torch.max(pred.squeeze(),dim=0)[1])
-    # plt.show()
+def get_lora_config_backbone_only():
+    lora_cfg = LoraConfig(
+        r=16,
+        lora_alpha=32,
+        target_modules= r"backbone\.res\d\.\d\.conv\d",
+        lora_dropout=0.1,
+        bias="lora_only",
+        modules_to_save=["sem_seg_head.predictor.mask_embed",
+                         "sem_seg_head.pixel_decoder.input_proj.0",
+                         "sem_seg_head.pixel_decoder.input_proj.1",
+                         "sem_seg_head.pixel_decoder.input_proj.2",
+                         "sem_seg_head.predictor.query_embed",
+                         "sem_seg_head.predictor.query_feat",
+                         "sem_seg_head.predictor.class_embed", ],)
+        # query_embed, query_feat, class_embed, mask
+
+    return lora_cfg
+
+def get_lora_config_backbone_only_noOQ():
+    lora_cfg = LoraConfig(
+        r=16,
+        lora_alpha=32,
+        target_modules= r"backbone\.res\d\.\d\.conv\d",
+        lora_dropout=0.1,
+        bias="lora_only",
+        modules_to_save=["sem_seg_head.predictor.mask_embed",
+                         "sem_seg_head.pixel_decoder.input_proj.0",
+                         "sem_seg_head.pixel_decoder.input_proj.1",
+                         "sem_seg_head.pixel_decoder.input_proj.2",],)
+        # query_embed, query_feat, class_embed, mask
+
+    return lora_cfg
+
+def get_lora_config_predictor_only():
+    lora_cfg = LoraConfig(
+        r=16,
+        lora_alpha=32,
+        target_modules= r"sem_seg_head\.predictor\.transformer_cross_attention_layers\.\d\.multihead_attn\.\w+"
+                       r"|sem_seg_head\.predictor\.transformer_self_attention_layers\.\d\.self_attn\.\w+"
+                       r"|sem_seg_head\.predictor\.transformer_ffn_layers\.\d\.linear.+",
+        lora_dropout=0.1,
+        bias="lora_only",
+        modules_to_save=["sem_seg_head.predictor.mask_embed",
+                         "sem_seg_head.pixel_decoder.input_proj.0",
+                         "sem_seg_head.pixel_decoder.input_proj.1",
+                         "sem_seg_head.pixel_decoder.input_proj.2",
+                         "sem_seg_head.predictor.query_embed",
+                         "sem_seg_head.predictor.query_feat",
+                         "sem_seg_head.predictor.class_embed", ],)
+        # query_embed, query_feat, class_embed, mask
+    return lora_cfg
+
+def get_lora_config_predictor_and_backbone():
+    lora_cfg = LoraConfig(
+        r=16,
+        lora_alpha=32,
+        target_modules= r"backbone\.res\d\.\d\.conv\d"
+                       r"|sem_seg_head\.predictor\.transformer_cross_attention_layers\.\d\.multihead_attn\.\w+"
+                       r"|sem_seg_head\.predictor\.transformer_self_attention_layers\.\d\.self_attn\.\w+"
+                       r"|sem_seg_head\.predictor\.transformer_ffn_layers\.\d\.linear.+",
+        lora_dropout=0.1,
+        bias="lora_only",
+        modules_to_save=["sem_seg_head.predictor.mask_embed",
+                         "sem_seg_head.pixel_decoder.input_proj.0",
+                         "sem_seg_head.pixel_decoder.input_proj.1",
+                         "sem_seg_head.pixel_decoder.input_proj.2",
+                         "sem_seg_head.predictor.query_embed",
+                         "sem_seg_head.predictor.query_feat",
+                         "sem_seg_head.predictor.class_embed", ],)
+        # query_embed, query_feat, class_embed, mask
+    return lora_cfg
+
+def get_lora_config_predictor_only_noFFN():
+    lora_cfg = LoraConfig(
+        r=16,
+        lora_alpha=32,
+        target_modules= r"sem_seg_head\.predictor\.transformer_cross_attention_layers\.\d\.multihead_attn\.\w+"
+                       r"|sem_seg_head\.predictor\.transformer_self_attention_layers\.\d\.self_attn\.\w+",
+        lora_dropout=0.1,
+        bias="lora_only",
+        modules_to_save=["sem_seg_head.predictor.mask_embed",
+                         "sem_seg_head.pixel_decoder.input_proj.0",
+                         "sem_seg_head.pixel_decoder.input_proj.1",
+                         "sem_seg_head.pixel_decoder.input_proj.2",
+                         "sem_seg_head.predictor.query_embed",
+                         "sem_seg_head.predictor.query_feat",
+                         "sem_seg_head.predictor.class_embed", ],)
+        # query_embed, query_feat, class_embed, mask
+    return lora_cfg
+
+def get_lora_config_predictor_only_noFFN_no_OQ():
+    lora_cfg = LoraConfig(
+        r=16,
+        lora_alpha=32,
+        target_modules= r"sem_seg_head\.predictor\.transformer_cross_attention_layers\.\d\.multihead_attn\.\w+"
+                       r"|sem_seg_head\.predictor\.transformer_self_attention_layers\.\d\.self_attn\.\w+",
+        lora_dropout=0.1,
+        bias="lora_only",
+        modules_to_save=["sem_seg_head.predictor.mask_embed",
+                         "sem_seg_head.pixel_decoder.input_proj.0",
+                         "sem_seg_head.pixel_decoder.input_proj.1",
+                         "sem_seg_head.pixel_decoder.input_proj.2",],)
+        # query_embed, query_feat, class_embed, mask
+    return lora_cfg
+
+
+def id():
+    args = default_argument_parser().parse_args()
+    cfg = setup(args)
+    cfg.defrost()
+
+    lrs = [8e-5, 6e-5]
+    max_iters = [2000,4000]
+    lora_configs = [
+        {"name" : "backbone_only",
+            "lora_cfg" : get_lora_config_backbone_only()},
+        {"name" : "backbone_only_noOQ",
+            "lora_cfg" : get_lora_config_backbone_only_noOQ()},
+        {"name" : "predictor_only",
+            "lora_cfg" : get_lora_config_predictor_only()},
+        {"name" : "predictor_and_backbone",
+            "lora_cfg" : get_lora_config_predictor_and_backbone()},
+        {"name" : "predictor_only_noFFN",
+            "lora_cfg" : get_lora_config_predictor_only_noFFN()},
+        {"name" : "predictor_only_noFFN_noOQ",
+            "lora_cfg" : get_lora_config_predictor_only_noFFN_no_OQ()}
+    ]
+
+    for lr in lrs:
+        for max_iter in max_iters:
+            for lora in lora_configs:
+                cfg.OUTPUT_DIR = cfg.MODEL.WEIGHTS.replace("train","LORA").replace("model_final.pth","")
+                model_name = cfg.OUTPUT_DIR.split("/")[-2]
+                old_name = model_name
+                model_name = model_name + "_" + str(max_iter) + "_" + str(lr) + "_" + lora["name"]
+                cfg.OUTPUT_DIR = cfg.OUTPUT_DIR.replace(old_name,model_name)
+                cfg.SOLVER.BASE_LR = lr
+                cfg.MAX_ITER = max_iter
+                logger = setup_logger(name="info", output=cfg.OUTPUT_DIR)
+                logger.info(f"Training with ---> lr: {lr} max_iter: {max_iter} LORA: {lora['name']}")
+                main(args)
+
+
+
+
+if __name__ == "__main__":
+    # ood()
+
+    id()
+
+

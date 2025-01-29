@@ -96,6 +96,8 @@ def main(args):
     logger = setup_logger(name="info", output=cfg.OUTPUT_DIR)
     logger.info("Number of trainable parameters before LoRA: " + str(print_total_params(model)))
     lora_model = get_peft_model(model,deepcopy(lora_cfg))
+    print_trainable_params(lora_model)
+    return
     trainable, total = lora_model.get_nb_trainable_parameters()
 
     logger.info("Number of trainable parameters after LoRA: " + str(trainable) + " Total: " + str(total) +
