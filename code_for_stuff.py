@@ -280,7 +280,7 @@ def id():
                 cfg.OUTPUT_DIR = cfg.OUTPUT_DIR.replace(old_name,model_name)
                 cfg.SOLVER.BASE_LR = lr
                 cfg.MAX_ITER = max_iter
-                logger = setup_logger(name="info", output=cfg.OUTPUT_DIR)
+                logger = setup_logger(name="code", output=cfg.OUTPUT_DIR)
                 logger.info(f"Training with ---> lr: {lr} max_iter: {max_iter} LORA: {lora['name']}")
                 main(args)
             return
