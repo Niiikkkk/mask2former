@@ -1,3 +1,4 @@
+import logging
 import os.path
 import sys
 from copy import deepcopy
@@ -12,9 +13,10 @@ from train_net import Trainer, setup
 from safetensors.torch import save_file as safe_save_file
 
 def print_trainable_params(model: torch.nn.Module):
+    logger = logging.getLogger("info")
     for name,p in model.named_parameters():
         if p.requires_grad:
-            print(name + " has " + str(p.numel()) + " trainable parameters. Dtype = " + str(p.type()))
+            logger.info(name + " has " + str(p.numel()) + " trainable parameters. Dtype = " + str(p.type()))
 
 def print_named_modules(model):
     names = [(n, type(m)) for n, m in model.named_modules()]
