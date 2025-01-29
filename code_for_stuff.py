@@ -285,13 +285,15 @@ def id():
                 cfg.SOLVER.BASE_LR = lr
                 cfg.MAX_ITER = max_iter
 
+                #Remove all loggers, that are created previously...
                 loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
                 for log in loggers:
                     log.handlers.clear()
+
+                #Finish the setup of cfgs, loggers...
                 default_setup(cfg, args)
-                # Setup logger for "mask_former" module
                 setup_logger(output=cfg.OUTPUT_DIR, distributed_rank=comm.get_rank(), name="mask2former")
-                logging.getLogger("mask2former").handlers.clear()
+
                 main(args,cfg,lora["lora_cfg"])
 
             return
