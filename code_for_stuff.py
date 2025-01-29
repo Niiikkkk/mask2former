@@ -296,8 +296,6 @@ def id():
 
                 main(args,cfg,lora["lora_cfg"])
 
-            return
-
 if __name__ == "__main__":
     # ood()
 
