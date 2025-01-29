@@ -66,10 +66,10 @@ def main(args,cfg,lora_cfg = None):
             modules_to_save=["sem_seg_head.predictor.mask_embed",
                              "sem_seg_head.pixel_decoder.input_proj.0",
                              "sem_seg_head.pixel_decoder.input_proj.1",
-                             "sem_seg_head.pixel_decoder.input_proj.2",
-                             "sem_seg_head.predictor.query_embed",
-                             "sem_seg_head.predictor.query_feat",
-                             "sem_seg_head.predictor.class_embed",],
+                             "sem_seg_head.pixel_decoder.input_proj.2",],
+                             # "sem_seg_head.predictor.query_embed",
+                             # "sem_seg_head.predictor.query_feat",
+                             # "sem_seg_head.predictor.class_embed",],
         )
 
     logger = setup_logger(name="info", output=cfg.OUTPUT_DIR)
