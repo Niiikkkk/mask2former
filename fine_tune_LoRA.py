@@ -115,7 +115,7 @@ def main(args,cfg,lora_cfg = None):
     inputs = {"image": x, "height": 512, "width": 512}
     y_peft = trainer._trainer.model([inputs])[0]["sem_seg"]
     y_loaded = loaded([inputs])[0]["sem_seg"]
-    print(torch.allclose(y_peft, y_loaded))
+    logger.info(torch.allclose(y_peft, y_loaded))
 
     del logger
     return
