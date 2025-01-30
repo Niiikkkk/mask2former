@@ -283,7 +283,7 @@ def id():
                 model_name = model_name + "_" + str(max_iter) + "_" + str(lr) + "_" + lora["name"]
                 cfg.OUTPUT_DIR = cfg.OUTPUT_DIR.replace(old_name,model_name)
                 cfg.SOLVER.BASE_LR = lr
-                cfg.MAX_ITER = max_iter
+                cfg.SOLVER.MAX_ITER = max_iter
 
                 #Remove all loggers, that are created previously...
                 loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
