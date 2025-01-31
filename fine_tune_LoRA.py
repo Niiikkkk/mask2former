@@ -46,11 +46,13 @@ def main(args,cfg,lora_cfg = None):
     sys.stderr = open(stderr_file, 'a')
 
     model = trainer._trainer.model
-    tmp_model = deepcopy(model)
 
     if isinstance(model, DistributedDataParallel):
         print("Model is DistributedDataParallel")
         model = trainer._trainer.model.module
+
+    tmp_model = deepcopy(model)
+
     if lora_cfg is None:
         lora_cfg = LoraConfig(
             r=16,
@@ -85,7 +87,6 @@ def main(args,cfg,lora_cfg = None):
     trainer._trainer.optimizer = optimizer
     trainer.scheduler = trainer.build_lr_scheduler(cfg,optimizer)
 
-    # lora_model.train()
     if isinstance(model, DistributedDataParallel):
         trainer._trainer.model.module = lora_model
     else:
@@ -96,7 +97,10 @@ def main(args,cfg,lora_cfg = None):
     lora_path = os.path.join(cfg.OUTPUT_DIR, "lora_model")
     if isinstance(model, DistributedDataParallel):
         logger.info("Saving Dist Model to ", lora_path)
-        trainer._trainer.model.module.save_pretrained(lora_path)
+        lora_cfg.save_pretrained(lora_path)
+
+        model_weights = get_lora_weights(trainer._trainer.model.module)
+        torch.save(model_weights, lora_path + "/model.pth")
     else:
         logger.info("Saving Model to ", lora_path)
         lora_cfg.save_pretrained(lora_path)
@@ -106,7 +110,10 @@ def main(args,cfg,lora_cfg = None):
 
 
     #TEST:
-    trainer._trainer.model.eval()
+    if isinstance(model, DistributedDataParallel):
+        trainer._trainer.model.module.eval()
+    else:
+        trainer._trainer.model.eval()
     lora_cfg = LoraConfig.from_pretrained(lora_path)
     loaded = get_peft_model(tmp_model, lora_cfg)
     loaded.load_state_dict(torch.load(lora_path+"/model.pth"),strict=False)
