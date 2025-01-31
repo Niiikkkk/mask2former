@@ -9,7 +9,7 @@ import tqdm
 from PIL import Image
 from detectron2.config import get_cfg
 from detectron2.data.detection_utils import read_image
-from detectron2.engine import DefaultPredictor, default_argument_parser, default_setup
+from detectron2.engine import DefaultPredictor, default_argument_parser, default_setup, launch
 from detectron2.projects.deeplab import add_deeplab_config
 import cv2
 import numpy as np
@@ -251,8 +251,7 @@ def get_lora_config_predictor_only_noFFN_no_OQ():
         # query_embed, query_feat, class_embed, mask
     return lora_cfg
 
-def id():
-    args = default_argument_parser().parse_args()
+def id(args):
     cfg = setup_cfgs(args)
     cfg.defrost()
 
@@ -299,6 +298,15 @@ def id():
 if __name__ == "__main__":
     # ood()
 
-    id()
+    #COMMENT OUT IF RUNNING ID
+    args = default_argument_parser().parse_args()
+    launch(
+        id,
+        args.num_gpus,
+        num_machines=args.num_machines,
+        machine_rank=args.machine_rank,
+        dist_url=args.dist_url,
+        args=(args,),
+    )
 
 
