@@ -279,7 +279,7 @@ def id(args):
                 cfg.OUTPUT_DIR = cfg.MODEL.WEIGHTS.replace("train","LORA").replace("model_final.pth","")
                 model_name = cfg.OUTPUT_DIR.split("/")[-2]
                 old_name = model_name
-                model_name = model_name + "_" + str(max_iter) + "_" + str(lr) + "_" + lora["name"] + "_bs" + str(cfg.SOLVER.IMS_PER_BATCH)
+                model_name = model_name + "_" + str(max_iter) + "_" + str(lr) + "_" + lora["name"]
                 cfg.OUTPUT_DIR = cfg.OUTPUT_DIR.replace(old_name,model_name)
                 cfg.SOLVER.BASE_LR = lr
                 cfg.SOLVER.MAX_ITER = max_iter
