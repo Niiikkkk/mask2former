@@ -6,7 +6,6 @@ import sys
 import matplotlib.pyplot as plt
 import torch
 import tqdm
-from PIL import Image
 from detectron2.config import get_cfg
 from detectron2.data.detection_utils import read_image
 from detectron2.engine import DefaultPredictor, default_argument_parser, default_setup, launch
@@ -19,10 +18,9 @@ import detectron2.utils.comm as comm
 
 from evaluation_on_ood import func
 
-from component_metric import get_threshold_from_PRC
 from mask2former import add_maskformer2_config
-from train_net import setup, Trainer
 from fine_tune_LoRA import main
+from train_net import Trainer
 
 
 def parse_args():
@@ -251,7 +249,7 @@ def get_lora_config_predictor_only_noFFN_no_OQ():
         # query_embed, query_feat, class_embed, mask
     return lora_cfg
 
-def id(args):
+def id_lora(args):
     cfg = setup_cfgs(args)
     cfg.defrost()
 
@@ -295,13 +293,47 @@ def id(args):
 
                 main(args,cfg,lora["lora_cfg"])
 
+def id_lp_ft(args):
+    cfg = setup_cfgs(args)
+    cfg.defrost()
+
+    lrs = [8e-5, 6e-5, 4e-5]
+    max_iters = [2000,4000,6000,8000]
+
+    for lr in lrs:
+        for max_iter in max_iters:
+            cfg.OUTPUT_DIR = cfg.MODEL.WEIGHTS.replace("train","LP_FT").replace("model_final.pth","")
+            model_name = cfg.OUTPUT_DIR.split("/")[-2]
+            old_name = model_name
+            model_name = model_name + "_" + str(max_iter) + "_" + str(lr)
+            cfg.OUTPUT_DIR = cfg.OUTPUT_DIR.replace(old_name,model_name)
+            cfg.SOLVER.BASE_LR = lr
+            cfg.SOLVER.MAX_ITER = max_iter
+
+            #Remove all loggers, that are created previously...
+            loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
+            for log in loggers:
+                log.handlers.clear()
+
+            #Finish the setup of cfgs, loggers...
+            default_setup(cfg, args)
+            setup_logger(output=cfg.OUTPUT_DIR, distributed_rank=comm.get_rank(), name="mask2former")
+
+            #Training
+            sys.stderr = open(os.path.join(cfg.OUTPUT_DIR, "stderr.txt"), "w")
+            trainer = Trainer(cfg)
+            trainer.resume_or_load(resume=args.resume)
+            trainer.train()
+
+
 if __name__ == "__main__":
     # ood()
 
     #COMMENT OUT IF RUNNING ID
     args = default_argument_parser().parse_args()
     launch(
-        id,
+        # id_lora,
+        id_lp_ft,
         args.num_gpus,
         num_machines=args.num_machines,
         machine_rank=args.machine_rank,
