@@ -296,17 +296,17 @@ def id(args):
                 main(args,cfg,lora["lora_cfg"])
 
 if __name__ == "__main__":
-    ood()
+    # ood()
 
     #COMMENT OUT IF RUNNING ID
-    # args = default_argument_parser().parse_args()
-    # launch(
-    #     id,
-    #     args.num_gpus,
-    #     num_machines=args.num_machines,
-    #     machine_rank=args.machine_rank,
-    #     dist_url=args.dist_url,
-    #     args=(args,),
-    # )
+    args = default_argument_parser().parse_args()
+    launch(
+        id,
+        args.num_gpus,
+        num_machines=args.num_machines,
+        machine_rank=args.machine_rank,
+        dist_url=args.dist_url,
+        args=(args,),
+    )
 
 
