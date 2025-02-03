@@ -332,8 +332,8 @@ if __name__ == "__main__":
     #COMMENT OUT IF RUNNING ID
     args = default_argument_parser().parse_args()
     launch(
-        id_lora,
-        # id_lp_ft,
+        # id_lora,
+        id_lp_ft,
         args.num_gpus,
         num_machines=args.num_machines,
         machine_rank=args.machine_rank,
