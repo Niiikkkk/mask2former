@@ -254,7 +254,7 @@ def id_lora(args):
     cfg.defrost()
 
     lrs = [8e-5, 6e-5]
-    max_iters = [2000,4000,8000]
+    max_iters = [2000]
     lora_configs = [
         {"name" : "backbone_only",
             "lora_cfg" : get_lora_config_backbone_only()},
