@@ -131,18 +131,18 @@ def ood():
     logger = setup_logger(name="fvcore")
     cfg.defrost()
     models = [
-        "bt-down-freezed_2000_4e-05",
-        "bt-down-freezed_4000_4e-05",
-        "bt-down-freezed_6000_4e-05",
-        "bt-down-freezed_8000_4e-05",
-        "bt-down-freezed_2000_6e-05",
-        "bt-down-freezed_4000_6e-05",
-        "bt-down-freezed_6000_6e-05",
-        "bt-down-freezed_8000_6e-05",
-        "bt-down-freezed_2000_8e-05",
-        "bt-down-freezed_4000_8e-05",
-        "bt-down-freezed_6000_8e-05",
-        "bt-down-freezed_8000_8e-05",
+        "dino-down-freezed_2000_4e-05",
+        "dino-down-freezed_4000_4e-05",
+        "dino-down-freezed_6000_4e-05",
+        "dino-down-freezed_8000_4e-05",
+        "dino-down-freezed_2000_6e-05",
+        "dino-down-freezed_4000_6e-05",
+        "dino-down-freezed_6000_6e-05",
+        "dino-down-freezed_8000_6e-05",
+        "dino-down-freezed_2000_8e-05",
+        "dino-down-freezed_4000_8e-05",
+        "dino-down-freezed_6000_8e-05",
+        "dino-down-freezed_8000_8e-05",
     ]
 
     for model in models:
