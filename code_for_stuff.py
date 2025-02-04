@@ -155,7 +155,7 @@ def ood():
     ]
 
     for input in inputs:
-        # args.input = input
+        args.input = input
         for model in models:
             print(glob(args.input))
             # cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/LP_FT", model, "model_final.pth")
