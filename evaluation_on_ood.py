@@ -179,6 +179,7 @@ def func(model, args, cfg):
             predictions.append(prediction_)
             gts.append(ood_gts)
 
+    print("Done processing images...")
     print(f"Starting evaluation on {db_name}...")
     # Eval...
     predictions = np.concatenate(predictions, axis=0)
