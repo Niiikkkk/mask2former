@@ -156,11 +156,12 @@ def ood():
     for input in inputs:
         args.input = input
         for model in models:
+            print(args.input)
             # cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/LP_FT", model, "model_final.pth")
             cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/FT", model, "model_final.pth")
             cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results/", model)
             model = DefaultPredictor(cfg)
-            func(model, args, cfg)
+            # func(model, args, cfg)
 
 def get_lora_config_backbone_only():
     lora_cfg = LoraConfig(
