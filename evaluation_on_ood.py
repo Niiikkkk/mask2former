@@ -1,5 +1,6 @@
 import argparse
 import sys
+from glob import glob
 
 import matplotlib.pyplot as plt
 from PIL import Image
@@ -70,9 +71,9 @@ def func(model, args, cfg):
     stderr_file = os.path.join(cfg.OUTPUT_DIR, 'stderr.txt')
     os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
 
-    # if not os.path.exists(stderr_file):
-    #     open(stderr_file, 'w').close()
-    # sys.stderr = open(stderr_file, 'a')
+    if not os.path.exists(stderr_file):
+        open(stderr_file, 'w').close()
+    sys.stderr = open(stderr_file, 'a')
 
     if not os.path.exists(file_path):
         open(file_path, 'w').close()
@@ -80,7 +81,6 @@ def func(model, args, cfg):
 
     db_name = str(args.input.split('/')[4])
     print(db_name)
-    return
     file.write(db_name + "\n")
 
     predictions = []
@@ -92,7 +92,9 @@ def func(model, args, cfg):
 
     print("Processing images...")
 
-    for num, img_path in enumerate(tqdm(args.input)):
+    for num, img_path in enumerate(glob(args.input)):
+        print(img_path)
+        return
         with torch.no_grad():
             img = read_image(img_path, format="BGR")
             # height, width = img.shape[:2]
