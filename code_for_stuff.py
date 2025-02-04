@@ -2,6 +2,7 @@ import argparse
 import logging
 import os.path
 import sys
+from glob import glob
 
 import matplotlib.pyplot as plt
 import torch
@@ -156,7 +157,7 @@ def ood():
     for input in inputs:
         # args.input = input
         for model in models:
-            print(args.input)
+            print(glob(args.input))
             # cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/LP_FT", model, "model_final.pth")
             cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/FT", model, "model_final.pth")
             cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results/", model)
