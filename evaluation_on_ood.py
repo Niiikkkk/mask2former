@@ -79,6 +79,8 @@ def func(model, args, cfg):
     file = open(file_path, 'a')
 
     db_name = str(args.input[0].split('/')[4])
+    print(db_name)
+    return
     file.write(db_name + "\n")
 
     predictions = []
