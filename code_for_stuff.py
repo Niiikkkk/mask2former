@@ -139,26 +139,24 @@ def ood():
     ]
 
     models = [
-        # "vicreg_down_freeze_2000_4e-05",
-        # "vicreg_down_freeze_4000_4e-05",
-        # "vicreg_down_freeze_6000_4e-05",
-        # "vicreg_down_freeze_8000_4e-05",
-        # "vicreg_down_freeze_2000_6e-05",
-        # "vicreg_down_freeze_4000_6e-05",
-        # "vicreg_down_freeze_6000_6e-05",
-        # "vicreg_down_freeze_8000_6e-05",
-        # "vicreg_down_freeze_2000_8e-05",
-        # "vicreg_down_freeze_4000_8e-05",
-        # "vicreg_down_freeze_6000_8e-05",
-        # "vicreg_down_freeze_8000_8e-05",
-        "dino_FT_4k_7e-5_all"
+        "vicreg_down_freeze_2000_4e-05",
+        "vicreg_down_freeze_4000_4e-05",
+        "vicreg_down_freeze_6000_4e-05",
+        "vicreg_down_freeze_8000_4e-05",
+        "vicreg_down_freeze_2000_6e-05",
+        "vicreg_down_freeze_4000_6e-05",
+        "vicreg_down_freeze_6000_6e-05",
+        "vicreg_down_freeze_8000_6e-05",
+        "vicreg_down_freeze_2000_8e-05",
+        "vicreg_down_freeze_4000_8e-05",
+        "vicreg_down_freeze_6000_8e-05",
+        "vicreg_down_freeze_8000_8e-05",
     ]
 
     for input in inputs:
         args.input = input
         for model in models:
-            # cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/LP_FT", model, "model_final.pth")
-            cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/FT", model, "model_final.pth")
+            cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/LP_FT", model, "model_final.pth")
             cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results/", model)
             model = DefaultPredictor(cfg)
             func(model, args, cfg)

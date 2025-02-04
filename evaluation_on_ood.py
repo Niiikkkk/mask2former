@@ -80,7 +80,6 @@ def func(model, args, cfg):
     file = open(file_path, 'a')
 
     db_name = str(args.input.split('/')[4])
-    print(db_name)
     file.write(db_name + "\n")
 
     predictions = []
@@ -93,8 +92,6 @@ def func(model, args, cfg):
     print("Processing images...")
 
     for num, img_path in enumerate(glob(args.input)):
-        print(img_path)
-        return
         with torch.no_grad():
             img = read_image(img_path, format="BGR")
             # height, width = img.shape[:2]
