@@ -139,18 +139,18 @@ def ood():
     ]
 
     models = [
-        "vicreg_down_freeze_2000_4e-05",
-        "vicreg_down_freeze_4000_4e-05",
-        "vicreg_down_freeze_6000_4e-05",
-        "vicreg_down_freeze_8000_4e-05",
-        "vicreg_down_freeze_2000_6e-05",
-        "vicreg_down_freeze_4000_6e-05",
-        "vicreg_down_freeze_6000_6e-05",
-        "vicreg_down_freeze_8000_6e-05",
-        "vicreg_down_freeze_2000_8e-05",
-        "vicreg_down_freeze_4000_8e-05",
-        "vicreg_down_freeze_6000_8e-05",
-        "vicreg_down_freeze_8000_8e-05",
+        "dino-down-freezed_2000_4e-05",
+        "dino-down-freezed_4000_4e-05",
+        "dino-down-freezed_6000_4e-05",
+        "dino-down-freezed_8000_4e-05",
+        "dino-down-freezed_2000_6e-05",
+        "dino-down-freezed_4000_6e-05",
+        "dino-down-freezed_6000_6e-05",
+        "dino-down-freezed_8000_6e-05",
+        "dino-down-freezed_2000_8e-05",
+        "dino-down-freezed_4000_8e-05",
+        "dino-down-freezed_6000_8e-05",
+        "dino-down-freezed_8000_8e-05",
     ]
 
     for input in inputs:
