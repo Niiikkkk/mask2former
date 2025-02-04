@@ -139,18 +139,18 @@ def ood():
     ]
 
     models = [
-        "moco_v1_downloaded_2000_4e-05",
-        "moco_v1_downloaded_4000_4e-05",
-        "moco_v1_downloaded_6000_4e-05",
-        "moco_v1_downloaded_8000_4e-05",
-        "moco_v1_downloaded_2000_6e-05",
-        "moco_v1_downloaded_4000_6e-05",
-        "moco_v1_downloaded_6000_6e-05",
-        "moco_v1_downloaded_8000_6e-05",
-        "moco_v1_downloaded_2000_8e-05",
-        "moco_v1_downloaded_4000_8e-05",
-        "moco_v1_downloaded_6000_8e-05",
-        "moco_v1_downloaded_8000_8e-05",
+        "moco_v2_downloaded_2000_4e-05",
+        "moco_v2_downloaded_4000_4e-05",
+        "moco_v2_downloaded_6000_4e-05",
+        "moco_v2_downloaded_8000_4e-05",
+        "moco_v2_downloaded_2000_6e-05",
+        "moco_v2_downloaded_4000_6e-05",
+        "moco_v2_downloaded_6000_6e-05",
+        "moco_v2_downloaded_8000_6e-05",
+        "moco_v2_downloaded_2000_8e-05",
+        "moco_v2_downloaded_4000_8e-05",
+        "moco_v2_downloaded_6000_8e-05",
+        "moco_v2_downloaded_8000_8e-05",
     ]
 
     for input in inputs:
