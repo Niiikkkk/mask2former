@@ -131,15 +131,22 @@ def ood():
     logger = setup_logger(name="fvcore")
     cfg.defrost()
     models = [
-        "vicreg_FT_3k_8e-5_all",
-        "vicreg_FT_3k_9e-5_all",
-        "vicreg_FT_5k_7e-5_all",
-        "vicreg_FT_5k_9e-5_all",
-        "vicreg_FT_1k_9e-5_all"
+        "moco_v2_downloaded_2000_4e-05",
+        "moco_v2_downloaded_4000_4e-05",
+        "moco_v2_downloaded_6000_4e-05",
+        "moco_v2_downloaded_8000_4e-05",
+        "moco_v2_downloaded_2000_6e-05",
+        "moco_v2_downloaded_4000_6e-05",
+        "moco_v2_downloaded_6000_6e-05",
+        "moco_v2_downloaded_8000_6e-05",
+        "moco_v2_downloaded_2000_8e-05",
+        "moco_v2_downloaded_4000_8e-05",
+        "moco_v2_downloaded_6000_8e-05",
+        "moco_v2_downloaded_8000_8e-05",
     ]
 
     for model in models:
-        cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/FT", model, "model_final.pth")
+        cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/LP_FT", model, "model_final.pth")
         cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results/", model)
         model = DefaultPredictor(cfg)
         func(model, args, cfg)
@@ -327,18 +334,18 @@ def id_lp_ft(args):
 
 
 if __name__ == "__main__":
-    # ood()
+    ood()
 
     #COMMENT OUT IF RUNNING ID
-    args = default_argument_parser().parse_args()
-    launch(
-        # id_lora,
-        id_lp_ft,
-        args.num_gpus,
-        num_machines=args.num_machines,
-        machine_rank=args.machine_rank,
-        dist_url=args.dist_url,
-        args=(args,),
-    )
+    # args = default_argument_parser().parse_args()
+    # launch(
+    #     # id_lora,
+    #     id_lp_ft,
+    #     args.num_gpus,
+    #     num_machines=args.num_machines,
+    #     machine_rank=args.machine_rank,
+    #     dist_url=args.dist_url,
+    #     args=(args,),
+    # )
 
 
