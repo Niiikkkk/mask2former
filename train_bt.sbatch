@@ -8,7 +8,7 @@
 #SBATCH --mail-type=END
 #SBATCH --partition=cuda
 #SBATCH --output=/home/nberardo/mask2former/train_id.log
-#SBATCH --error=/home/nberardo/mask2former/train_ood.err
+#SBATCH --error=/home/nberardo/mask2former/train_id.err
 ###### 1 Load the module
 module load nvidia/cudasdk/11.6
 #module load intel/python/3
