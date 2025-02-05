@@ -242,14 +242,14 @@ def ood_lora():
         for model in models:
             cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", "bt-down-freezed", "model_final.pth")
             cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results_LORA/", model)
-            model = DefaultPredictor(cfg)
+            predictor = DefaultPredictor(cfg)
             lora_path = os.path.join("/home/nberardo/mask2former/output/LORA", model, "lora_model")
             print(f"Loading LORA model from {lora_path}")
             lora_config = LoraConfig.from_pretrained(lora_path)
-            inference_model = get_peft_model(model.model, lora_config)
+            inference_model = get_peft_model(predictor.model, lora_config)
             inference_model.load_state_dict(torch.load(lora_path + "/model.pth"), strict=False)
-            model.model = inference_model
-            func(model, args, cfg)
+            predictor.model = inference_model
+            func(predictor, args, cfg)
 
 def get_lora_config_backbone_only():
     lora_cfg = LoraConfig(
