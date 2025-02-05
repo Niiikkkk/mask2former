@@ -50,5 +50,5 @@ export CUDA_HOME=/home/nberardo/cuda_11.8
 #--input /home/nberardo/Datasets/fs_static/images/*.jpg \
 
 python evaluation_ood_lora.py \
---config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_bt.yaml \
+--config_file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_bt.yaml \
 --input /home/nberardo/Datasets/fs_static/images/*.jpg
