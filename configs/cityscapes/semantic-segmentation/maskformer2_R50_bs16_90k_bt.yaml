@@ -1,6 +1,6 @@
 _BASE_: Base-Cityscapes-SemanticSegmentation.yaml
 #OUTPUT_DIR: "/home/nberardo/mask2former/output/FT/dino_2k_2e-6_all/"
-OUTPUT_DIR: "/home/nberardo/mask2former/output/LORA/simsiam_freezed_8000_6e-05_backbone_only/"
+OUTPUT_DIR: "/home/nberardo/mask2former/output/LORA/dino-down-freezed_8000_6e-05_backbone_only/"
 SOLVER:
   IMS_PER_BATCH: 8
 #  IMS_PER_BATCH: 16
