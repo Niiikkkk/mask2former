@@ -139,25 +139,49 @@ def ood():
     ]
 
     models = [
-        "bt-down-freezed_2000_4e-05",
-        "bt-down-freezed_4000_4e-05",
-        "bt-down-freezed_6000_4e-05",
-        "bt-down-freezed_8000_4e-05",
-        "bt-down-freezed_2000_6e-05",
-        "bt-down-freezed_4000_6e-05",
-        "bt-down-freezed_6000_6e-05",
-        "bt-down-freezed_8000_6e-05",
-        "bt-down-freezed_2000_8e-05",
-        "bt-down-freezed_4000_8e-05",
-        "bt-down-freezed_6000_8e-05",
-        "bt-down-freezed_8000_8e-05",
+        "bt-down-freezed_2000_6e-05_backbone_only",
+        "bt-down-freezed_2000_6e-05_backbone_only_noOQ",
+        "bt-down-freezed_2000_6e-05_predictor_only",
+        "bt-down-freezed_2000_6e-05_predictor_and_backbone",
+        "bt-down-freezed_2000_6e-05_predictor_only_noFFN",
+        "bt-down-freezed_2000_6e-05_predictor_only_noFFN_noOQ",
+        "bt-down-freezed_2000_8e-05_backbone_only",
+        "bt-down-freezed_2000_8e-05_backbone_only_noOQ",
+        "bt-down-freezed_2000_8e-05_predictor_only",
+        "bt-down-freezed_2000_8e-05_predictor_and_backbone",
+        "bt-down-freezed_2000_8e-05_predictor_only_noFFN",
+        "bt-down-freezed_2000_8e-05_predictor_only_noFFN_noOQ",
+        "bt-down-freezed_4000_6e-05_backbone_only",
+        "bt-down-freezed_4000_6e-05_backbone_only_noOQ",
+        "bt-down-freezed_4000_6e-05_predictor_only",
+        "bt-down-freezed_4000_6e-05_predictor_and_backbone",
+        "bt-down-freezed_4000_6e-05_predictor_only_noFFN",
+        "bt-down-freezed_4000_6e-05_predictor_only_noFFN_noOQ",
+        "bt-down-freezed_4000_8e-05_backbone_only",
+        "bt-down-freezed_4000_8e-05_backbone_only_noOQ",
+        "bt-down-freezed_4000_8e-05_predictor_only",
+        "bt-down-freezed_4000_8e-05_predictor_and_backbone",
+        "bt-down-freezed_4000_8e-05_predictor_only_noFFN",
+        "bt-down-freezed_4000_8e-05_predictor_only_noFFN_noOQ",
+        "bt-down-freezed_8000_6e-05_backbone_only",
+        "bt-down-freezed_8000_6e-05_backbone_only_noOQ",
+        "bt-down-freezed_8000_6e-05_predictor_only",
+        "bt-down-freezed_8000_6e-05_predictor_and_backbone",
+        "bt-down-freezed_8000_6e-05_predictor_only_noFFN",
+        "bt-down-freezed_8000_6e-05_predictor_only_noFFN_noOQ",
+        "bt-down-freezed_8000_8e-05_backbone_only",
+        "bt-down-freezed_8000_8e-05_backbone_only_noOQ",
+        "bt-down-freezed_8000_8e-05_predictor_only",
+        "bt-down-freezed_8000_8e-05_predictor_and_backbone",
+        "bt-down-freezed_8000_8e-05_predictor_only_noFFN",
+        "bt-down-freezed_8000_8e-05_predictor_only_noFFN_noOQ",
     ]
 
     for input in inputs:
         args.input = input
         for model in models:
             cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/LP_FT", model, "model_final.pth")
-            cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results/", model)
+            cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results_LORA/", model)
             model = DefaultPredictor(cfg)
             func(model, args, cfg)
 
