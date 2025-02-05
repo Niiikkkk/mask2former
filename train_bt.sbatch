@@ -7,8 +7,8 @@
 #SBATCH --mail-user=s319439@studenti.polito.it
 #SBATCH --mail-type=END
 #SBATCH --partition=cuda
-#SBATCH --output=/home/nberardo/mask2former/train_id.log
-#SBATCH --error=/home/nberardo/mask2former/train_id.err
+#SBATCH --output=/home/nberardo/mask2former/train_ood.log
+#SBATCH --error=/home/nberardo/mask2former/train_ood.err
 ###### 1 Load the module
 module load nvidia/cudasdk/11.6
 #module load intel/python/3
@@ -29,9 +29,9 @@ export CUDA_HOME=/home/nberardo/cuda_11.8
 #  --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_bt.yaml \
 #  --num-gpus 1
 
-#python code_for_stuff.py \
-#  --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml \
-#  --input /home/nberardo/Datasets/RoadAnomaly21/images/*.png \
+python code_for_stuff.py \
+  --config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml \
+  --input /home/nberardo/Datasets/RoadAnomaly21/images/*.png \
 
 #python code_for_stuff.py \
 #--config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml \
@@ -48,7 +48,3 @@ export CUDA_HOME=/home/nberardo/cuda_11.8
 #python code_for_stuff.py \
 #--config-file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_inference.yaml \
 #--input /home/nberardo/Datasets/fs_static/images/*.jpg \
-
-python evaluation_ood_lora.py \
---config_file configs/cityscapes/semantic-segmentation/maskformer2_R50_bs16_90k_bt.yaml \
---input /home/nberardo/Datasets/fs_static/images/*.jpg

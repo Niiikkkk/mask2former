@@ -191,9 +191,9 @@ def ood_lora():
 
     cfg.defrost()
     inputs = [
-        "/home/nberardo/Datasets/RoadAnomaly21/images/*.png",
-        "/home/nberardo/Datasets/RoadObsticle21/images/*.webp",
-        "/home/nberardo/Datasets/RoadAnomaly/images/*.jpg",
+        # "/home/nberardo/Datasets/RoadAnomaly21/images/*.png",
+        # "/home/nberardo/Datasets/RoadObsticle21/images/*.webp",
+        # "/home/nberardo/Datasets/RoadAnomaly/images/*.jpg",
         "/home/nberardo/Datasets/FS_LostFound_full/images/*.png",
         "/home/nberardo/Datasets/fs_static/images/*.jpg"
     ]
