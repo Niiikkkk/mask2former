@@ -14,7 +14,7 @@ from detectron2.projects.deeplab import add_deeplab_config
 import cv2
 import numpy as np
 from detectron2.utils.logger import setup_logger
-from peft import LoraConfig
+from peft import LoraConfig, get_peft_model
 import detectron2.utils.comm as comm
 
 from evaluation_on_ood import func
@@ -183,6 +183,72 @@ def ood():
             cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/LP_FT", model, "model_final.pth")
             cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results_LORA/", model)
             model = DefaultPredictor(cfg)
+            func(model, args, cfg)
+
+def ood_lora():
+    args = parse_args()
+    cfg = setup_cfgs(args)
+
+    cfg.defrost()
+    inputs = [
+        "/home/nberardo/Datasets/RoadAnomaly21/images/*.png",
+        "/home/nberardo/Datasets/RoadObsticle21/images/*.webp",
+        "/home/nberardo/Datasets/RoadAnomaly/images/*.jpg",
+        "/home/nberardo/Datasets/FS_LostFound_full/images/*.png",
+        "/home/nberardo/Datasets/fs_static/images/*.jpg"
+    ]
+
+    models = [
+        "bt-down-freezed_2000_6e-05_backbone_only",
+        "bt-down-freezed_2000_6e-05_backbone_only_noOQ",
+        "bt-down-freezed_2000_6e-05_predictor_only",
+        "bt-down-freezed_2000_6e-05_predictor_and_backbone",
+        "bt-down-freezed_2000_6e-05_predictor_only_noFFN",
+        "bt-down-freezed_2000_6e-05_predictor_only_noFFN_noOQ",
+        "bt-down-freezed_2000_8e-05_backbone_only",
+        "bt-down-freezed_2000_8e-05_backbone_only_noOQ",
+        "bt-down-freezed_2000_8e-05_predictor_only",
+        "bt-down-freezed_2000_8e-05_predictor_and_backbone",
+        "bt-down-freezed_2000_8e-05_predictor_only_noFFN",
+        "bt-down-freezed_2000_8e-05_predictor_only_noFFN_noOQ",
+        "bt-down-freezed_4000_6e-05_backbone_only",
+        "bt-down-freezed_4000_6e-05_backbone_only_noOQ",
+        "bt-down-freezed_4000_6e-05_predictor_only",
+        "bt-down-freezed_4000_6e-05_predictor_and_backbone",
+        "bt-down-freezed_4000_6e-05_predictor_only_noFFN",
+        "bt-down-freezed_4000_6e-05_predictor_only_noFFN_noOQ",
+        "bt-down-freezed_4000_8e-05_backbone_only",
+        "bt-down-freezed_4000_8e-05_backbone_only_noOQ",
+        "bt-down-freezed_4000_8e-05_predictor_only",
+        "bt-down-freezed_4000_8e-05_predictor_and_backbone",
+        "bt-down-freezed_4000_8e-05_predictor_only_noFFN",
+        "bt-down-freezed_4000_8e-05_predictor_only_noFFN_noOQ",
+        "bt-down-freezed_8000_6e-05_backbone_only",
+        "bt-down-freezed_8000_6e-05_backbone_only_noOQ",
+        "bt-down-freezed_8000_6e-05_predictor_only",
+        "bt-down-freezed_8000_6e-05_predictor_and_backbone",
+        "bt-down-freezed_8000_6e-05_predictor_only_noFFN",
+        "bt-down-freezed_8000_6e-05_predictor_only_noFFN_noOQ",
+        "bt-down-freezed_8000_8e-05_backbone_only",
+        "bt-down-freezed_8000_8e-05_backbone_only_noOQ",
+        "bt-down-freezed_8000_8e-05_predictor_only",
+        "bt-down-freezed_8000_8e-05_predictor_and_backbone",
+        "bt-down-freezed_8000_8e-05_predictor_only_noFFN",
+        "bt-down-freezed_8000_8e-05_predictor_only_noFFN_noOQ",
+    ]
+
+    for input in inputs:
+        args.input = input
+        for model in models:
+            cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/LORA", model, "model_final.pth")
+            cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results_LORA/", model)
+            model = DefaultPredictor(cfg)
+            lora_path = os.path.join("/home/nberardo/mask2former/output/LORA", model, "lora_model")
+            print(f"Loading LORA model from {lora_path}")
+            lora_config = LoraConfig.from_pretrained(lora_path)
+            inference_model = get_peft_model(model.model, lora_config)
+            inference_model.load_state_dict(torch.load(lora_path + "/model.pth"), strict=False)
+            model.model = inference_model
             func(model, args, cfg)
 
 def get_lora_config_backbone_only():
