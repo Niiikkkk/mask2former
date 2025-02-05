@@ -240,7 +240,7 @@ def ood_lora():
     for input in inputs:
         args.input = input
         for model in models:
-            cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/LORA", model, "model_final.pth")
+            cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", "bt-down-freezed", "model_final.pth")
             cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results_LORA/", model)
             model = DefaultPredictor(cfg)
             lora_path = os.path.join("/home/nberardo/mask2former/output/LORA", model, "lora_model")
