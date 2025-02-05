@@ -434,8 +434,8 @@ def id_lp_ft(args):
 
 
 if __name__ == "__main__":
-    ood()
-
+    # ood()
+    ood_lora()
     #COMMENT OUT IF RUNNING ID
     # args = default_argument_parser().parse_args()
     # launch(
