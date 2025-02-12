@@ -41,15 +41,19 @@ def main(args,cfg,lora_cfg = None):
     trainer.resume_or_load(resume=args.resume)
 
     stderr_file = os.path.join(cfg.OUTPUT_DIR, 'stderr.txt')
-    if not os.path.exists(stderr_file):
-        open(stderr_file, 'w').close()
-    sys.stderr = open(stderr_file, 'a')
+    # if not os.path.exists(stderr_file):
+    #     open(stderr_file, 'w').close()
+    # sys.stderr = open(stderr_file, 'a')
 
     model = trainer._trainer.model
 
     if isinstance(model, DistributedDataParallel):
         print("Model is DistributedDataParallel")
         model = trainer._trainer.model.module
+
+    print_named_modules(model)
+
+
 
     tmp_model = deepcopy(model)
 
@@ -58,20 +62,25 @@ def main(args,cfg,lora_cfg = None):
             r=16,
             lora_alpha=32,
             # target_modules=r"sem_seg_head\.pixel_decoder\.
-            target_modules=#r"sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.self_attn\.\w+"
-                            # r"backbone\.res\d\.\d\.conv\d"
-                            # r"|sem_seg_head\.predictor\.transformer_ffn_layers\.\d\.linear.+"
-                           r"sem_seg_head\.predictor\.transformer_cross_attention_layers\.\d\.multihead_attn\.\w+"
+            target_modules=
+                            r"sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.self_attn\.\w+"
+                            r"|sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.linear\d"
+                            r"|backbone\.res\d\.\d\.conv\d"
+                            r"|backbone\.stem\.conv\d"
+                            r"|backbone\.res\d\.\d\.shortcut"
+                            r"|sem_seg_head\.predictor\.transformer_ffn_layers\.\d\.linear.+"
+                           r"|sem_seg_head\.predictor\.transformer_cross_attention_layers\.\d\.multihead_attn\.\w+"
                            r"|sem_seg_head\.predictor\.transformer_self_attention_layers\.\d\.self_attn\.\w+",
             lora_dropout=0.1,
             bias="lora_only",
             modules_to_save=["sem_seg_head.predictor.mask_embed",
                              "sem_seg_head.pixel_decoder.input_proj.0",
                              "sem_seg_head.pixel_decoder.input_proj.1",
-                             "sem_seg_head.pixel_decoder.input_proj.2",],
-                             # "sem_seg_head.predictor.query_embed",
-                             # "sem_seg_head.predictor.query_feat",
-                             # "sem_seg_head.predictor.class_embed",],
+                             "sem_seg_head.pixel_decoder.input_proj.2",
+                             "sem_seg_head.predictor.query_embed",
+                             "sem_seg_head.predictor.query_feat",
+                             "sem_seg_head.predictor.class_embed",
+                             "sem_seg_head.predictor.level_embed"],
         )
 
     logger = setup_logger(name="info", output=cfg.OUTPUT_DIR)
