@@ -14,7 +14,7 @@ MODEL:
   FREEZE_TRANSFORMER_DECODER_EXCEPT_MLP: False
   BACKBONE:
     FREEZE_AT: 0
-  WEIGHTS: "/home/nberardo/mask2former/output/train/moco_v2_downloaded/model_final.pth"
+  WEIGHTS: "/home/nberardo/mask2former/output/train/simsiam_freezed/model_final.pth"
   META_ARCHITECTURE: "MaskFormer"
   RESNETS:
 
