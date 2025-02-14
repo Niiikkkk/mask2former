@@ -22,7 +22,7 @@ import detectron2.utils.comm as comm
 from evaluation_on_ood import func
 
 from mask2former import add_maskformer2_config
-from fine_tune_LoRA import main, print_trainable_params
+from fine_tune_LoRA import main, print_trainable_params, print_named_modules
 from train_net import Trainer
 
 
@@ -919,8 +919,7 @@ def id_lora_FT(args):
                 lora_config = LoraConfig.from_pretrained(lora_path)
                 new_model = get_peft_model(trainer._trainer.model, lora_config)
                 new_model.load_state_dict(torch.load(lora_path + "/model.pth"), strict=False)
-                new_model.merge_and_unload()
-                print_trainable_params(new_model)
+                print_named_modules(new_model)
                 return
                 trainer._trainer.model = new_model
                 trainer.train()
