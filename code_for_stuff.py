@@ -919,6 +919,7 @@ def id_lora_FT(args):
                 lora_config = LoraConfig.from_pretrained(lora_path)
                 new_model = get_peft_model(trainer._trainer.model, lora_config)
                 new_model.load_state_dict(torch.load(lora_path + "/model.pth"), strict=False)
+                new_model.merge_and_unload()
                 print_trainable_params(new_model)
                 return
                 trainer._trainer.model = new_model
