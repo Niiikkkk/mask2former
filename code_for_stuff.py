@@ -915,7 +915,6 @@ def id_lora_FT(args):
 
                 trainer = Trainer(cfg)
                 trainer.resume_or_load(resume=args.resume)
-                print_trainable_params(trainer._trainer.model)
                 lora_path = os.path.join("/home/nberardo/mask2former/output/LORA", model, "lora_model")
                 print(f"Loading LORA model from {lora_path}")
                 lora_config = LoraConfig.from_pretrained(lora_path)
@@ -925,8 +924,6 @@ def id_lora_FT(args):
 
                 for _, param in new_model.named_parameters():
                     param.requires_grad = True
-
-                print_trainable_params(new_model)
 
                 optimizer = trainer.build_optimizer(cfg, new_model)
                 trainer._trainer.optimizer = optimizer
