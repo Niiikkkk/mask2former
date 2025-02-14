@@ -930,8 +930,6 @@ def id_lora_FT(args):
                 trainer.scheduler = trainer.build_lr_scheduler(cfg, optimizer)
 
                 trainer._trainer.model = new_model
-                trainer.test(cfg, trainer._trainer.model)
-                return
                 trainer.train()
 
 if __name__ == "__main__":
