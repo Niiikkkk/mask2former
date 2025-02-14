@@ -914,6 +914,7 @@ def id_lora_FT(args):
 
 
                 trainer = Trainer(cfg)
+                trainer.resume_or_load(resume=args.resume)
                 lora_path = os.path.join("/home/nberardo/mask2former/output/LORA", model, "lora_model")
                 print(f"Loading LORA model from {lora_path}")
                 lora_config = LoraConfig.from_pretrained(lora_path)
