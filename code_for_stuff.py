@@ -22,7 +22,7 @@ import detectron2.utils.comm as comm
 from evaluation_on_ood import func
 
 from mask2former import add_maskformer2_config
-from fine_tune_LoRA import main
+from fine_tune_LoRA import main, print_trainable_params
 from train_net import Trainer
 
 
@@ -841,6 +841,89 @@ def test():
     for metric, avg_value in zip(metrics, average_values):
         print(f"{metric}: {avg_value:.2f}")
 
+def id_lora_FT(args):
+    cfg = setup_cfgs(args)
+    cfg.defrost()
+
+    lrs = [8e-5, 6e-5]
+    max_iters = [2000, 4000]
+
+    models = [
+        "moco_v2_downloaded_2000_6e-05_all",
+        "moco_v2_downloaded_2000_6e-05_backbone_only",
+        "moco_v2_downloaded_2000_6e-05_backbone_only_noOQ",
+        "moco_v2_downloaded_2000_6e-05_predictor_and_backbone",
+        "moco_v2_downloaded_2000_6e-05_predictor_only",
+        "moco_v2_downloaded_2000_6e-05_predictor_only_noFFN",
+        "moco_v2_downloaded_2000_6e-05_predictor_only_noFFN_noOQ",
+        "moco_v2_downloaded_2000_8e-05_all",
+        "moco_v2_downloaded_2000_8e-05_backbone_only",
+        "moco_v2_downloaded_2000_8e-05_backbone_only_noOQ",
+        "moco_v2_downloaded_2000_8e-05_predictor_and_backbone",
+        "moco_v2_downloaded_2000_8e-05_predictor_only",
+        "moco_v2_downloaded_2000_8e-05_predictor_only_noFFN",
+        "moco_v2_downloaded_2000_8e-05_predictor_only_noFFN_noOQ",
+        "moco_v2_downloaded_4000_6e-05_all",
+        "moco_v2_downloaded_4000_6e-05_backbone_only",
+        "moco_v2_downloaded_4000_6e-05_backbone_only_noOQ",
+        "moco_v2_downloaded_4000_6e-05_predictor_and_backbone",
+        "moco_v2_downloaded_4000_6e-05_predictor_only",
+        "moco_v2_downloaded_4000_6e-05_predictor_only_noFFN",
+        "moco_v2_downloaded_4000_6e-05_predictor_only_noFFN_noOQ",
+        "moco_v2_downloaded_4000_8e-05_all",
+        "moco_v2_downloaded_4000_8e-05_backbone_only",
+        "moco_v2_downloaded_4000_8e-05_backbone_only_noOQ",
+        "moco_v2_downloaded_4000_8e-05_predictor_and_backbone",
+        "moco_v2_downloaded_4000_8e-05_predictor_only",
+        "moco_v2_downloaded_4000_8e-05_predictor_only_noFFN",
+        "moco_v2_downloaded_4000_8e-05_predictor_only_noFFN_noOQ",
+        "moco_v2_downloaded_8000_6e-05_all",
+        "moco_v2_downloaded_8000_6e-05_backbone_only",
+        "moco_v2_downloaded_8000_6e-05_backbone_only_noOQ",
+        "moco_v2_downloaded_8000_6e-05_predictor_and_backbone",
+        "moco_v2_downloaded_8000_6e-05_predictor_only",
+        "moco_v2_downloaded_8000_6e-05_predictor_only_noFFN",
+        "moco_v2_downloaded_8000_6e-05_predictor_only_noFFN_noOQ",
+        "moco_v2_downloaded_8000_8e-05_all",
+        "moco_v2_downloaded_8000_8e-05_backbone_only",
+        "moco_v2_downloaded_8000_8e-05_backbone_only_noOQ",
+        "moco_v2_downloaded_8000_8e-05_predictor_and_backbone",
+        "moco_v2_downloaded_8000_8e-05_predictor_only",
+        "moco_v2_downloaded_8000_8e-05_predictor_only_noFFN",
+        "moco_v2_downloaded_8000_8e-05_predictor_only_noFFN_noOQ",
+    ]
+
+    for lr in [8e-5]:
+        for iter in [2000]:
+            for model in models:
+                cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", "moco_v2_downloaded",
+                                                 "model_final.pth")
+                model_name = model + "_" + str(iter) + "_" + str(lr)
+                cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/output/LORA_FT", model_name)
+                cfg.SOLVER.BASE_LR = lr
+                cfg.SOLVER.MAX_ITER = iter
+
+                loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
+                for log in loggers:
+                    log.handlers.clear()
+
+                default_setup(cfg, args)
+                setup_logger(output=cfg.OUTPUT_DIR, distributed_rank=comm.get_rank(), name="mask2former")
+
+                sys.stderr = open(os.path.join(cfg.OUTPUT_DIR, "stderr.txt"), "w")
+
+
+                trainer = Trainer(cfg)
+                lora_path = os.path.join("/home/nberardo/mask2former/output/LORA", model, "lora_model")
+                print(f"Loading LORA model from {lora_path}")
+                lora_config = LoraConfig.from_pretrained(lora_path)
+                new_model = get_peft_model(trainer._trainer.model, lora_config)
+                new_model.load_state_dict(torch.load(lora_path + "/model.pth"), strict=False)
+                print_trainable_params(new_model)
+                return
+                trainer._trainer.model = new_model
+                trainer.train()
+
 if __name__ == "__main__":
     # test()
     # ood()
@@ -848,8 +931,9 @@ if __name__ == "__main__":
     #COMMENT OUT IF RUNNING ID
     args = default_argument_parser().parse_args()
     launch(
-        id_lora,
+        # id_lora,
         # id_lp_ft,
+        id_lora_FT,
         args.num_gpus,
         num_machines=args.num_machines,
         machine_rank=args.machine_rank,
