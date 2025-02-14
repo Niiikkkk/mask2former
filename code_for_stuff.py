@@ -893,8 +893,8 @@ def id_lora_FT(args):
         "moco_v2_downloaded_8000_8e-05_predictor_only_noFFN_noOQ",
     ]
 
-    for lr in [8e-5]:
-        for iter in [2000]:
+    for lr in lrs:
+        for iter in max_iters:
             for model in models:
                 cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", "moco_v2_downloaded",
                                                  "model_final.pth")
@@ -910,7 +910,7 @@ def id_lora_FT(args):
                 default_setup(cfg, args)
                 setup_logger(output=cfg.OUTPUT_DIR, distributed_rank=comm.get_rank(), name="mask2former")
 
-                # sys.stderr = open(os.path.join(cfg.OUTPUT_DIR, "stderr.txt"), "w")
+                sys.stderr = open(os.path.join(cfg.OUTPUT_DIR, "stderr.txt"), "w")
 
 
                 trainer = Trainer(cfg)
