@@ -922,7 +922,7 @@ def id_lora_FT(args):
                 new_model.merge_and_unload()
                 print_named_modules(new_model)
                 trainer._trainer.model = new_model
-                trainer.test()
+                trainer.test(cfg, trainer._trainer.model)
                 return
                 trainer.train()
 
