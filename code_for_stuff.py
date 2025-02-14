@@ -910,7 +910,7 @@ def id_lora_FT(args):
                 default_setup(cfg, args)
                 setup_logger(output=cfg.OUTPUT_DIR, distributed_rank=comm.get_rank(), name="mask2former")
 
-                sys.stderr = open(os.path.join(cfg.OUTPUT_DIR, "stderr.txt"), "w")
+                # sys.stderr = open(os.path.join(cfg.OUTPUT_DIR, "stderr.txt"), "w")
 
 
                 trainer = Trainer(cfg)
