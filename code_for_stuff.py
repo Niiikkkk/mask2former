@@ -921,8 +921,9 @@ def id_lora_FT(args):
                 new_model.load_state_dict(torch.load(lora_path + "/model.pth"), strict=False)
                 new_model.merge_and_unload()
                 print_named_modules(new_model)
-                return
                 trainer._trainer.model = new_model
+                trainer.test()
+                return
                 trainer.train()
 
 if __name__ == "__main__":
