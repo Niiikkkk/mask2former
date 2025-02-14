@@ -921,9 +921,12 @@ def id_lora_FT(args):
                 new_model = get_peft_model(trainer._trainer.model, lora_config)
                 new_model.load_state_dict(torch.load(lora_path + "/model.pth"), strict=False)
                 new_model.merge_and_unload(safe_merge=True)
+
+                for _, param in new_model.named_parameters():
+                    param.requires_grad = True
                 print_trainable_params(new_model)
 
-                optimizer = trainer.build_optimizer(cfg, lora_model)
+                optimizer = trainer.build_optimizer(cfg, new_model)
                 trainer._trainer.optimizer = optimizer
                 trainer.scheduler = trainer.build_lr_scheduler(cfg, optimizer)
 
