@@ -924,6 +924,10 @@ def id_lora_FT(args):
 
                 for _, param in new_model.named_parameters():
                     param.requires_grad = True
+
+                for _,param in new_model.named_buffers():
+                    param.requires_grad = True
+
                 print_trainable_params(new_model)
 
                 optimizer = trainer.build_optimizer(cfg, new_model)
