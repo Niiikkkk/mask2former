@@ -58,7 +58,6 @@ def setup_cfgs(args):
     cfg.freeze()
     return cfg
 
-
 colors = [
         #[  0,   0,   0],
         [128, 64, 128],
@@ -166,42 +165,12 @@ def ood_lora():
     ]
 
     models = [
-        "vicreg_down_freeze_2000_6e-05_backbone_only",
-        "vicreg_down_freeze_2000_6e-05_backbone_only_noOQ",
-        "vicreg_down_freeze_2000_6e-05_predictor_only",
-        "vicreg_down_freeze_2000_6e-05_predictor_and_backbone",
-        "vicreg_down_freeze_2000_6e-05_predictor_only_noFFN",
-        "vicreg_down_freeze_2000_6e-05_predictor_only_noFFN_noOQ",
-        "vicreg_down_freeze_2000_8e-05_backbone_only",
-        "vicreg_down_freeze_2000_8e-05_backbone_only_noOQ",
-        "vicreg_down_freeze_2000_8e-05_predictor_only",
-        "vicreg_down_freeze_2000_8e-05_predictor_and_backbone",
-        "vicreg_down_freeze_2000_8e-05_predictor_only_noFFN",
-        "vicreg_down_freeze_2000_8e-05_predictor_only_noFFN_noOQ",
-        "vicreg_down_freeze_4000_6e-05_backbone_only",
-        "vicreg_down_freeze_4000_6e-05_backbone_only_noOQ",
-        "vicreg_down_freeze_4000_6e-05_predictor_only",
-        "vicreg_down_freeze_4000_6e-05_predictor_and_backbone",
-        "vicreg_down_freeze_4000_6e-05_predictor_only_noFFN",
-        "vicreg_down_freeze_4000_6e-05_predictor_only_noFFN_noOQ",
-        "vicreg_down_freeze_4000_8e-05_backbone_only",
-        "vicreg_down_freeze_4000_8e-05_backbone_only_noOQ",
-        "vicreg_down_freeze_4000_8e-05_predictor_only",
-        "vicreg_down_freeze_4000_8e-05_predictor_and_backbone",
-        "vicreg_down_freeze_4000_8e-05_predictor_only_noFFN",
-        "vicreg_down_freeze_4000_8e-05_predictor_only_noFFN_noOQ",
-        "vicreg_down_freeze_8000_6e-05_backbone_only",
-        "vicreg_down_freeze_8000_6e-05_backbone_only_noOQ",
-        "vicreg_down_freeze_8000_6e-05_predictor_only",
-        "vicreg_down_freeze_8000_6e-05_predictor_and_backbone",
-        "vicreg_down_freeze_8000_6e-05_predictor_only_noFFN",
-        "vicreg_down_freeze_8000_6e-05_predictor_only_noFFN_noOQ",
-        "vicreg_down_freeze_8000_8e-05_backbone_only",
-        "vicreg_down_freeze_8000_8e-05_backbone_only_noOQ",
-        "vicreg_down_freeze_8000_8e-05_predictor_only",
-        "vicreg_down_freeze_8000_8e-05_predictor_and_backbone",
-        "vicreg_down_freeze_8000_8e-05_predictor_only_noFFN",
-        "vicreg_down_freeze_8000_8e-05_predictor_only_noFFN_noOQ",
+        "vicreg_down_freeze_2000_6e-05_all",
+        "vicreg_down_freeze_2000_8e-05_all",
+        "vicreg_down_freeze_4000_6e-05_all",
+        "vicreg_down_freeze_4000_8e-05_all",
+        "vicreg_down_freeze_8000_6e-05_all",
+        "vicreg_down_freeze_8000_8e-05_all",
     ]
 
     for input in inputs:
@@ -935,18 +904,18 @@ def id_lora_FT(args):
 if __name__ == "__main__":
     # test()
     # ood()
-    # ood_lora()
+    ood_lora()
     #COMMENT OUT IF RUNNING ID
-    args = default_argument_parser().parse_args()
-    launch(
-        # id_lora,
-        # id_lp_ft,
-        id_lora_FT,
-        args.num_gpus,
-        num_machines=args.num_machines,
-        machine_rank=args.machine_rank,
-        dist_url=args.dist_url,
-        args=(args,),
-    )
+    # args = default_argument_parser().parse_args()
+    # launch(
+    #     # id_lora,
+    #     # id_lp_ft,
+    #     id_lora_FT,
+    #     args.num_gpus,
+    #     num_machines=args.num_machines,
+    #     machine_rank=args.machine_rank,
+    #     dist_url=args.dist_url,
+    #     args=(args,),
+    # )
 
 
