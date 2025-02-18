@@ -165,18 +165,18 @@ def ood_lora():
     ]
 
     models = [
-        "dino-down-freezed_2000_6e-05_all",
-        "dino-down-freezed_2000_8e-05_all",
-        "dino-down-freezed_4000_6e-05_all",
-        "dino-down-freezed_4000_8e-05_all",
-        "dino-down-freezed_8000_6e-05_all",
-        "dino-down-freezed_8000_8e-05_all",
+        "bt-down-freezed_2000_6e-05_all",
+        "bt-down-freezed_2000_8e-05_all",
+        "bt-down-freezed_4000_6e-05_all",
+        "bt-down-freezed_4000_8e-05_all",
+        "bt-down-freezed_8000_6e-05_all",
+        "bt-down-freezed_8000_8e-05_all",
     ]
 
     for input in inputs:
         args.input = input
         for model in models:
-            cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", "dino-down-freezed", "model_final.pth")
+            cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", "bt-down-freezed", "model_final.pth")
             cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results_LORA/", model)
             predictor = DefaultPredictor(cfg)
             lora_path = os.path.join("/home/nberardo/mask2former/output/LORA", model, "lora_model")
