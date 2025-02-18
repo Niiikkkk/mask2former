@@ -165,18 +165,18 @@ def ood_lora():
     ]
 
     models = [
-        "moco_v2_downloaded_2000_6e-05_all",
-        "moco_v2_downloaded_2000_8e-05_all",
-        "moco_v2_downloaded_4000_6e-05_all",
-        "moco_v2_downloaded_4000_8e-05_all",
-        "moco_v2_downloaded_8000_6e-05_all",
-        "moco_v2_downloaded_8000_8e-05_all",
+        "simsiam_freezed_2000_6e-05_all",
+        "simsiam_freezed_2000_8e-05_all",
+        "simsiam_freezed_4000_6e-05_all",
+        "simsiam_freezed_4000_8e-05_all",
+        "simsiam_freezed_8000_6e-05_all",
+        "simsiam_freezed_8000_8e-05_all",
     ]
 
     for input in inputs:
         args.input = input
         for model in models:
-            cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", "moco_v2_downloaded", "model_final.pth")
+            cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", "simsiam_freezed", "model_final.pth")
             cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results_LORA/", model)
             predictor = DefaultPredictor(cfg)
             lora_path = os.path.join("/home/nberardo/mask2former/output/LORA", model, "lora_model")
