@@ -189,8 +189,8 @@ def ood_lora():
 
 def get_lora_config_backbone_only():
     lora_cfg = LoraConfig(
-        r=16,
-        lora_alpha=32,
+        r=32,
+        lora_alpha=64,
         target_modules= r"backbone\.res\d\.\d\.conv\d",
         lora_dropout=0.1,
         bias="lora_only",
@@ -207,8 +207,8 @@ def get_lora_config_backbone_only():
 
 def get_lora_config_backbone_only_noOQ():
     lora_cfg = LoraConfig(
-        r=16,
-        lora_alpha=32,
+        r=32,
+        lora_alpha=64,
         target_modules= r"backbone\.res\d\.\d\.conv\d",
         lora_dropout=0.1,
         bias="lora_only",
@@ -222,8 +222,8 @@ def get_lora_config_backbone_only_noOQ():
 
 def get_lora_config_predictor_only():
     lora_cfg = LoraConfig(
-        r=16,
-        lora_alpha=32,
+        r=32,
+        lora_alpha=64,
         target_modules= r"sem_seg_head\.predictor\.transformer_cross_attention_layers\.\d\.multihead_attn\.\w+"
                        r"|sem_seg_head\.predictor\.transformer_self_attention_layers\.\d\.self_attn\.\w+"
                        r"|sem_seg_head\.predictor\.transformer_ffn_layers\.\d\.linear.+",
@@ -241,8 +241,8 @@ def get_lora_config_predictor_only():
 
 def get_lora_config_predictor_and_backbone():
     lora_cfg = LoraConfig(
-        r=16,
-        lora_alpha=32,
+        r=32,
+        lora_alpha=64,
         target_modules= r"backbone\.res\d\.\d\.conv\d"
                        r"|sem_seg_head\.predictor\.transformer_cross_attention_layers\.\d\.multihead_attn\.\w+"
                        r"|sem_seg_head\.predictor\.transformer_self_attention_layers\.\d\.self_attn\.\w+"
@@ -261,8 +261,8 @@ def get_lora_config_predictor_and_backbone():
 
 def get_lora_config_predictor_only_noFFN():
     lora_cfg = LoraConfig(
-        r=16,
-        lora_alpha=32,
+        r=32,
+        lora_alpha=64,
         target_modules= r"sem_seg_head\.predictor\.transformer_cross_attention_layers\.\d\.multihead_attn\.\w+"
                        r"|sem_seg_head\.predictor\.transformer_self_attention_layers\.\d\.self_attn\.\w+",
         lora_dropout=0.1,
@@ -279,8 +279,8 @@ def get_lora_config_predictor_only_noFFN():
 
 def get_lora_config_predictor_only_noFFN_no_OQ():
     lora_cfg = LoraConfig(
-        r=16,
-        lora_alpha=32,
+        r=32,
+        lora_alpha=64,
         target_modules= r"sem_seg_head\.predictor\.transformer_cross_attention_layers\.\d\.multihead_attn\.\w+"
                        r"|sem_seg_head\.predictor\.transformer_self_attention_layers\.\d\.self_attn\.\w+",
         lora_dropout=0.1,
@@ -294,8 +294,8 @@ def get_lora_config_predictor_only_noFFN_no_OQ():
 
 def get_lora_config_all():
     lora_cfg = LoraConfig(
-        r=16,
-        lora_alpha=32,
+        r=32,
+        lora_alpha=64,
         # target_modules=r"sem_seg_head\.pixel_decoder\.
         target_modules=
         r"sem_seg_head\.pixel_decoder\.transformer\.encoder\.layers\.\d\.self_attn\.\w+"
@@ -328,25 +328,25 @@ def id_lora(args):
     lora_configs = [
         {"name" : "all",
             "lora_cfg" : get_lora_config_all()},
-        # {"name" : "backbone_only",
-        #     "lora_cfg" : get_lora_config_backbone_only()},
-        # {"name" : "backbone_only_noOQ",
-        #     "lora_cfg" : get_lora_config_backbone_only_noOQ()},
-        # {"name" : "predictor_only",
-        #     "lora_cfg" : get_lora_config_predictor_only()},
-        # {"name" : "predictor_and_backbone",
-        #     "lora_cfg" : get_lora_config_predictor_and_backbone()},
-        # {"name" : "predictor_only_noFFN",
-        #     "lora_cfg" : get_lora_config_predictor_only_noFFN()},
-        # {"name" : "predictor_only_noFFN_noOQ",
-        #     "lora_cfg" : get_lora_config_predictor_only_noFFN_no_OQ()}
+        {"name" : "backbone_only",
+            "lora_cfg" : get_lora_config_backbone_only()},
+        {"name" : "backbone_only_noOQ",
+            "lora_cfg" : get_lora_config_backbone_only_noOQ()},
+        {"name" : "predictor_only",
+            "lora_cfg" : get_lora_config_predictor_only()},
+        {"name" : "predictor_and_backbone",
+            "lora_cfg" : get_lora_config_predictor_and_backbone()},
+        {"name" : "predictor_only_noFFN",
+            "lora_cfg" : get_lora_config_predictor_only_noFFN()},
+        {"name" : "predictor_only_noFFN_noOQ",
+            "lora_cfg" : get_lora_config_predictor_only_noFFN_no_OQ()}
     ]
 
     for lr in lrs:
         for max_iter in max_iters:
             for lora in lora_configs:
 
-                cfg.OUTPUT_DIR = cfg.MODEL.WEIGHTS.replace("train","LORA").replace("model_final.pth","")
+                cfg.OUTPUT_DIR = cfg.MODEL.WEIGHTS.replace("train","LORA_R32").replace("model_final.pth","")
                 model_name = cfg.OUTPUT_DIR.split("/")[-2]
                 old_name = model_name
                 model_name = model_name + "_" + str(max_iter) + "_" + str(lr) + "_" + lora["name"]
@@ -904,18 +904,18 @@ def id_lora_FT(args):
 if __name__ == "__main__":
     # test()
     # ood()
-    ood_lora()
-    #COMMENT OUT IF RUNNING ID
-    # args = default_argument_parser().parse_args()
-    # launch(
-    #     # id_lora,
-    #     # id_lp_ft,
-    #     id_lora_FT,
-    #     args.num_gpus,
-    #     num_machines=args.num_machines,
-    #     machine_rank=args.machine_rank,
-    #     dist_url=args.dist_url,
-    #     args=(args,),
-    # )
+    # ood_lora()
+    # COMMENT OUT IF RUNNING ID
+    args = default_argument_parser().parse_args()
+    launch(
+        # id_lora,
+        # id_lp_ft,
+        id_lora_FT,
+        args.num_gpus,
+        num_machines=args.num_machines,
+        machine_rank=args.machine_rank,
+        dist_url=args.dist_url,
+        args=(args,),
+    )
 
 
