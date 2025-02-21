@@ -165,21 +165,57 @@ def ood_lora():
     ]
 
     models = [
-        "simsiam_freezed_2000_6e-05_all",
-        "simsiam_freezed_2000_8e-05_all",
-        "simsiam_freezed_4000_6e-05_all",
-        "simsiam_freezed_4000_8e-05_all",
-        "simsiam_freezed_8000_6e-05_all",
-        "simsiam_freezed_8000_8e-05_all",
+        "bt-down-freezed_2000_6e-05_all",
+        "bt-down-freezed_2000_6e-05_backbone_only",
+        "bt-down-freezed_2000_6e-05_backbone_only_noOQ",
+        "bt-down-freezed_2000_6e-05_predictor_only",
+        "bt-down-freezed_2000_6e-05_predictor_and_backbone",
+        "bt-down-freezed_2000_6e-05_predictor_only_noFFN",
+        "bt-down-freezed_2000_6e-05_predictor_only_noFFN_noOQ",
+        "bt-down-freezed_4000_6e-05_all",
+        "bt-down-freezed_4000_6e-05_backbone_only",
+        "bt-down-freezed_4000_6e-05_backbone_only_noOQ",
+        "bt-down-freezed_4000_6e-05_predictor_only",
+        "bt-down-freezed_4000_6e-05_predictor_and_backbone",
+        "bt-down-freezed_4000_6e-05_predictor_only_noFFN",
+        "bt-down-freezed_4000_6e-05_predictor_only_noFFN_noOQ",
+        "bt-down-freezed_2000_6e-05_all",
+        "bt-down-freezed_8000_6e-05_backbone_only",
+        "bt-down-freezed_8000_6e-05_backbone_only_noOQ",
+        "bt-down-freezed_8000_6e-05_predictor_only",
+        "bt-down-freezed_8000_6e-05_predictor_and_backbone",
+        "bt-down-freezed_8000_6e-05_predictor_only_noFFN",
+        "bt-down-freezed_8000_6e-05_predictor_only_noFFN_noOQ",
+        "bt-down-freezed_2000_8e-05_all",
+        "bt-down-freezed_2000_8e-05_backbone_only",
+        "bt-down-freezed_2000_8e-05_backbone_only_noOQ",
+        "bt-down-freezed_2000_8e-05_predictor_only",
+        "bt-down-freezed_2000_8e-05_predictor_and_backbone",
+        "bt-down-freezed_2000_8e-05_predictor_only_noFFN",
+        "bt-down-freezed_2000_8e-05_predictor_only_noFFN_noOQ",
+        "bt-down-freezed_4000_8e-05_all",
+        "bt-down-freezed_4000_8e-05_backbone_only",
+        "bt-down-freezed_4000_8e-05_backbone_only_noOQ",
+        "bt-down-freezed_4000_8e-05_predictor_only",
+        "bt-down-freezed_4000_8e-05_predictor_and_backbone",
+        "bt-down-freezed_4000_8e-05_predictor_only_noFFN",
+        "bt-down-freezed_4000_8e-05_predictor_only_noFFN_noOQ",
+        "bt-down-freezed_2000_8e-05_all",
+        "bt-down-freezed_8000_8e-05_backbone_only",
+        "bt-down-freezed_8000_8e-05_backbone_only_noOQ",
+        "bt-down-freezed_8000_8e-05_predictor_only",
+        "bt-down-freezed_8000_8e-05_predictor_and_backbone",
+        "bt-down-freezed_8000_8e-05_predictor_only_noFFN",
+        "bt-down-freezed_8000_8e-05_predictor_only_noFFN_noOQ",
     ]
 
     for input in inputs:
         args.input = input
         for model in models:
-            cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", "simsiam_freezed", "model_final.pth")
-            cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results_LORA/", model)
+            cfg.MODEL.WEIGHTS = os.path.join("/home/nberardo/mask2former/output/train", "bt-down-freezed", "model_final.pth")
+            cfg.OUTPUT_DIR = os.path.join("/home/nberardo/mask2former/results_LORA_R32/", model)
             predictor = DefaultPredictor(cfg)
-            lora_path = os.path.join("/home/nberardo/mask2former/output/LORA", model, "lora_model")
+            lora_path = os.path.join("/home/nberardo/mask2former/output/LORA_R32", model, "lora_model")
             print(f"Loading LORA model from {lora_path}")
             lora_config = LoraConfig.from_pretrained(lora_path)
             inference_model = get_peft_model(predictor.model, lora_config)
@@ -904,18 +940,18 @@ def id_lora_FT(args):
 if __name__ == "__main__":
     # test()
     # ood()
-    # ood_lora()
+    ood_lora()
     # COMMENT OUT IF RUNNING ID
-    args = default_argument_parser().parse_args()
-    launch(
-        id_lora,
-        # id_lp_ft,
-        # id_lora_FT,
-        args.num_gpus,
-        num_machines=args.num_machines,
-        machine_rank=args.machine_rank,
-        dist_url=args.dist_url,
-        args=(args,),
-    )
+    # args = default_argument_parser().parse_args()
+    # launch(
+    #     id_lora,
+    #     # id_lp_ft,
+    #     # id_lora_FT,
+    #     args.num_gpus,
+    #     num_machines=args.num_machines,
+    #     machine_rank=args.machine_rank,
+    #     dist_url=args.dist_url,
+    #     args=(args,),
+    # )
 
 
