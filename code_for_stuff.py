@@ -940,18 +940,18 @@ def id_lora_FT(args):
 if __name__ == "__main__":
     # test()
     # ood()
-    # ood_lora()
+    ood_lora()
     # COMMENT OUT IF RUNNING ID
-    args = default_argument_parser().parse_args()
-    launch(
-        id_lora,
-        # id_lp_ft,
-        # id_lora_FT,
-        args.num_gpus,
-        num_machines=args.num_machines,
-        machine_rank=args.machine_rank,
-        dist_url=args.dist_url,
-        args=(args,),
-    )
+    # args = default_argument_parser().parse_args()
+    # launch(
+    #     id_lora,
+    #     # id_lp_ft,
+    #     # id_lora_FT,
+    #     args.num_gpus,
+    #     num_machines=args.num_machines,
+    #     machine_rank=args.machine_rank,
+    #     dist_url=args.dist_url,
+    #     args=(args,),
+    # )
 
 
