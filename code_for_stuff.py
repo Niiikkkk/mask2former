@@ -370,12 +370,12 @@ def id_lora(args):
         #     "lora_cfg" : get_lora_config_backbone_only_noOQ()},
         # {"name" : "predictor_only",
         #     "lora_cfg" : get_lora_config_predictor_only()},
-        {"name" : "predictor_and_backbone",
-            "lora_cfg" : get_lora_config_predictor_and_backbone()},
-        # {"name" : "predictor_only_noFFN",
-        #     "lora_cfg" : get_lora_config_predictor_only_noFFN()},
-        # {"name" : "predictor_only_noFFN_noOQ",
-        #     "lora_cfg" : get_lora_config_predictor_only_noFFN_no_OQ()}
+        # {"name" : "predictor_and_backbone",
+        #     "lora_cfg" : get_lora_config_predictor_and_backbone()},
+        {"name" : "predictor_only_noFFN",
+            "lora_cfg" : get_lora_config_predictor_only_noFFN()},
+        {"name" : "predictor_only_noFFN_noOQ",
+            "lora_cfg" : get_lora_config_predictor_only_noFFN_no_OQ()}
     ]
 
     for lr in lrs:
@@ -940,18 +940,18 @@ def id_lora_FT(args):
 if __name__ == "__main__":
     # test()
     # ood()
-    ood_lora()
+    # ood_lora()
     # COMMENT OUT IF RUNNING ID
-    # args = default_argument_parser().parse_args()
-    # launch(
-    #     id_lora,
-    #     # id_lp_ft,
-    #     # id_lora_FT,
-    #     args.num_gpus,
-    #     num_machines=args.num_machines,
-    #     machine_rank=args.machine_rank,
-    #     dist_url=args.dist_url,
-    #     args=(args,),
-    # )
+    args = default_argument_parser().parse_args()
+    launch(
+        id_lora,
+        # id_lp_ft,
+        # id_lora_FT,
+        args.num_gpus,
+        num_machines=args.num_machines,
+        machine_rank=args.machine_rank,
+        dist_url=args.dist_url,
+        args=(args,),
+    )
 
 
